@@ -2,10 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-weight: 400;
+    font-family: Presicav;
+    src: url(/fonts/PresicavHv-Regular.ttf) format("ttf");
+  }
+  /* @font-face {
+    font-family: Presicav Lt;
+    font-weight: 500;
+    src: url(/fonts/proxima-nova/500-medium.woff) format("ttf");
+  } */
+}
+
 body {
-  font-family: 'Inter', sans-serif;
-  color: white;
-  background-color: black;
   width: 100vw;
   height: 100vh;
+  font-family: 'Presicav';
+  background-color: #000321;
 }

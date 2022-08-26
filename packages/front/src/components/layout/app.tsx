@@ -1,5 +1,5 @@
 import routes from "~react-pages";
-import { Header } from "@/components/header";
+import { Header } from "./header";
 import { BrowserRouter as Router, useRoutes } from "react-router-dom";
 
 const Pages = () => {
@@ -8,7 +8,9 @@ const Pages = () => {
 
 export const App = () => (
   <Router>
-    <Header />
-    <Pages />
+    <div className="bg-[url('./assets/background-home.png')] bg-[repeat-x]">
+      <Header />
+      <Pages />
+    </div>
   </Router>
 );

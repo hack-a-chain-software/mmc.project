@@ -1,17 +1,46 @@
+import { Slider, Button } from "@/components";
+
 export const Index = () => {
   return (
-    <div className="p-4 flex min-h-[70vh] flex-1 flex-col items-center justify-center">
-      <div className="overflow-hidden">
-        <h1 className="title h-auto text-center font-[800] text-4xl tracking-[-0.06em] w3-animate-bottom overflow-hidden">
-          Welcome to the{" "}
-          <strong className="w3-animate-bottom">Near Monorepo</strong>
-        </h1>
+    <main className="w-screen min-h-screen bg-[url('./assets/svgs/clouds.svg')] bg-[center_top_290px] bg-no-repeat">
+      <Slider />
+
+      <section className="flex flex-col items-center pt-[82px] pb-[296px] space-y-[125px] max-w-[1620px] mx-auto">
+        <div>
+          <img src="./assets/hero.png" className="max-w-[1129px] mx-auto" />
+        </div>
+
+        <div className="flex items-center space-x-[40px]">
+          <div>
+            <span className="uppercase text-white text-[25px] font-[300]">
+              Minting soon
+            </span>
+          </div>
+
+          <div>
+            <Button
+              onClick={() => {}}
+              className="px-[24px] h-[58px] border-[2px] text-[26px]"
+            >
+              Join the whitelist
+            </Button>
+          </div>
+
+          <div>
+            <span className="uppercase text-white text-[25px] font-[300]">
+              Limited supply
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <div>
+        <img
+          src="./assets/svgs/silhouette.svg"
+          className="w-full max-w-[1920px]"
+        />
       </div>
-      <h1 className="mb-8 max-w-[600px] text-center font-semibold opacity-[0.6] text-xl tracking-[-0.06em] ">
-        A Monorepo that helps you building Dapps on NEAR in the right way,
-        Please Sign In to Interact with The Sample Contract
-      </h1>
-    </div>
+    </main>
   );
 };
 
