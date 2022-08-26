@@ -34,7 +34,7 @@ export const Index = () => {
         </div>
       </section>
 
-      <div>
+      <div className="max-w-[1920px] mx-auto">
         <img
           src="./assets/svgs/silhouette.svg"
           className="w-full max-w-[1920px]"
