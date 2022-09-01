@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 export function Button({
   children,
   onClick,
@@ -11,10 +13,10 @@ export function Button({
     <button
       children={children}
       onClick={() => onClick()}
-      className={
-        "bg-purple0 text-white uppercase min-h-[40px] px-[13px] text-[15px] tracking-[0px] border border-white rounded-[50px] " +
+      className={clsx(
+        "bg-purple-0 text-white text-[14px] uppercase min-h-[40px] px-[13px] tracking-[0px] border border-white rounded-[50px] font-[400]",
         className
-      }
+      )}
     />
   );
 }

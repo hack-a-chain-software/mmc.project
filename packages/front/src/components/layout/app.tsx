@@ -8,9 +8,7 @@ const Pages = () => {
 
 export const App = () => (
   <Router>
-    <div className="bg-[url('./assets/background-home.png')] bg-[repeat-x]">
-      <Header />
-      <Pages />
-    </div>
+    {/* <Header /> */}
+    <Pages />
   </Router>
 );
