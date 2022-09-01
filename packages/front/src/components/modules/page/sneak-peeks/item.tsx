@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function Item() {
   const [hide, setHide] = useState(true);
+  const [image, setImage] = useState(1);
+
+  useEffect(() => {
+    if (!hide) {
+      return;
+    }
+
+    const newValue = Math.max(Math.floor(Math.random() * 5), 1);
+
+    setImage(newValue);
+  }, [hide]);
 
   return (
     <div className="flex flex-col items-center space-y-[42px]">
-      <div className="relative">
+      <div className="relative h-[700px]">
         <div className="absolute top-0 h-[40px] overflow-hidden">
           <img src="./assets/svgs/blinds.svg" />
         </div>
@@ -31,13 +42,27 @@ export function Item() {
           </AnimatePresence>
         </div>
 
-        <div className="w-screen max-w-[500px] h-[700px] border border-[25px] border-purple-1">
-          <div className="w-full h-full border border-purple-0 border-[18px]"></div>
+        <div className="w-screen max-w-[500px] h-full border border-[25px] border-purple-1">
+          <div className="w-full h-full border border-purple-0 border-[18px]">
+            {!hide && (
+              <motion.div
+                className="absolute top-0 left-0 z-[-1] w-full h-full"
+                transition={{ duration: 0.32 }}
+                animate={{ opacity: 1, zIndex: "-1" }}
+                initial={{ opacity: 0, zIndex: "-1" }}
+              >
+                <img
+                  className="absolute w-[500px] z-[-1] top-0 left-0"
+                  src={`./assets/sneak-peeks/sneak-peek-${image}.webp`}
+                />
+              </motion.div>
+            )}
+          </div>
         </div>
       </div>
 
       <Button onClick={() => setHide(!hide)} className="px-[19px]">
-        Open
+        {hide ? "Open" : "Close"}
       </Button>
     </div>
   );
