@@ -19,11 +19,11 @@ const routes = [
 
 const socials = [
   {
-    icon: "/assets/svgs/discord.svg",
+    icon: "./svgs/discord.svg",
     path: "#",
   },
   {
-    icon: "/assets/svgs/discord.svg",
+    icon: "./svgs/discord.svg",
     path: "#",
   },
 ];
@@ -33,7 +33,7 @@ export function PageFooter() {
     <div className="py-[60px] min-h-[300px] bg-purple-0">
       <div className="container mx-auto flex justify-between">
         <div>
-          <img src="./assets/hero.png" className="h-[175px]" />
+          <img src="./images/hero.png" className="h-[175px]" />
         </div>
 
         <div className="flex flex-col items-end text-white space-y-[32px]">

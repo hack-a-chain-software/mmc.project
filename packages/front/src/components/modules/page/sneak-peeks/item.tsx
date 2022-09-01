@@ -20,7 +20,7 @@ export function Item() {
     <div className="flex flex-col items-center space-y-[42px] flex-grow">
       <div className="relative aspect-[5/7] w-full min-w-[350px] max-w-[700px]">
         <div className="absolute top-0 w-full h-[40px] overflow-hidden">
-          <img src="./assets/svgs/blinds.svg" className="w-full" />
+          <img src="./svgs/blinds.svg" className="w-full" />
         </div>
 
         <div className="absolute top-0 left-0 w-full">
@@ -37,7 +37,7 @@ export function Item() {
                 transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
               >
                 <img
-                  src="./assets/svgs/blinds.svg"
+                  src="./svgs/blinds.svg"
                   className="w-screen aspect-[500/641]"
                 />
               </motion.section>
@@ -56,7 +56,7 @@ export function Item() {
               >
                 <img
                   className="absolute w-full z-[-1] top-0 left-0"
-                  src={`./assets/sneak-peeks/sneak-peek-${image}.webp`}
+                  src={`./images/sneak-peeks/sneak-peek-${image}.webp`}
                 />
               </motion.div>
             )}

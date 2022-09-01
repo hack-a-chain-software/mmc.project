@@ -14,7 +14,7 @@ export const Index = () => {
     <main className="w-screen min-h-screen">
       <div
         className="
-          bg-no-repeat bg-[url('./assets/background-home.png')] bg-[length:100%_100%]
+          bg-no-repeat bg-[url('./images/background-home.png')] bg-[length:100%_100%]
         "
       >
         <PageHeader />
@@ -27,11 +27,11 @@ export const Index = () => {
             pt-[82px] pb-[296px]
             space-y-[125px]
             mx-auto
-            bg-no-repeat bg-[url('./assets/svgs/clouds.svg')] bg-[center_top_190px]
+            bg-no-repeat bg-[url('./svgs/clouds.svg')] bg-[center_top_190px]
           "
         >
           <div>
-            <img src="./assets/hero.png" className="max-w-[1129px] mx-auto" />
+            <img src="./images/hero.png" className="max-w-[1129px] mx-auto" />
           </div>
 
           <div className="flex items-center space-x-[40px]">
@@ -59,7 +59,7 @@ export const Index = () => {
         </section>
 
         <div className="w-full max-w-[1920px] mx-auto">
-          <img src="./assets/svgs/silhouette.svg" className="w-full" />
+          <img src="./svgs/silhouette.svg" className="w-full" />
         </div>
       </div>
 
@@ -74,7 +74,7 @@ export const Index = () => {
       <div className="container mx-auto relative overflow-hidden mb-[200px]">
         <section>
           <img
-            src="./assets/pins.png"
+            src="./images/pins.png"
             className="hidden xl:block absolute scale-[1.05] left-[40px] top-[85px] 2xl:top-[65px]"
           />
 

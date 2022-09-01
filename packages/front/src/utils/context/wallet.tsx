@@ -53,10 +53,10 @@ export const WalletSelectorContextProvider: React.FC<
       debug: true,
       modules: [
         setupSender({
-          iconUrl: "/assets/sender-icon.png",
+          iconUrl: "/images/sender-icon.png",
         }),
         setupNearWallet({
-          iconUrl: "/assets/near-wallet-icon.png",
+          iconUrl: "/images/near-wallet-icon.png",
         }),
       ],
     });
