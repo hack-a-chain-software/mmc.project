@@ -1,4 +1,6 @@
-export function Item({ title, text }: { title: string; text: string }) {
+import { ReactNode } from "react";
+
+export function Item({ title, text }: { title: string; text: ReactNode }) {
   return (
     <div className="flex flex-col items-center">
       <div

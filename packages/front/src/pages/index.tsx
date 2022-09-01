@@ -75,7 +75,7 @@ export const Index = () => {
         <section>
           <img
             src="./assets/pins.png"
-            className="absolute scale-[1.05] left-[40px] top-[65px]"
+            className="hidden xl:block absolute scale-[1.05] left-[40px] top-[85px] 2xl:top-[65px]"
           />
 
           <Title>Roadmap</Title>

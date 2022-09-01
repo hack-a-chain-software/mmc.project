@@ -1,7 +1,7 @@
 export function Slider() {
   return (
     <div className="w-screen max-w-[100vw] overflow-hidden py-[22px] border-y-[2px] text-center">
-      <span className="block animate-sliding text-white text-[14px] leading-[18px]">
+      <span className="block animate-sliding text-white text-[14px] leading-[18px] whitespace-nowrap">
         ALERT • THERE’S BEEN A MURDER • CALLING ALL VOLUNTEERS • ALERT • THERE’S
         BEEN A MURDER • CALLING ALL VOLUNTEERS • ALERT • THERE’S BEEN A MURDER •
         CALLING ALL VOLUNTEERS

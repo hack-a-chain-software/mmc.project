@@ -36,7 +36,7 @@ const socials = [
 
 export function PageHeader() {
   return (
-    <div className="pt-[60px] pb-[59px]">
+    <div className="container mx-auto pt-[60px] pb-[59px]">
       <nav className="flex justify-between items-center max-w-[1620px] mx-auto">
         <ul className="flex space-x-[40px]">
           {routes.map(({ label, path }) => (

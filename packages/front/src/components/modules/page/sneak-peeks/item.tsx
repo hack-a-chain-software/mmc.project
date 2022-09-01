@@ -17,13 +17,13 @@ export function Item() {
   }, [hide]);
 
   return (
-    <div className="flex flex-col items-center space-y-[42px]">
-      <div className="relative h-[700px]">
-        <div className="absolute top-0 h-[40px] overflow-hidden">
-          <img src="./assets/svgs/blinds.svg" />
+    <div className="flex flex-col items-center space-y-[42px] flex-grow">
+      <div className="relative aspect-[5/7] w-full min-w-[350px] max-w-[700px]">
+        <div className="absolute top-0 w-full h-[40px] overflow-hidden">
+          <img src="./assets/svgs/blinds.svg" className="w-full" />
         </div>
 
-        <div className="absolute top-0 left-0 h-full">
+        <div className="absolute top-0 left-0 w-full">
           <AnimatePresence initial={false}>
             {hide && (
               <motion.section
@@ -36,13 +36,16 @@ export function Item() {
                 }}
                 transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
               >
-                <img src="./assets/svgs/blinds.svg" />
+                <img
+                  src="./assets/svgs/blinds.svg"
+                  className="w-screen aspect-[500/641]"
+                />
               </motion.section>
             )}
           </AnimatePresence>
         </div>
 
-        <div className="w-screen max-w-[500px] h-full border border-[25px] border-purple-1">
+        <div className="w-full h-full border border-[25px] border-purple-1">
           <div className="w-full h-full border border-purple-0 border-[18px]">
             {!hide && (
               <motion.div
@@ -52,7 +55,7 @@ export function Item() {
                 initial={{ opacity: 0, zIndex: "-1" }}
               >
                 <img
-                  className="absolute w-[500px] z-[-1] top-0 left-0"
+                  className="absolute w-full z-[-1] top-0 left-0"
                   src={`./assets/sneak-peeks/sneak-peek-${image}.webp`}
                 />
               </motion.div>
