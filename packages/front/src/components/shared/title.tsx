@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { twMerge } from "tailwind-merge";
 import { PropsWithChildren } from "react";
 
 export function Title({
@@ -9,7 +9,7 @@ export function Title({
     <div className="text-center pb-[140px]">
       <span
         children={children}
-        className={clsx(
+        className={twMerge(
           "uppercase text-white text-[50px] leading-[60px]",
           className
         )}

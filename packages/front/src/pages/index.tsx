@@ -44,7 +44,7 @@ export const Index = () => {
             <div>
               <Button
                 onClick={() => {}}
-                className="px-[30px] h-[58px] text-[23px] border-[2px]"
+                className="text-[22px] px-[24px] h-[58px] border-[2px]"
               >
                 Join the whitelist
               </Button>

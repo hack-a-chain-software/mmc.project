@@ -9,9 +9,9 @@ const items = [
         title: "Detectives",
         text: (
           <span>
-            <span className="font-[400]">SUPPLY:</span> TBD <br />{" "}
-            <span className="font-[400]">CLUE STAKING:</span> YES <br />{" "}
-            <span className="font-[400]">REWARD ELIGABLE:</span> YES
+            <span className="font-[500]">SUPPLY:</span> TBD <br />{" "}
+            <span className="font-[500]">CLUE STAKING:</span> YES <br />{" "}
+            <span className="font-[500]">REWARD ELIGABLE:</span> YES
           </span>
         ),
       },
@@ -19,9 +19,9 @@ const items = [
         title: "UNDERCOVER PUPS",
         text: (
           <span>
-            <span className="font-[400]">SUPPLY:</span> TBD <br />{" "}
-            <span className="font-[400]">CLUE STAKING:</span> YES <br />{" "}
-            <span className="font-[400]">REWARD ELIGABLE:</span> YES
+            <span className="font-[500]">SUPPLY:</span> TBD <br />{" "}
+            <span className="font-[500]">CLUE STAKING:</span> YES <br />{" "}
+            <span className="font-[500]">REWARD ELIGABLE:</span> YES
           </span>
         ),
       },
