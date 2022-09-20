@@ -23,7 +23,7 @@ const socials = [
     path: "#",
   },
   {
-    icon: "./svgs/discord.svg",
+    icon: "./svgs/twitter.svg",
     path: "#",
   },
 ];
@@ -44,7 +44,7 @@ export function PageFooter() {
           <div className="flex space-x-[32px]">
             {socials.map(({ icon, path }, i) => (
               <a href={path} key={`mmc-navbar-social-${i}`}>
-                <img loading="lazy" src={icon} className="h-[52px]" />
+                <img loading="lazy" src={icon} className="h-[32px]" />
               </a>
             ))}
           </div>
