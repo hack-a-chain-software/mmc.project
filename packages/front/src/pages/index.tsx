@@ -14,7 +14,7 @@ export const Index = () => {
     <main className="w-screen min-h-screen">
       <div
         className="
-          bg-no-repeat bg-[url('./images/background-home.png')] bg-[length:100%_100%]
+          bg-no-repeat bg-[url('/images/background-home.png')] bg-[length:100%_100%]
         "
       >
         <PageHeader />
@@ -27,7 +27,7 @@ export const Index = () => {
             pt-[82px] pb-[296px]
             space-y-[125px]
             mx-auto
-            bg-no-repeat bg-[url('./svgs/clouds.svg')] bg-[center_top_190px]
+            bg-no-repeat bg-[url('/svgs/clouds.svg')] bg-[center_top_190px]
           "
         >
           <div>

@@ -2,18 +2,33 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components";
 import { AnimatePresence, motion } from "framer-motion";
 
-export function Item() {
+export function Item({
+  selected,
+  updateSelected,
+}: {
+  selected: any[];
+  updateSelected: (value: number) => void;
+}) {
   const [hide, setHide] = useState(true);
   const [image, setImage] = useState(1);
 
+  const getRandomImage = () => {
+    const newValue = Math.max(Math.floor(Math.random() * 35), 1);
+
+    if (selected.includes(newValue)) {
+      return getRandomImage();
+    }
+
+    setImage(newValue);
+    updateSelected(newValue);
+  };
+
   useEffect(() => {
-    if (!hide) {
+    if (hide) {
       return;
     }
 
-    const newValue = Math.max(Math.floor(Math.random() * 5), 1);
-
-    setImage(newValue);
+    getRandomImage();
   }, [hide]);
 
   return (
@@ -55,8 +70,8 @@ export function Item() {
                 initial={{ opacity: 0, zIndex: "-1" }}
               >
                 <img
-                  className="absolute w-full z-[-1] top-0 left-0"
-                  src={`./images/sneak-peeks/sneak-peek-${image}.webp`}
+                  className="absolute h-[670px] z-[-1] top-0 left-0"
+                  src={`./images/sneak-peeks/${image}.jpg`}
                 />
               </motion.div>
             )}
