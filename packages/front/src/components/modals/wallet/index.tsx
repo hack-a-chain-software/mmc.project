@@ -90,6 +90,7 @@ export function WalletSelectorModal(props: {}) {
                       className="border border-black rounded-[13px] py-[12px] px-[24px] text-black h-[56px] flex items-center hover:bg-black hover:text-white"
                     >
                       <img
+                        loading="lazy"
                         src={module.metadata.iconUrl}
                         className="w-[32px] h-[32px] mr-[12px]"
                       />

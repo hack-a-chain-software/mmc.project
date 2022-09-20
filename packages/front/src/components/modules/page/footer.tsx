@@ -33,14 +33,18 @@ export function PageFooter() {
     <div className="py-[60px] min-h-[300px] bg-purple-0">
       <div className="container mx-auto flex justify-between">
         <div>
-          <img src="./svgs/mmc-tt_white.svg" className="w-[395px] h-auto" />
+          <img
+            loading="lazy"
+            src="./svgs/mmc-tt_white.svg"
+            className="w-[395px] h-auto"
+          />
         </div>
 
         <div className="flex flex-col items-end text-white space-y-[32px]">
           <div className="flex space-x-[32px]">
             {socials.map(({ icon, path }, i) => (
               <a href={path} key={`mmc-navbar-social-${i}`}>
-                <img src={icon} className="h-[52px]" />
+                <img loading="lazy" src={icon} className="h-[52px]" />
               </a>
             ))}
           </div>

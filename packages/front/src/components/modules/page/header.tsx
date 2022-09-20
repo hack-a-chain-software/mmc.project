@@ -51,7 +51,7 @@ export function PageHeader() {
         <div className="flex items-center space-x-[32px]">
           {socials.map(({ icon, path }, i) => (
             <a href={path} key={`mmc-navbar-social-${i}`}>
-              <img src={icon} className="h-[52px]" />
+              <img loading="lazy" src={icon} className="h-[52px]" />
             </a>
           ))}
 

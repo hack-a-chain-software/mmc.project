@@ -82,7 +82,7 @@ export function About() {
           key={"about-item" + index}
         >
           <div className="mb-[52px]">
-            <img src={`./images/${icon}.png`} />
+            <img loading="lazy" src={`./images/${icon}.png`} />
           </div>
 
           <div className="pb-[32px] max-w-[360px] text-center">

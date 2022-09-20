@@ -21,15 +21,8 @@ export function Item({
 
     setImage(newValue);
     updateSelected(newValue);
+    setHide(!hide);
   };
-
-  useEffect(() => {
-    if (hide) {
-      return;
-    }
-
-    getRandomImage();
-  }, [hide]);
 
   return (
     <div className="flex flex-col items-center space-y-[42px] flex-grow">
@@ -52,6 +45,7 @@ export function Item({
                 transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
               >
                 <img
+                  loading="lazy"
                   src="./svgs/blinds.svg"
                   className="w-screen aspect-[500/641]"
                 />
@@ -70,6 +64,8 @@ export function Item({
                 initial={{ opacity: 0, zIndex: "-1" }}
               >
                 <img
+                  loading="lazy"
+                  key={"sneek-peek-image" + image}
                   className="absolute h-[670px] z-[-1] top-0 left-0"
                   src={`./images/sneak-peeks/${image}.jpg`}
                 />
@@ -79,7 +75,7 @@ export function Item({
         </div>
       </div>
 
-      <Button onClick={() => setHide(!hide)} className="px-[19px]">
+      <Button onClick={() => getRandomImage()} className="px-[19px]">
         {hide ? "Open" : "Close"}
       </Button>
     </div>

@@ -14,7 +14,7 @@ export const Index = () => {
     <main className="w-screen min-h-screen">
       <div
         className="
-          bg-no-repeat bg-[url('/images/background-home.png')] bg-[length:100%_100%]
+          bg-no-repeat bg-[url('/images/background-home.jpg')] bg-[length:100%_100%]
         "
       >
         <PageHeader />
@@ -31,7 +31,11 @@ export const Index = () => {
           "
         >
           <div>
-            <img src="./images/hero.png" className="max-w-[1129px] mx-auto" />
+            <img
+              src="./images/hero.webp"
+              loading="eager"
+              className="max-w-[1129px] mx-auto"
+            />
           </div>
 
           <div className="flex items-center space-x-[40px]">
