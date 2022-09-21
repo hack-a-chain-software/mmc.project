@@ -25,20 +25,21 @@ export const Index = () => {
           className="
             flex flex-col items-center
             pt-[82px] pb-[296px]
-            space-y-[125px]
+            space-y-[60px]
+            xl:space-y-[125px]
             mx-auto
             bg-no-repeat bg-[url('/svgs/clouds.svg')] bg-[center_top_190px]
           "
         >
-          <div className="min-h-[500px]">
+          <div className="xl:min-h-[500px] px-[30px] xl:px-0">
             <img
               src="./images/hero.webp"
               loading="eager"
-              className="max-w-[1129px] mx-auto"
+              className="xl:max-w-[1129px] xl:mx-auto"
             />
           </div>
 
-          <div className="flex items-center space-x-[40px]">
+          <div className="flex flex-col space-y-[40px] items-center xl:flex-row xl:space-y-0 xl:space-x-[40px]">
             <div>
               <span className="uppercase text-white font-[200] leading-[30px] text-[22px] font-[300]">
                 Minting soon
@@ -67,7 +68,10 @@ export const Index = () => {
         </div>
       </div>
 
-      <div id="the-case" className="container mx-auto mt-[-350px] mb-[200px]">
+      <div
+        id="the-case"
+        className="container mx-auto mt-[-350px] mb-[200px] px-[30px] sm:px-0"
+      >
         <section className="w-full">
           <Title>The Case</Title>
 
@@ -85,7 +89,7 @@ export const Index = () => {
               </span>
             </div>
 
-            <div className="flex items-center space-x-[25px] mb-[50px]">
+            <div className="flex flex-col space-y-[25px] text-center lg:space-y-0 lg:flex-row items-center space-x-[25px] mb-[50px]">
               <div className="h-[95px] w-[95px] bg-[#A500FB] rounded-full border flex items-center justify-center">
                 <img
                   loading="lazy"
@@ -113,7 +117,7 @@ export const Index = () => {
 
       <div
         id="how-to-play"
-        className="container mx-auto relative overflow-hidden mb-[200px]"
+        className="container mx-auto relative overflow-hidden mb-[200px] px-[30px] sm:px-0"
       >
         <section>
           <Title>How to Play</Title>
@@ -140,10 +144,9 @@ export const Index = () => {
 
       <div
         id="sneak-peeks"
-        className="container mx-auto pb-[135px]
-      bg-[url('/svgs/bricks.svg')] bg-[length:100%_100%]"
+        className="container mx-auto pb-[250px] bg-[url('/svgs/bricks.svg')] bg-[length:100%_auto] xl:bg-[length:100%_auto] px-[30px] sm:px-0"
       >
-        <section className="space-y-[120px]">
+        <section>
           <Title className="pb-[239px]">Sneak Peeks</Title>
 
           <SneakPeeks />

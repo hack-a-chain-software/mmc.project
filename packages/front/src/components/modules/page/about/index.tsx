@@ -1,4 +1,5 @@
 import { Item } from "./item";
+import { AboutCarousel } from "./carousel";
 
 const items = [
   {
@@ -69,35 +70,39 @@ const items = [
 
 export function About() {
   return (
-    <div className="flex justify-between items-start">
-      {items.map(({ icon, title, items }, index) => (
-        <div
-          className="
-            text-white
-            text-center
-            max-w-[485px]
-            space-y-[48px]
-            flex flex-col items-center justify-center
-          "
-          key={"about-item" + index}
-        >
-          <div className="mb-[52px]">
-            <img loading="lazy" src={`./images/${icon}.png`} />
-          </div>
+    <div>
+      <div className="hidden md:flex flex-col justify-between items-center space-y-[120px] xl:flex-row xl:items-start xl:space-y-0">
+        {items.map(({ icon, title, items }, index) => (
+          <div
+            className="
+              text-white
+              text-center
+              max-w-[485px]
+              space-y-[48px]
+              flex flex-col items-center justify-center
+            "
+            key={"about-item" + index}
+          >
+            <div className="mb-[52px]">
+              <img loading="lazy" src={`./images/${icon}.png`} />
+            </div>
 
-          <div className="pb-[32px] max-w-[360px] text-center">
-            <span
-              children={title}
-              className="uppercase text-[38px] leading-[50px] font-[300]"
-            />
-          </div>
+            <div className="pb-[32px] max-w-[360px] text-center">
+              <span
+                children={title}
+                className="uppercase text-[38px] leading-[50px] font-[300]"
+              />
+            </div>
 
-          {items &&
-            items.map((item, i) => (
-              <Item {...item} key={"about-card-item-" + i} />
-            ))}
-        </div>
-      ))}
+            {items &&
+              items.map((item, i) => (
+                <Item {...item} key={"about-card-item-" + i} />
+              ))}
+          </div>
+        ))}
+      </div>
+
+      <AboutCarousel />
     </div>
   );
 }

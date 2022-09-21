@@ -37,9 +37,9 @@ const socials = [
 
 export function PageHeader() {
   return (
-    <div className="container mx-auto pt-[80px] pb-[59px]">
+    <div className="container mx-auto pt-[50px] pb-[25px] md:pt-[80px] md:pb-[59px] px-[30px] sm:px-0">
       <nav className="flex justify-between items-center max-w-[1620px] mx-auto">
-        <ul className="flex space-x-[40px]">
+        <ul className="hidden md:flex space-x-[40px]">
           {routes.map(({ label, path }) => (
             <li
               key={`mmc-navbar-route-${label}-to-${path}`}
@@ -60,6 +60,12 @@ export function PageHeader() {
           ))}
         </ul>
 
+        <div className="block md:hidden">
+          <button onClick={() => {}}>
+            <img src="./svgs/plus.svg" className="h-[32px]" />
+          </button>
+        </div>
+
         <div className="flex items-center space-x-[32px]">
           {socials.map(({ icon, path }, i) => (
             <a
@@ -71,7 +77,9 @@ export function PageHeader() {
             </a>
           ))}
 
-          <Button onClick={() => {}}>Connect Wallet</Button>
+          <Button className="hidden lg:block" onClick={() => {}}>
+            Connect Wallet
+          </Button>
         </div>
       </nav>
     </div>

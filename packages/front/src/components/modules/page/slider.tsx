@@ -3,6 +3,7 @@ export function Slider() {
     <div
       className="
         py-[22px] border-y-[2px]
+        overflow-hidden
       "
     >
       <div className="w-[calc(594*14)] animate-slider text-center flex">

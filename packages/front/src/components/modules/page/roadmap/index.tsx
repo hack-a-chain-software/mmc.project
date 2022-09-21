@@ -1,4 +1,5 @@
 import { Item } from "./item";
+import { RoadmapCarousel } from "./carousel";
 
 const roadmap = [
   {
@@ -38,10 +39,14 @@ const roadmap = [
 
 export function Roadmap() {
   return (
-    <div className="flex items-start justify-between">
-      {roadmap.map((item) => (
-        <Item {...item} key={"roadmap-" + item.title} />
-      ))}
+    <div>
+      <div className="hidden md:flex flex-col items-center space-y-[120px] justify-between xl:flex-row xl:items-start xl:space-y-0">
+        {roadmap.map((item) => (
+          <Item {...item} key={"roadmap-" + item.title} />
+        ))}
+      </div>
+
+      <RoadmapCarousel />
     </div>
   );
 }

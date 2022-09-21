@@ -18,15 +18,29 @@ export function SneakPeeks() {
       flex flex-col xl:flex-row
       xl:space-x-[50px] xl:space-y-0
       space-y-[50px]
+      z-[10]
+      relative
     "
     >
-      {[...Array(3)].map((_, index) => (
-        <Item
-          selected={selected}
-          key={"sneak-peek-item" + index}
-          updateSelected={(value: number) => updateSelected(value, index)}
-        />
-      ))}
+      <Item
+        selected={selected}
+        key="sneak-peek-item-0"
+        updateSelected={(value: number) => updateSelected(value, 0)}
+      />
+
+      <Item
+        selected={selected}
+        key="sneak-peek-item-1"
+        className="hidden md:flex"
+        updateSelected={(value: number) => updateSelected(value, 1)}
+      />
+
+      <Item
+        selected={selected}
+        key="sneak-peek-item-2"
+        className="hidden md:flex"
+        updateSelected={(value: number) => updateSelected(value, 2)}
+      />
     </div>
   );
 }

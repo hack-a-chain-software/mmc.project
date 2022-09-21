@@ -30,8 +30,8 @@ const socials = [
 
 export function PageFooter() {
   return (
-    <div className="py-[60px] min-h-[300px] bg-purple-0">
-      <div className="container mx-auto flex justify-between">
+    <div className="py-[60px] min-h-[300px] bg-purple-0 px-[30px] sm:px-0">
+      <div className="container mx-auto flex flex-col space-y-[120px] lg:space-y-0 lg:justify-between lg:flex-row">
         <div>
           <img
             loading="lazy"
@@ -40,7 +40,7 @@ export function PageFooter() {
           />
         </div>
 
-        <div className="flex flex-col items-end text-white space-y-[32px]">
+        <div className="flex flex-col lg:items-end text-white space-y-[32px]">
           <div className="flex space-x-[32px]">
             {socials.map(({ icon, path }, i) => (
               <a
