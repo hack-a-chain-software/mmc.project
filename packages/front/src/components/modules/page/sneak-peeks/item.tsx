@@ -30,11 +30,11 @@ export function Item({
   return (
     <div
       className={twMerge(
-        "flex flex-col items-center space-y-[42px] flex-grow overflow-hidden",
+        "flex flex-col items-center space-y-[42px] flex-grow overflow-hidden]",
         className
       )}
     >
-      <div className="relative aspect-[5/7] w-full min-w-[350px] max-w-[700px]">
+      <div className="relative aspect-[5/7] w-full min-w-[300px] max-w-[300px] sm:min-w-[350px] sm:max-w-[700px]">
         <div className="absolute top-0 w-full h-[40px] overflow-hidden">
           <img src="./svgs/blinds.svg" className="w-full" />
         </div>

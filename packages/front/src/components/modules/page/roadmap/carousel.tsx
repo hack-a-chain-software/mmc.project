@@ -1,5 +1,6 @@
 import { Item } from "./item";
 import { Fragment } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const roadmap = [
   {
@@ -51,43 +52,40 @@ export function RoadmapCarousel() {
   };
 
   return (
-    <div className="carousel relative min-h-[900px] flex md:hidden mt-[-70px]">
-      <div className="absolute top-[110px] left-0 right-0 pointer-events-none">
-        <div className="max-w-[408px] flex space-between mx-auto">
-          <img
-            loading="lazy"
-            src="./svgs/chevron.svg"
-            className="h-[120px] rotate-[180deg]"
-          />
+    <div className="carousel relative min-h-[500px] flex md:hidden mt-[-70px]">
+      <div className="absolute top-[80px] left-0 right-0 pointer-events-none z-[3]">
+        <div className="w-full flex space-between mx-auto">
+          <ChevronLeftIcon className="h-[100px] text-[#DF44A9]" />
 
-          <img
-            loading="lazy"
-            src="./svgs/chevron.svg"
-            className="h-[120px] ml-auto"
-          />
+          <ChevronRightIcon className="h-[100px] text-[#DF44A9] ml-auto" />
         </div>
       </div>
 
-      <div className="carousel__viewport">
+      <div className="carousel__viewport pt-[100px]">
+        <img
+          src="./images/pins.png"
+          className="absolute min-w-[1200px] z-[2] pointer-events-none top-0 left-[400px]"
+        />
+
         {roadmap &&
           roadmap.map((item, index) => (
             <div
               id={"roadmap-carousel-item-" + index}
               key={"about-item" + index}
-              className="basis-full min-w-full flex items-center justify-center relative"
+              className="basis-full min-w-full flex  justify-center relative"
             >
               {index === 0 ? (
                 <div className="carousel__snapper">
-                  <div className="absolute top-[110px] left-0 right-0">
-                    <div className="max-w-[408px] w-full flex space-between mx-auto">
+                  <div className="absolute top-[-18px] left-0 right-0">
+                    <div className="w-full px-[30px] flex space-between mx-auto">
                       <a
                         href={"#roadmap-carousel-item-" + getPrev(index)}
-                        className="opacity-[0] h-[120px] w-[63px]"
+                        className="opacity-[0] h-[100px] w-[100px]"
                       />
 
                       <a
                         href={"#roadmap-carousel-item-" + getNext(index)}
-                        className="opacity-[0] h-[120px] w-[63px] ml-auto"
+                        className="opacity-[0]  h-[100px] w-[100px] ml-auto"
                       />
                     </div>
                   </div>
@@ -96,16 +94,16 @@ export function RoadmapCarousel() {
                 <Fragment>
                   <div className="carousel__snapper" />
 
-                  <div className="absolute top-[110px] left-0 right-0 ">
-                    <div className="max-w-[408px] w-full flex space-between mx-auto">
+                  <div className="absolute top-[-18px] left-0 right-0">
+                    <div className="w-full px-[30px] flex space-between mx-auto">
                       <a
                         href={"#roadmap-carousel-item-" + getPrev(index)}
-                        className="opacity-[0] h-[120px] w-[63px]"
+                        className="opacity-[0] h-[100px] w-[100px]"
                       />
 
                       <a
                         href={"#roadmap-carousel-item-" + getNext(index)}
-                        className="opacity-[0] h-[120px] w-[63px] ml-auto"
+                        className="opacity-[0]  h-[100px] w-[100px] ml-auto"
                       />
                     </div>
                   </div>

@@ -8,11 +8,12 @@ export function Item({ title, items }: { title: string; items: ReactNode[] }) {
           bg-pink-0
           flex items-center justify-center mx-auto
           border border-[2px] h-[60px] w-[415px]
+          max-w-[330px] md:max-w-none
         "
       >
         <span
           children={title}
-          className="uppercase text-[30px] leading-[40px]"
+          className="uppercase text-[22px] md:text-[28px] md:leading-[40px]"
         />
       </div>
 
@@ -21,7 +22,7 @@ export function Item({ title, items }: { title: string; items: ReactNode[] }) {
           <span
             children={value}
             key={title + "-roadmap-item-" + index}
-            className="uppercase text-[28px] leading-[40px font-[300]"
+            className="uppercase text-[22px] md:text-[28px] md:leading-[40px] font-[300]"
           />
         ))}
       </div>
