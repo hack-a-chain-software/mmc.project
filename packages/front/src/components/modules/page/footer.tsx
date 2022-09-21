@@ -43,7 +43,11 @@ export function PageFooter() {
         <div className="flex flex-col items-end text-white space-y-[32px]">
           <div className="flex space-x-[32px]">
             {socials.map(({ icon, path }, i) => (
-              <a href={path} key={`mmc-navbar-social-${i}`}>
+              <a
+                href={path}
+                key={`mmc-navbar-social-${i}`}
+                className="cursor-pointer hover:opacity-[.8]"
+              >
                 <img loading="lazy" src={icon} className="h-[32px]" />
               </a>
             ))}
@@ -55,7 +59,7 @@ export function PageFooter() {
                 <li
                   children={label}
                   key={`mmc-navbar-route-${label}-to-${path}`}
-                  className="text-white uppercase text-[14px] leading-[18px] font-[200]"
+                  className="text-white uppercase text-[14px] leading-[18px] font-[200] cursor-pointer hover:opacity-[.8]"
                 />
               ))}
             </ul>

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components";
 import { AnimatePresence, motion } from "framer-motion";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export function Item({
   selected,
@@ -25,7 +26,7 @@ export function Item({
   };
 
   return (
-    <div className="flex flex-col items-center space-y-[42px] flex-grow">
+    <div className="flex flex-col items-center space-y-[42px] flex-grow overflow-hidden">
       <div className="relative aspect-[5/7] w-full min-w-[350px] max-w-[700px]">
         <div className="absolute top-0 w-full h-[40px] overflow-hidden">
           <img src="./svgs/blinds.svg" className="w-full" />
@@ -63,12 +64,18 @@ export function Item({
                 animate={{ opacity: 1, zIndex: "-1" }}
                 initial={{ opacity: 0, zIndex: "-1" }}
               >
-                <img
-                  loading="lazy"
+                <div
                   key={"sneek-peek-image" + image}
-                  className="absolute h-[670px] z-[-1] top-0 left-0"
-                  src={`./images/sneak-peeks/${image}.jpg`}
-                />
+                  className="absolute h-full z-[-1] inset-0 overflow-hidden"
+                >
+                  <LazyLoadImage
+                    className="h-full w-full relative top-[30px]"
+                    src={`./images/sneak-peeks/${image}.jpg`}
+                    placeholder={
+                      <div className="w-full h-full bg-white animate-pulse bg-slate-700" />
+                    }
+                  />
+                </div>
               </motion.div>
             )}
           </div>

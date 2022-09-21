@@ -40,7 +40,7 @@ export const Index = () => {
 
           <div className="flex items-center space-x-[40px]">
             <div>
-              <span className="uppercase text-white text-[25px] font-[200] leading-[30px]">
+              <span className="uppercase text-white font-[200] leading-[30px] text-[22px] font-[300]">
                 Minting soon
               </span>
             </div>
@@ -48,14 +48,14 @@ export const Index = () => {
             <div>
               <Button
                 onClick={() => {}}
-                className="text-[22px] px-[24px] h-[58px] border-[2px]"
+                className="text-[22px] h-[60px] border-[2px] font-[400] shadow-0 w-[375px] text-[22px]"
               >
                 Join the whitelist
               </Button>
             </div>
 
             <div>
-              <span className="uppercase text-white text-[25px] font-[200] leading-[30px]">
+              <span className="uppercase text-white font-[200] leading-[30px] text-[22px]">
                 Limited supply
               </span>
             </div>

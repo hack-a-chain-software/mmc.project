@@ -42,6 +42,9 @@ module.exports = {
           },
         },
       },
+      screens: {
+        web: "1620px",
+      },
     },
   },
   plugins: [],
