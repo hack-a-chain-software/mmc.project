@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components";
 import { AnimatePresence, motion } from "framer-motion";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export function Item({
   selected,
@@ -68,12 +67,9 @@ export function Item({
                   key={"sneek-peek-image" + image}
                   className="absolute h-full z-[-1] inset-0 overflow-hidden"
                 >
-                  <LazyLoadImage
-                    className="h-full w-full relative top-[30px]"
+                  <img
+                    className="h-full w-full relative top-[30px] bg-transparent"
                     src={`./images/sneak-peeks/${image}.jpg`}
-                    placeholder={
-                      <div className="w-full h-full bg-white animate-pulse bg-slate-700" />
-                    }
                   />
                 </div>
               </motion.div>
