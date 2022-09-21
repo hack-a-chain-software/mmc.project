@@ -22,6 +22,7 @@ module.exports = {
       },
       animation: {
         sliding: "sliding 32s linear infinite",
+        slider: "scroll 120s linear infinite",
       },
       keyframes: {
         sliding: {
@@ -30,6 +31,14 @@ module.exports = {
           },
           to: {
             transform: "translateX(-100%)",
+          },
+        },
+        scroll: {
+          from: {
+            transform: "translateX(0)",
+          },
+          to: {
+            transform: "translateX(calc(-594px * 7))",
           },
         },
       },
