@@ -144,7 +144,7 @@ export const Index = () => {
       bg-[url('/svgs/bricks.svg')] bg-[length:100%_100%]"
       >
         <section className="space-y-[120px]">
-          <Title className="pb-[269px]">Sneak Peeks</Title>
+          <Title className="pb-[239px]">Sneak Peeks</Title>
 
           <SneakPeeks />
         </section>
