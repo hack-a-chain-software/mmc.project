@@ -1,25 +1,26 @@
 import { Button } from "@/components";
+import { HashLink } from "react-router-hash-link";
 
 const routes = [
   {
     label: "Home",
-    path: "#",
+    path: "/",
   },
   {
     label: "The Case",
-    path: "#",
+    path: "#the-case",
   },
   {
     label: "Play",
-    path: "#",
+    path: "#how-to-play",
   },
   {
     label: "Roadmap",
-    path: "#",
+    path: "#roadmap",
   },
   {
     label: "Sneak Peeks",
-    path: "#",
+    path: "#sneak-peeks",
   },
 ];
 
@@ -41,10 +42,21 @@ export function PageHeader() {
         <ul className="flex space-x-[40px]">
           {routes.map(({ label, path }) => (
             <li
-              children={label}
               key={`mmc-navbar-route-${label}-to-${path}`}
               className="text-white uppercase text-[15px] font-[300] cursor-pointer hover:opacity-[.8]"
-            />
+            >
+              <HashLink
+                to={"/" + path}
+                _hover={{
+                  textDecoration: "unset",
+                }}
+                scroll={(el) =>
+                  el.scrollIntoView({ behavior: "smooth", block: "start" })
+                }
+              >
+                {label}
+              </HashLink>
+            </li>
           ))}
         </ul>
 

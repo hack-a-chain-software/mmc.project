@@ -67,7 +67,7 @@ export const Index = () => {
         </div>
       </div>
 
-      <div className="container mx-auto mt-[-350px] mb-[200px]">
+      <div id="the-case" className="container mx-auto mt-[-350px] mb-[200px]">
         <section className="w-full">
           <Title>The Case</Title>
 
@@ -111,7 +111,10 @@ export const Index = () => {
         </section>
       </div>
 
-      <div className="container mx-auto relative overflow-hidden mb-[200px]">
+      <div
+        id="how-to-play"
+        className="container mx-auto relative overflow-hidden mb-[200px]"
+      >
         <section>
           <Title>How to Play</Title>
 
@@ -119,7 +122,10 @@ export const Index = () => {
         </section>
       </div>
 
-      <div className="container mx-auto relative overflow-hidden mb-[200px]">
+      <div
+        id="roadmap"
+        className="container mx-auto relative overflow-hidden mb-[200px]"
+      >
         <section>
           <img
             src="./images/pins.png"
@@ -133,6 +139,7 @@ export const Index = () => {
       </div>
 
       <div
+        id="sneak-peeks"
         className="container mx-auto pb-[135px]
       bg-[url('/svgs/bricks.svg')] bg-[length:100%_100%]"
       >
