@@ -98,15 +98,15 @@ body {
   }
 }
 
-.carousel::-webkit-scrollbar {
+.carousel__viewport::-webkit-scrollbar {
   width: 0;
 }
 
-.carousel::-webkit-scrollbar-track {
+.carousel__viewport::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.carousel::-webkit-scrollbar-thumb {
+.carousel__viewport::-webkit-scrollbar-thumb {
   background: transparent;
   border: none;
 }

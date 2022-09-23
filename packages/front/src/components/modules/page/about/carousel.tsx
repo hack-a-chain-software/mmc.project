@@ -1,5 +1,6 @@
 import { Item } from "./item";
 import { Fragment } from "react";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const items = [
   {
@@ -88,20 +89,12 @@ export function AboutCarousel() {
   };
 
   return (
-    <div className="carousel relative min-h-[900px] flex sm:hidden">
-      <div className="absolute top-[160px] left-0 right-0 pointer-events-none z-[4]">
-        <div className="max-w-[408px] flex space-between mx-auto">
-          <img
-            loading="lazy"
-            src="./svgs/chevron.svg"
-            className="h-[80px] rotate-[180deg]"
-          />
+    <div className="carousel relative min-h-[640px] flex sm:hidden">
+      <div className="absolute top-[30px] left-0 right-0 pointer-events-none z-[4]">
+        <div className="w-full flex space-between mx-auto">
+          <ChevronLeftIcon className="h-[80px] text-[#972DF2]" />
 
-          <img
-            loading="lazy"
-            src="./svgs/chevron.svg"
-            className="h-[80px] ml-auto"
-          />
+          <ChevronRightIcon className="h-[80px] text-[#972DF2] ml-auto" />
         </div>
       </div>
 
@@ -115,7 +108,7 @@ export function AboutCarousel() {
             <Fragment>
               <div className="carousel__snapper" />
 
-              <div className="absolute top-[160px] left-0 right-0 flex space-between">
+              <div className="absolute top-[30px] left-0 right-0 flex space-between">
                 <div className="max-w-[408px] w-full flex space-between mx-auto">
                   <a
                     href={"#about-carousel-item-" + getPrev(index)}

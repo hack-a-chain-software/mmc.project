@@ -28,7 +28,7 @@ export const Index = () => {
             space-y-[60px]
             xl:space-y-[125px]
             mx-auto
-            bg-no-repeat bg-[url('/svgs/clouds.svg')] bg-[center_top_190px]
+            bg-no-repeat bg-[url('/svgs/clouds.svg')] bg-[length:700px_600px] md:bg-[length:auto_auto] bg-[center_top_190px]
           "
         >
           <div className="xl:min-h-[500px] px-[30px] xl:px-0">
@@ -128,7 +128,7 @@ export const Index = () => {
 
       <div
         id="roadmap"
-        className="container mx-auto relative overflow-hidden lg:mb-[200px] mb-[80px]"
+        className="container mx-auto relative overflow-hidden lg:mb-[200px] mb-[40px]"
       >
         <section>
           <img

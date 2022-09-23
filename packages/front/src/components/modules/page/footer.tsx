@@ -31,12 +31,12 @@ const socials = [
 export function PageFooter() {
   return (
     <div className="py-[60px] min-h-[300px] bg-purple-0 px-[30px] sm:px-0">
-      <div className="container mx-auto flex flex-col space-y-[120px] lg:space-y-0 lg:justify-between lg:flex-row">
+      <div className="container mx-auto flex flex-col space-y-[30px] md:space-y-[120px] lg:space-y-0 lg:justify-between lg:flex-row">
         <div>
           <img
             loading="lazy"
             src="./svgs/mmc-tt_white.svg"
-            className="w-[395px] h-auto"
+            className="w-[275px] md:w-[395px] h-auto"
           />
         </div>
 
@@ -54,7 +54,7 @@ export function PageFooter() {
           </div>
 
           <div>
-            <ul className="hidden md:block flex space-x-[32px]">
+            <ul className="flex flex-col md:flex-row space-y-[12px] md:space-y-0 md:space-x-[32px]">
               {routes.map(({ label, path }) => (
                 <li
                   children={label}
@@ -65,7 +65,7 @@ export function PageFooter() {
             </ul>
           </div>
 
-          <div>
+          <div className="text-center">
             <span className="text-white text-[14px] leading-[18px] font-[200]">
               ©Scribble Labs, The Murder Mystery Collective 2022
             </span>

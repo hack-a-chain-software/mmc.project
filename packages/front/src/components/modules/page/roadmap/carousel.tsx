@@ -59,8 +59,8 @@ export function RoadmapCarousel() {
   };
 
   return (
-    <div className="carousel relative min-h-[500px] flex sm:hidden mt-[-70px]">
-      <div className="absolute top-[45px] left-0 right-0 pointer-events-none z-[3]">
+    <div className="carousel relative min-h-[450px] flex sm:hidden mt-[-70px]">
+      <div className="absolute top-[60px] left-0 right-0 pointer-events-none z-[3]">
         <div className="w-full flex space-between mx-auto">
           <ChevronLeftIcon className="h-[80px] text-[#DF44A9]" />
 
@@ -84,7 +84,7 @@ export function RoadmapCarousel() {
               <Fragment>
                 <div className="carousel__snapper" />
 
-                <div className="absolute top-[40px] left-0 right-0">
+                <div className="absolute top-[60px] left-0 right-0">
                   <div className="w-full px-[30px] flex space-between mx-auto">
                     <a
                       href={"#roadmap-carousel-item-" + getPrev(index)}
