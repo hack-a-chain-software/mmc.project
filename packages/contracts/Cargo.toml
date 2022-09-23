@@ -1,7 +1,8 @@
 [workspace]
 #Add location of contracts here
 members = [
-    "./contract"
+    "./locked_token",
+    "./fungible_token",
 ]
 
 [profile.release]
