@@ -54,7 +54,7 @@ export function PageFooter() {
           </div>
 
           <div>
-            <ul className="flex space-x-[32px]">
+            <ul className="hidden md:block flex space-x-[32px]">
               {routes.map(({ label, path }) => (
                 <li
                   children={label}

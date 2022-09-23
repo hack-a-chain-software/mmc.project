@@ -71,7 +71,7 @@ const items = [
 export function About() {
   return (
     <div>
-      <div className="hidden md:flex flex-col justify-between items-center space-y-[120px] xl:flex-row xl:items-start xl:space-y-0">
+      <div className="hidden sm:flex flex-col justify-between items-center space-y-[120px] xl:flex-row xl:items-start xl:space-y-0">
         {items.map(({ icon, title, items }, index) => (
           <div
             className="

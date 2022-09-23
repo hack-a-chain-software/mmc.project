@@ -18,7 +18,8 @@ const roadmap = [
     title: "Q4 2022",
     items: [
       <span>
-        $ Solve token <br /> presale {"&"} public sale
+        $ Solve token <br /> presale {"&"} <br className="block sm:hidden" />{" "}
+        public sale
       </span>,
       <span>
         Season one <br /> game launch
@@ -31,9 +32,15 @@ const roadmap = [
   {
     title: "Q1 2023",
     items: [
-      <span>Season one concludes</span>,
-      <span>Staking {"&"} Solving rewards</span>,
-      <span>Season 2 announcements</span>,
+      <span>
+        Season one <br className="block sm:hidden" /> concludes
+      </span>,
+      <span>
+        Staking {"&"} <br className="block sm:hidden" /> Solving rewards
+      </span>,
+      <span>
+        Season 2 <br className="block sm:hidden" /> announcements
+      </span>,
     ],
   },
 ];
@@ -52,19 +59,19 @@ export function RoadmapCarousel() {
   };
 
   return (
-    <div className="carousel relative min-h-[500px] flex md:hidden mt-[-70px]">
-      <div className="absolute top-[80px] left-0 right-0 pointer-events-none z-[3]">
+    <div className="carousel relative min-h-[500px] flex sm:hidden mt-[-70px]">
+      <div className="absolute top-[45px] left-0 right-0 pointer-events-none z-[3]">
         <div className="w-full flex space-between mx-auto">
-          <ChevronLeftIcon className="h-[100px] text-[#DF44A9]" />
+          <ChevronLeftIcon className="h-[80px] text-[#DF44A9]" />
 
-          <ChevronRightIcon className="h-[100px] text-[#DF44A9] ml-auto" />
+          <ChevronRightIcon className="h-[80px] text-[#DF44A9] ml-auto" />
         </div>
       </div>
 
-      <div className="carousel__viewport pt-[100px]">
+      <div className="carousel__viewport">
         <img
           src="./images/pins.png"
-          className="absolute min-w-[1200px] z-[2] pointer-events-none top-0 left-[400px]"
+          className="absolute min-w-[calc(2*100vw)] h-[102px] z-[2] pointer-events-none top-[8px] left-[55%]"
         />
 
         {roadmap &&
@@ -72,43 +79,26 @@ export function RoadmapCarousel() {
             <div
               id={"roadmap-carousel-item-" + index}
               key={"about-item" + index}
-              className="basis-full min-w-full flex  justify-center relative"
+              className="basis-full min-w-full flex justify-center relative pt-[80px]"
             >
-              {index === 0 ? (
-                <div className="carousel__snapper">
-                  <div className="absolute top-[-18px] left-0 right-0">
-                    <div className="w-full px-[30px] flex space-between mx-auto">
-                      <a
-                        href={"#roadmap-carousel-item-" + getPrev(index)}
-                        className="opacity-[0] h-[100px] w-[100px]"
-                      />
+              <Fragment>
+                <div className="carousel__snapper" />
 
-                      <a
-                        href={"#roadmap-carousel-item-" + getNext(index)}
-                        className="opacity-[0]  h-[100px] w-[100px] ml-auto"
-                      />
-                    </div>
+                <div className="absolute top-[40px] left-0 right-0">
+                  <div className="w-full px-[30px] flex space-between mx-auto">
+                    <a
+                      href={"#roadmap-carousel-item-" + getPrev(index)}
+                      className="opacity-[0] h-[80px] w-[80px]"
+                    />
+
+                    <a
+                      href={"#roadmap-carousel-item-" + getNext(index)}
+                      className="opacity-[0]  h-[80px] w-[80px] ml-auto"
+                    />
                   </div>
                 </div>
-              ) : (
-                <Fragment>
-                  <div className="carousel__snapper" />
+              </Fragment>
 
-                  <div className="absolute top-[-18px] left-0 right-0">
-                    <div className="w-full px-[30px] flex space-between mx-auto">
-                      <a
-                        href={"#roadmap-carousel-item-" + getPrev(index)}
-                        className="opacity-[0] h-[100px] w-[100px]"
-                      />
-
-                      <a
-                        href={"#roadmap-carousel-item-" + getNext(index)}
-                        className="opacity-[0]  h-[100px] w-[100px] ml-auto"
-                      />
-                    </div>
-                  </div>
-                </Fragment>
-              )}
               <Item {...item} />
             </div>
           ))}

@@ -88,19 +88,19 @@ export function AboutCarousel() {
   };
 
   return (
-    <div className="carousel relative min-h-[900px] flex md:hidden">
-      <div className="absolute top-[110px] left-0 right-0 pointer-events-none">
+    <div className="carousel relative min-h-[900px] flex sm:hidden">
+      <div className="absolute top-[160px] left-0 right-0 pointer-events-none z-[4]">
         <div className="max-w-[408px] flex space-between mx-auto">
           <img
             loading="lazy"
             src="./svgs/chevron.svg"
-            className="h-[120px] rotate-[180deg]"
+            className="h-[80px] rotate-[180deg]"
           />
 
           <img
             loading="lazy"
             src="./svgs/chevron.svg"
-            className="h-[120px] ml-auto"
+            className="h-[80px] ml-auto"
           />
         </div>
       </div>
@@ -112,41 +112,23 @@ export function AboutCarousel() {
             key={"about-item" + index}
             className="basis-full min-w-full flex items-center justify-center relative"
           >
-            {index === 0 ? (
-              <div className="carousel__snapper">
-                <div className="absolute top-[110px] left-0 right-0 flex space-between">
-                  <div className="max-w-[408px] w-full flex space-between mx-auto">
-                    <a
-                      href={"#about-carousel-item-" + getPrev(index)}
-                      className="opacity-[0] h-[120px] w-[63px]"
-                    />
+            <Fragment>
+              <div className="carousel__snapper" />
 
-                    <a
-                      href={"#about-carousel-item-" + getNext(index)}
-                      className="opacity-[0] h-[120px] w-[63px] ml-auto"
-                    />
-                  </div>
+              <div className="absolute top-[160px] left-0 right-0 flex space-between">
+                <div className="max-w-[408px] w-full flex space-between mx-auto">
+                  <a
+                    href={"#about-carousel-item-" + getPrev(index)}
+                    className="opacity-[0] h-[80px] w-[80px]"
+                  />
+
+                  <a
+                    href={"#about-carousel-item-" + getNext(index)}
+                    className="opacity-[0] h-[80px] w-[80px] ml-auto"
+                  />
                 </div>
               </div>
-            ) : (
-              <Fragment>
-                <div className="carousel__snapper" />
-
-                <div className="absolute top-[110px] left-0 right-0 flex space-between">
-                  <div className="max-w-[408px] w-full flex space-between mx-auto">
-                    <a
-                      href={"#about-carousel-item-" + getPrev(index)}
-                      className="opacity-[0] h-[120px] w-[63px]"
-                    />
-
-                    <a
-                      href={"#about-carousel-item-" + getNext(index)}
-                      className="opacity-[0] h-[120px] w-[63px] ml-auto"
-                    />
-                  </div>
-                </div>
-              </Fragment>
-            )}
+            </Fragment>
 
             <div
               className="
@@ -160,13 +142,17 @@ export function AboutCarousel() {
               "
             >
               <div className="mb-[54px]">
-                <img loading="lazy" src={`./images/${icon}.png`} />
+                <img
+                  loading="lazy"
+                  src={`./images/${icon}.png`}
+                  className="h-[130px]"
+                />
               </div>
 
               <div className="md:max-w-[360px] text-center">
                 <span
                   children={title}
-                  className="uppercase text-[22px] leading-[50px] font-[300]"
+                  className="uppercase text-[16px] sm:text-[22px] leading-[50px] font-[300]"
                 />
               </div>
 
