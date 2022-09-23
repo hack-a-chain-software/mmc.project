@@ -3,6 +3,7 @@
 members = [
     "./locked_token",
     "./fungible_token",
+    "./vesting_contract",
 ]
 
 [profile.release]
