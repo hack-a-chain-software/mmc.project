@@ -5,6 +5,8 @@ import react from "@vitejs/plugin-react";
 import reactRefresh from "@vitejs/plugin-react-refresh";
 import NodeGlobalsPolyfillPlugin from "@esbuild-plugins/node-globals-polyfill";
 
+import relay from "vite-plugin-relay";
+
 export default defineConfig({
   plugins: [
     react(),
@@ -16,6 +18,7 @@ export default defineConfig({
     Pages({
       pagesDir: "src/pages",
     }),
+    relay,
   ],
   esbuild: {},
   define: {
