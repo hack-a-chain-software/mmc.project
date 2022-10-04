@@ -1,6 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
 import { useNearWalletSelector } from "@/utils/context/wallet";
+import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import type { ModuleState } from "@near-wallet-selector/core";
 
 export function WalletSelectorModal(props: {}) {
@@ -75,27 +76,35 @@ export function WalletSelectorModal(props: {}) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <div className="flex flex-col mb-[12px]">
-                  <Dialog.Title className="text-[24px] font-medium leading-6 text-gray-900">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-[24px] text-left align-middle shadow-xl transition-all">
+                <div className="flex flex-col mb-[24px]">
+                  <span className="text-black text-[18px] font-[400]">
                     Connect Wallet
-                  </Dialog.Title>
+                  </span>
                 </div>
 
-                <div className="space-y-[12px] flex flex-col">
+                <div className="flex flex-col rounded-[12px] border border-[#e0e1e4] divide-y-black overflow-hidden">
                   {modules.map((module) => (
                     <button
                       key={"wallet-selector-modal-module" + module.id}
                       onClick={() => handleWalletClick(module)}
-                      className="border border-black rounded-[13px] py-[12px] px-[24px] text-black h-[56px] flex items-center hover:bg-black hover:text-white"
+                      className="
+                        p-[16px] flex items-center hover:bg-white hover:text-purple-0 border-b border-[#e0e1e4]
+                      "
                     >
-                      <img
-                        loading="lazy"
-                        src={module.metadata.iconUrl}
-                        className="w-[32px] h-[32px] mr-[12px]"
-                      />
+                      <div className="flex">
+                        <img
+                          src={module.metadata.iconUrl}
+                          className="w-[20px] mr-[12px]"
+                        />
 
-                      {module.metadata.name}
+                        <span
+                          children={module.metadata.name}
+                          className="text-[14px] font-[400]"
+                        />
+                      </div>
+
+                      <ChevronRightIcon className="h-[14px] ml-auto text-current" />
                     </button>
                   ))}
                 </div>

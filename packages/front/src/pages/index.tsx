@@ -1,6 +1,4 @@
 import {
-  PageHeader,
-  PageFooter,
   Slider,
   Button,
   About,
@@ -14,11 +12,9 @@ export const Index = () => {
     <main className="w-screen min-h-screen">
       <div
         className="
-          bg-no-repeat bg-[url('/images/background-home.jpg')] bg-[length:100%_100%]
+          bg-no-repeat bg-[url('/images/background-home.jpg')] bg-[length:100%_100%] pt-[179px]
         "
       >
-        <PageHeader />
-
         <Slider />
 
         <section
@@ -152,8 +148,6 @@ export const Index = () => {
           <SneakPeeks />
         </section>
       </div>
-
-      <PageFooter />
     </main>
   );
 };
