@@ -7,8 +7,8 @@ export const Scene = ({ image, name, clues }: SceneInterface) => {
       <img src={image} />
 
       {clues &&
-        clues.map((point, i) => (
-          <Clue {...point} key={`scene-${name}-point-${i}`} />
+        clues.map((clue, i) => (
+          <Clue {...clue} key={`scene-${name}-point-${i}`} />
         ))}
     </div>
   );
