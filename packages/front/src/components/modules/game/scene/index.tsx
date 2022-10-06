@@ -1,18 +1,15 @@
-interface point {
-  name?: string;
-  about?: string;
-  action?: string | number;
-  type: "clue" | "portal";
-}
+import { Clue } from "./clue";
+import { SceneInterface } from "@/utils/interfaces";
 
-export const Scene = ({
-  image,
-  name,
-  points,
-}: {
-  image: string;
-  name: string;
-  points: point[];
-}) => {
-  return <div></div>;
+export const Scene = ({ image, name, clues }: SceneInterface) => {
+  return (
+    <div className="relative">
+      <img src={image} />
+
+      {clues &&
+        clues.map((point, i) => (
+          <Clue {...point} key={`scene-${name}-point-${i}`} />
+        ))}
+    </div>
+  );
 };
