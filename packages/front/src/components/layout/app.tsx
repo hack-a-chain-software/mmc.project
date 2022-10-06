@@ -21,13 +21,15 @@ const Pages = () => {
 };
 
 export const App = () => {
+  const notInSubdomain = !(host.includes(subdomain) && subdomain.length === 4);
+
   return (
     <Router>
-      {!host.includes(subdomain) && <Header />}
+      {notInSubdomain && <Header />}
 
       <Pages />
 
-      {!host.includes(subdomain) && <Footer />}
+      {notInSubdomain && <Footer />}
     </Router>
   );
 };

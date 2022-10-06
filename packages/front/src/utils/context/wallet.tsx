@@ -12,13 +12,17 @@ import { setupNearWallet } from "@near-wallet-selector/near-wallet";
 import type { AccountView } from "near-api-js/lib/providers/provider";
 import type { WalletSelector, AccountState } from "@near-wallet-selector/core";
 
+import { keyStores, KeyPair } from "near-api-js";
+
 interface NearContextValue {
+  keypair: any;
   connection: WalletSelector;
   accounts: AccountState[];
   accountId: string | null;
   showModal: boolean;
   signOut: () => Promise<void>;
   toggleModal: () => void;
+  signMessage: (message: string) => any;
 }
 
 export type Account = AccountView & {
@@ -30,6 +34,7 @@ const WalletContext = React.createContext<NearContextValue | null>(null);
 export const WalletSelectorContextProvider: React.FC<
   PropsWithChildren<Record<any, any>>
 > = ({ children }) => {
+  const [keypair, setKeypair] = useState<any>();
   const [accountId, setAccountId] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
   const [accounts, setAccounts] = useState<AccountState[]>([]);
@@ -45,6 +50,19 @@ export const WalletSelectorContextProvider: React.FC<
     const wallet = await connection.wallet();
 
     wallet.signOut();
+  };
+
+  const signMessage = (message) => {
+    const msg = Buffer.from(message);
+
+    const { signature } = keypair.sign(msg);
+
+    const isValid = keypair.verify(msg, signature);
+
+    return {
+      signature,
+      isValid,
+    };
   };
 
   const init = useCallback(async () => {
@@ -98,6 +116,17 @@ export const WalletSelectorContextProvider: React.FC<
       accounts.find((account) => account.active)?.accountId || "";
 
     setAccountId(newAccount);
+
+    (async () => {
+      const keystore = new keyStores.BrowserLocalStorageKeyStore();
+
+      const keyPair = await keystore.getKey(
+        import.meta.env.VITE_NEAR_NETWORK,
+        newAccount
+      );
+
+      setKeypair(keyPair);
+    })();
   }, [accounts]);
 
   if (!connection) {
@@ -108,10 +137,12 @@ export const WalletSelectorContextProvider: React.FC<
     <WalletContext.Provider
       value={{
         accounts,
+        keypair,
         accountId,
         showModal,
         connection,
         signOut,
+        signMessage,
         toggleModal,
       }}
     >
