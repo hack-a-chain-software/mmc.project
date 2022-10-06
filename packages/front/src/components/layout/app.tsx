@@ -3,7 +3,11 @@ import { Header } from "./header";
 import { Footer } from "./footer";
 import { BrowserRouter as Router, useRoutes } from "react-router-dom";
 
-const getSubdomainRoutes = (routes, subdomain) => {
+const { host } = window.location;
+
+const subdomain = host.split(".")[0];
+
+const getSubdomainRoutes = () => {
   const { children = [] } = routes.find(({ path }) => path === subdomain) || {};
 
   return children.map((subroute) => ({
@@ -13,19 +17,17 @@ const getSubdomainRoutes = (routes, subdomain) => {
 };
 
 const Pages = () => {
-  const { host } = window.location;
-  const subdomain = host.split(".")[0];
-
-  const _routes =
-    subdomain.length === 4 ? getSubdomainRoutes(routes, subdomain) : routes;
-
-  return useRoutes(_routes);
+  return useRoutes(subdomain.length === 4 ? getSubdomainRoutes() : routes);
 };
 
-export const App = () => (
-  <Router>
-    <Header />
-    <Pages />
-    <Footer />
-  </Router>
-);
+export const App = () => {
+  return (
+    <Router>
+      {!host.includes(subdomain) && <Header />}
+
+      <Pages />
+
+      {!host.includes(subdomain) && <Footer />}
+    </Router>
+  );
+};
