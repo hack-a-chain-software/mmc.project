@@ -19,11 +19,11 @@ const routes = [
 
 const socials = [
   {
-    icon: "./svgs/discord.svg",
+    icon: "/svgs/discord.svg",
     path: "#",
   },
   {
-    icon: "./svgs/twitter.svg",
+    icon: "/svgs/twitter.svg",
     path: "#",
   },
 ];

@@ -1,6 +1,5 @@
-import { Button } from "@/components";
+import { isProd } from "@/utils/helpers";
 import { HashLink } from "react-router-hash-link";
-import { useNearWalletSelector } from "@/utils/context/wallet";
 
 const routes = [
   {
@@ -27,18 +26,16 @@ const routes = [
 
 const socials = [
   {
-    icon: "./svgs/discord.svg",
+    icon: "/svgs/discord.svg",
     path: "#",
   },
   {
-    icon: "./svgs/twitter.svg",
+    icon: "/svgs/twitter.svg",
     path: "#",
   },
 ];
 
 export function Header() {
-  const { accountId, signOut, toggleModal } = useNearWalletSelector();
-
   return (
     <div className="absolute w-full mx-auto pt-[50px] pb-[25px] md:pt-[80px] md:pb-[59px] px-[30px] sm:px-0">
       <nav className="flex justify-between items-center max-w-[1620px] mx-auto">
@@ -80,15 +77,12 @@ export function Header() {
             </a>
           ))}
 
-          {!!!accountId ? (
-            <Button className="hidden lg:block" onClick={() => toggleModal()}>
-              Connect Wallet
-            </Button>
-          ) : (
-            <Button onClick={() => signOut()}>
-              <span children={accountId?.split(".").at(0)} />
-            </Button>
-          )}
+          <a
+            href={isProd ? "https://www.google.com" : "/play"}
+            className="w-[150px] hidden lg:flex flex items-center justify-center bg-purple-0 text-white text-[14px] uppercase min-h-[40px] px-[13px] tracking-[0px] border border-white rounded-[50px] font-[400] hover:bg-white hover:text-purple-0"
+          >
+            Play Now
+          </a>
         </div>
       </nav>
     </div>

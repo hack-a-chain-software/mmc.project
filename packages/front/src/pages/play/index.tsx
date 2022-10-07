@@ -3,6 +3,7 @@ import scenes from "@/scenes.json";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useNearWalletSelector } from "@/utils/context/wallet";
+import { prefix } from "@/utils/helpers";
 
 export const Play = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ export const Play = () => {
 
   useEffect(() => {
     if (!accountId) {
-      navigate("/connect");
+      navigate(prefix + "/connect");
     }
   }, [accountId]);
 

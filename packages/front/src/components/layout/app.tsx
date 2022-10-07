@@ -3,7 +3,7 @@ import { Header } from "./header";
 import { Footer } from "./footer";
 import { BrowserRouter as Router, useRoutes } from "react-router-dom";
 
-const { host } = window.location;
+const { host, href } = window.location;
 
 const subdomain = host.split(".")[0];
 
@@ -21,15 +21,15 @@ const Pages = () => {
 };
 
 export const App = () => {
-  const notInSubdomain = !(host.includes(subdomain) && subdomain.length === 4);
+  const notInGame = !href.includes("play");
 
   return (
     <Router>
-      {notInSubdomain && <Header />}
+      {notInGame && <Header />}
 
       <Pages />
 
-      {notInSubdomain && <Footer />}
+      {notInGame && <Footer />}
     </Router>
   );
 };
