@@ -72,7 +72,7 @@ export class AuthService {
 
     const currentTimestampMs = new Date().valueOf();
     const deltaT = currentTimestampMs - parsedMessage.timestampMs;
-    const hasntExpired = deltaT <= this.messageValidForMs;
+    const hasntExpired = 0 <= deltaT && deltaT <= this.messageValidForMs;
 
     return hasntExpired;
   }
