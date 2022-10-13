@@ -83,6 +83,14 @@ describe('AuthService', () => {
 
       expect(isMessageValid).toBe(false);
     });
+
+    it('should return false for messages with future timestamps', () => {
+      const message = JSON.stringify({ timestampMs: new Date().valueOf() + 180000 });
+
+      const isMessageValid = authService.validateMessage(message);
+
+      expect(isMessageValid).toBe(false);
+    });
   });
 
   describe('verifySignature', () => {
