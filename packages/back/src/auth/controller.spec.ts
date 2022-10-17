@@ -41,8 +41,8 @@ describe('AuthControler', () => {
       const loginDto = {
         accountId: 'account.near',
         signedMessage: {
-          message: new Uint8Array(),
-          signature: new Uint8Array(),
+          message: [],
+          signature: [],
           publicKey: KeyPair.fromRandom('ed25519').getPublicKey().toString(),
         },
       };
@@ -71,8 +71,8 @@ describe('AuthControler', () => {
       const loginDto = {
         accountId: 'account.near',
         signedMessage: {
-          message: new Uint8Array(),
-          signature: new Uint8Array(),
+          message: [],
+          signature: [],
           publicKey: KeyPair.fromRandom('ed25519').getPublicKey().toString(),
         },
       };
@@ -95,8 +95,8 @@ describe('AuthControler', () => {
       const loginDto = {
         accountId: 'account.near',
         signedMessage: {
-          message: new Uint8Array(),
-          signature: new Uint8Array(),
+          message: [],
+          signature: [],
           publicKey: 'not a correctly encoded public key',
         },
       };
