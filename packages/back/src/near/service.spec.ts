@@ -12,7 +12,13 @@ describe('NearService', () => {
   let nearService: NearService;
 
   const keyPair = KeyPairEd25519.fromRandom();
-  const nearConfig: Partial<NearConfiguration> = { receiverId: 'abacaba.near' };
+  const nearConfig: Partial<NearConfiguration> = {
+    receiverId: 'abacaba.near',
+    account: {
+      id: 'hackadu.near',
+      keyPair: ''
+    }
+  };
 
   beforeEach(async () => {
     jest.restoreAllMocks();

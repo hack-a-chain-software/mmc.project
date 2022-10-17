@@ -11,11 +11,17 @@ export function configuration(): Configuration {
     near: {
       receiverId: process.env.RECEIVER_ID,
 
+      account: {
+        id: process.env.ACCOUNT_ID,
+        keyPair: process.env.ACCOUNT_KEYPAR
+      },
+
       connection: {
         networkId: process.env.NEAR_NETWORK,
         nodeUrl: process.env.NEAR_NODE_URL,
       },
     },
+
     auth: {
       messageValidForMs: parseInt(process.env.AUTH_MESSAGE_VALID_FOR_MS, 10),
 
