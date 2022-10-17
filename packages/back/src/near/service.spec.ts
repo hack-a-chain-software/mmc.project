@@ -2,7 +2,7 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Account, Near } from 'near-api-js';
 import { KeyPairEd25519 } from 'near-api-js/lib/utils';
-import { configServiceMock } from 'src/config/mock.test';
+import { configServicePartialMock } from 'src/config/mock.test';
 import { NearConfiguration } from './configuration';
 import { CONNECTION_PROVIDER_KEY } from './constants';
 import { NearService } from './service';
@@ -26,7 +26,7 @@ describe('NearService', () => {
     module = await Test.createTestingModule({
       providers: [
         NearService,
-        configServiceMock('near', nearConfig),
+        configServicePartialMock('near', nearConfig),
         {
           provide: CONNECTION_PROVIDER_KEY,
           useValue: createMock<Near>()
