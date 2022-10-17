@@ -2,7 +2,7 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { KeyPair } from 'near-api-js';
-import { configServiceMock } from 'src/config/mock.test';
+import { configServicePartialMock } from 'src/config/mock.test';
 import { NearService } from 'src/near/service';
 import { AuthConfiguration } from './configuration';
 import { AuthService } from './service';
@@ -20,7 +20,7 @@ describe('AuthService', () => {
     module = await Test.createTestingModule({
       providers: [
         AuthService,
-        configServiceMock('auth', authConfig),
+        configServicePartialMock('auth', authConfig),
       ],
     })
       .useMocker(createMock)

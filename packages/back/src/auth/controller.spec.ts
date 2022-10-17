@@ -2,7 +2,7 @@ import { getMockRes } from '@jest-mock/express';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { KeyPair } from 'near-api-js/lib/utils';
-import { configServiceMock } from 'src/config/mock.test';
+import { configServicePartialMock } from 'src/config/mock.test';
 import { AuthConfiguration } from './configuration';
 import { AuthController } from './controller';
 import { AuthService } from './service';
@@ -19,7 +19,7 @@ describe('AuthControler', () => {
 
     module = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [configServiceMock('auth', authConfig)]
+      providers: [configServicePartialMock('auth', authConfig)]
     })
       .useMocker(createMock)
       .compile();
