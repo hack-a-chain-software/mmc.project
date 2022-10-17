@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthController } from './auth/controller';
+import { AuthModule } from './auth/module';
 import { configuration } from './config/configuration';
 
 @Module({
@@ -8,7 +9,7 @@ import { configuration } from './config/configuration';
     ConfigModule.forRoot({
       load: [configuration],
     }),
-  ],
-  controllers: [AuthController],
+    AuthModule,
+  ]
 })
-export class AppModule {}
+export class AppModule { }
