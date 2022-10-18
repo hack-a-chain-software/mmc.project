@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PublicKey } from 'near-api-js/lib/utils';
 import { CodecService } from 'src/codec/service';
 import { Configuration } from 'src/config/configuration';
-import { NearService } from '../near/service';
+import { NearService } from 'src/near/service';
 
 // TODO: move it somewhere else
 export interface SignedMessage {

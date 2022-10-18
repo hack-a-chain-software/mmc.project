@@ -1,4 +1,4 @@
-import { Body, Controller, Headers, Post, Response } from '@nestjs/common';
+import { Body, Controller, Post, Response } from '@nestjs/common';
 import * as express from 'express';
 import { PublicKey } from 'near-api-js/lib/utils';
 import { AUTH_URI } from './constants';
