@@ -32,12 +32,12 @@ export class NearService {
 
         const accountKeys = await account.getAccessKeys();
 
-        const mmcKey = accountKeys.find(
+        const providedKey = accountKeys.find(
             (ak) => ak.public_key == publicKey.toString(),
         );
-        if (!mmcKey) return false;
+        if (!providedKey) return false;
 
-        const permission = mmcKey.access_key.permission;
+        const permission = providedKey.access_key.permission;
 
         return (
             permission == 'FullAccess' ||
@@ -46,7 +46,8 @@ export class NearService {
     }
 
     async callContractChangeFunction<T>(options: ChangeFunctionCallOptions): Promise<FinalExecutionOutcome> {
-        const outcome = await (await this.account).functionCall(options);
+        const account = await this.account;
+        const outcome = await account.functionCall(options);
 
         return outcome;
     }
@@ -54,6 +55,7 @@ export class NearService {
     async callContractViewFunction<T>(options: ViewFunctionCallOptions): Promise<T> {
         const account = await this.account;
         const result: T = await account.viewFunctionV2(options);
+
         return result;
     }
 }
