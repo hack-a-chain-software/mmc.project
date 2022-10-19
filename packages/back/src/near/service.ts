@@ -52,8 +52,8 @@ export class NearService {
     }
 
     async callContractViewFunction<T>(options: ViewFunctionCallOptions): Promise<T> {
-        const result: T = await (await this.account).viewFunctionV2(options);
-
+        const account = await this.account;
+        const result: T = await account.viewFunctionV2(options);
         return result;
     }
 }

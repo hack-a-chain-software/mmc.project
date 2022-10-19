@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthController } from './auth/controller';
 import { AuthModule } from './auth/module';
 import { configuration } from './config/configuration';
+import { NftModule } from './nft/module';
 
 @Module({
   imports: [
@@ -10,6 +10,7 @@ import { configuration } from './config/configuration';
       load: [configuration],
     }),
     AuthModule,
+    NftModule,
   ]
 })
 export class AppModule { }
