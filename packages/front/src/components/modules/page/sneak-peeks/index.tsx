@@ -34,13 +34,6 @@ export function SneakPeeks() {
         className="hidden md:flex"
         updateSelected={(value: number) => updateSelected(value, 1)}
       />
-
-      <Item
-        selected={selected}
-        key="sneak-peek-item-2"
-        className="hidden md:flex"
-        updateSelected={(value: number) => updateSelected(value, 2)}
-      />
     </div>
   );
 }

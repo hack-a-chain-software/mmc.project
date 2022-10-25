@@ -77,20 +77,23 @@ export function About() {
             className="
               text-white
               text-center
-              max-w-[485px]
-              space-y-[48px]
+              max-w-[290px]
               flex flex-col items-center justify-center
             "
             key={"about-item" + index}
           >
-            <div className="mb-[52px]">
-              <img loading="lazy" src={`./images/${icon}.png`} />
+            <div className="mb-[25px]">
+              <img
+                loading="lazy"
+                src={`./images/${icon}.png`}
+                className="h-[100px]"
+              />
             </div>
 
-            <div className="pb-[32px] max-w-[360px] text-center">
+            <div className="max-w-[290px] text-center mb-[25px] h-[54px]">
               <span
                 children={title}
-                className="uppercase text-[38px] leading-[50px] font-[300]"
+                className="uppercase text-[20px] leading-[30px] font-[300]"
               />
             </div>
 

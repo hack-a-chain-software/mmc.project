@@ -34,12 +34,12 @@ export function Item({
         className
       )}
     >
-      <div className="relative aspect-[5/7] w-full min-w-[300px] max-w-[300px] sm:min-w-[350px] md:max-w-[700px]">
+      <div className="relative aspect-[5/7] w-full h-[490px] w-[450px]">
         <div className="absolute top-0 w-full h-[40px] overflow-hidden">
           <img src="./svgs/blinds.svg" className="w-full" />
         </div>
 
-        <div className="absolute top-0 left-0 w-full">
+        <div className="absolute top-0 left-0 w-full overflow-hidden max-h-[470px]">
           <AnimatePresence initial={false}>
             {hide && (
               <motion.section
@@ -52,11 +52,7 @@ export function Item({
                 }}
                 transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
               >
-                <img
-                  loading="lazy"
-                  src="./svgs/blinds.svg"
-                  className="w-screen aspect-[500/641]"
-                />
+                <img loading="lazy" src="./svgs/blinds.svg" />
               </motion.section>
             )}
           </AnimatePresence>

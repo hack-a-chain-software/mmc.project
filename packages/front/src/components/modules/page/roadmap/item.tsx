@@ -2,18 +2,17 @@ import { ReactNode } from "react";
 
 export function Item({ title, items }: { title: string; items: ReactNode[] }) {
   return (
-    <div className="text-white w-max space-y-[42px] max-w-[415px] w-full">
+    <div className="text-white w-max space-y-[42px] min-w-[290px] max-w-[290px] w-screen">
       <div
         className="
           bg-pink-0
           flex items-center justify-center mx-auto
-          border border-[2px] h-[42px] sm:h-[60px] w-[415px]
-          max-w-[230px] ms:max-w-[330px] md:max-w-none
+          border border-[2px] w-full
         "
       >
         <span
           children={title}
-          className="uppercase text-[16px] sm:text-[22px] md:text-[28px] md:leading-[40px]"
+          className="uppercase text-[20px] leading-[40px] font-[300]"
         />
       </div>
 
@@ -22,7 +21,7 @@ export function Item({ title, items }: { title: string; items: ReactNode[] }) {
           <span
             children={value}
             key={title + "-roadmap-item-" + index}
-            className="uppercase text-[16px] sm:text-[22px] md:text-[28px] md:leading-[40px] font-[300]"
+            className="uppercase text-[15px] leading-[20px] font-[300]"
           />
         ))}
       </div>
