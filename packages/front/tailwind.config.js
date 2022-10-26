@@ -20,6 +20,9 @@ module.exports = {
           0: "#F124AD",
         },
       },
+      gridTemplateColumns: {
+        "auto-fit": "repeat(auto-fit, minmax(18rem, 1fr))",
+      },
       animation: {
         sliding: "sliding 32s linear infinite",
         slider: "scroll 120s linear infinite",

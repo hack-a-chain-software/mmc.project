@@ -44,7 +44,7 @@ export const Index = () => {
 
             <div>
               <Button
-                onClick={() => {}}
+                onClick={() => console.log("")}
                 className="text-[16px] sm:text-[15px] h-[60px] border-[2px] font-[400] shadow-0 px-[17px] h-[40px]"
               >
                 Join the whitelist
@@ -59,7 +59,7 @@ export const Index = () => {
           </div>
         </section>
 
-        <div className="w-screen overflow-hidden pointer-events-none h-[470px] w-[1920px]">
+        <div className="w-full overflow-hidden pointer-events-none max-h-[470px]">
           <img
             src="./svgs/scene-1_expanded_silhouette.svg"
             className="shrink-0"

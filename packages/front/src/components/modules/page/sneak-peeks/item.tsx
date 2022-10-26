@@ -34,7 +34,7 @@ export function Item({
         className
       )}
     >
-      <div className="relative aspect-[5/7] w-full h-[490px] w-[450px]">
+      <div className="relative aspect-[5/7] w-full max-h-[490px] max-w-[450px]">
         <div className="absolute top-0 w-full h-[40px] overflow-hidden">
           <img src="./svgs/blinds.svg" className="w-full" />
         </div>

@@ -71,10 +71,11 @@ const items = [
 export function About() {
   return (
     <div>
-      <div className="hidden sm:flex flex-col justify-between items-center space-y-[120px] xl:flex-row xl:items-start xl:space-y-0">
+      <div className="grid grid-cols-auto-fit gap-5 justify-items-center">
         {items.map(({ icon, title, items }, index) => (
           <div
             className="
+              w-[100%]
               text-white
               text-center
               max-w-[290px]
