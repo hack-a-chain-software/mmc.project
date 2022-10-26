@@ -12,7 +12,7 @@ export const Index = () => {
     <main className="w-screen min-h-screen">
       <div
         className="
-          bg-no-repeat bg-[url('/images/background-home.jpg')] bg-[length:100%_100%] pt-[137px] min-h-[100vh]
+          bg-no-repeat bg-[url('/images/background-home.jpg')] bg-[length:100%_100%] pt-[117px] min-h-[100vh]
         "
       >
         <Slider />
