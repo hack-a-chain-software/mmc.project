@@ -26,6 +26,8 @@ module.exports = {
       animation: {
         sliding: "sliding 32s linear infinite",
         slider: "scroll 120s linear infinite",
+        "scale-up":
+          "scale-up 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both",
       },
       keyframes: {
         sliding: {
@@ -42,6 +44,16 @@ module.exports = {
           },
           to: {
             transform: "translateX(calc(-594px * 7))",
+          },
+        },
+        "scale-up": {
+          from: {
+            transform: "scale(0.5)",
+            "transform-origin": "0% 0%",
+          },
+          to: {
+            transform: "scale(1)",
+            "transform-origin": "0% 0%",
           },
         },
       },

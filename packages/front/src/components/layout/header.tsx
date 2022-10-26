@@ -1,4 +1,5 @@
 import { isProd } from "@/utils/helpers";
+import { useState } from "react";
 import { HashLink } from "react-router-hash-link";
 
 const routes = [
@@ -36,6 +37,8 @@ const socials = [
 ];
 
 export function Header() {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
     <div className="absolute w-full mx-auto pt-[50px] px-[30px]">
       <nav className="flex justify-between items-center max-w-[1290px] mx-auto">
@@ -61,10 +64,55 @@ export function Header() {
         </ul>
 
         <div className="block md:hidden">
-          <button onClick={() => {}}>
+          <button onClick={() => setIsOpen(true)}>
             <img src="./svgs/plus.svg" className="h-[32px]" />
           </button>
         </div>
+
+        {isOpen && (
+          <div className="md:hidden motion-safe:animate-scale-up absolute bg-white inset-0 w-60 h-[170px] rounded-br-[70%]">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="block ml-auto px-3"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-6 h-6 font-bold"
+              >
+                <path d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <nav>
+              <ul className="flex flex-col ml-5 gap-2">
+                {routes.map(({ label, path }) => (
+                  <li
+                    key={`mmc-navbar-route-${label}-to-${path}`}
+                    className="black uppercase text-[12px] leading-[15px] font-[300] cursor-pointer tracking-[0px] hover:opacity-[.8]"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <HashLink
+                      to={"/" + path}
+                      _hover={{
+                        textDecoration: "unset",
+                      }}
+                      scroll={(el) =>
+                        el.scrollIntoView({
+                          behavior: "smooth",
+                          block: "start",
+                        })
+                      }
+                    >
+                      {label}
+                    </HashLink>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        )}
 
         <div className="flex items-center space-x-[32px]">
           {socials.map(({ icon, path }, i) => (
