@@ -30,8 +30,8 @@ const socials = [
 
 export function Footer() {
   return (
-    <div className="py-[60px] min-h-[300px] bg-purple-0 px-[30px] sm:px-0">
-      <div className="container mx-auto flex flex-col space-y-[30px] md:space-y-[120px] lg:space-y-0 lg:justify-between lg:flex-row max-w-[1290px]">
+    <div className="py-[60px] min-h-[300px] bg-purple-0">
+      <div className="container mx-auto flex flex-col space-y-[30px] md:space-y-[120px] lg:space-y-0 lg:justify-between lg:flex-row max-w-[1290px] px-[30px]">
         <div>
           <img
             loading="lazy"
