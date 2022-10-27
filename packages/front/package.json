@@ -33,6 +33,7 @@
     "react-dom": "^18.0.0",
     "react-lazy-load-image-component": "^1.5.5",
     "react-near": "^3.4.8",
+    "react-ready-state-effect": "^1.0.3",
     "react-relay": "^14.1.0",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",

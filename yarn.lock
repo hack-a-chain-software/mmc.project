@@ -5879,6 +5879,11 @@ react-near@^3.4.8:
   dependencies:
     cookie "^0.5.0"
 
+react-ready-state-effect@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-ready-state-effect/-/react-ready-state-effect-1.0.3.tgz#451f90e5d6a5cd6df8e7c964631fa9560e77425f"
+  integrity sha512-DAd5F9jNPW2e+ZL8C/W3ffA0rFVjh8c/V3YYVZFfOE5bkX79a4fmrrYELmUWWe3ycmhjY0nbm899GAsD0XefMA==
+
 react-refresh@^0.10.0:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.10.0.tgz#2f536c9660c0b9b1d500684d9e52a65e7404f7e3"
