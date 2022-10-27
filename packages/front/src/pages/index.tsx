@@ -47,7 +47,7 @@ export const Index = () => {
                 onClick={() => console.log("")}
                 className="text-[16px] sm:text-[15px] h-[60px] border-[2px] font-[400] shadow-0 px-[17px] h-[40px]"
               >
-                Join the whitelist
+                Join the Collective
               </Button>
             </div>
 

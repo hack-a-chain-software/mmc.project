@@ -26,8 +26,9 @@ module.exports = {
       animation: {
         sliding: "sliding 32s linear infinite",
         slider: "scroll 120s linear infinite",
-        "scale-up":
-          "scale-up 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both",
+        "slider-right":
+          "slider-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both",
+        collapsed: "collapsed 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both",
       },
       keyframes: {
         sliding: {
@@ -46,14 +47,20 @@ module.exports = {
             transform: "translateX(calc(-594px * 7))",
           },
         },
-        "scale-up": {
+        "slider-right": {
           from: {
-            transform: "scale(0.5)",
-            "transform-origin": "0% 0%",
+            transform: "translateX(-300px)",
           },
           to: {
-            transform: "scale(1)",
-            "transform-origin": "0% 0%",
+            transform: "translateX(0)",
+          },
+        },
+        collapsed: {
+          from: {
+            transform: "translateX(0)",
+          },
+          to: {
+            transform: "translateX(-300px)",
           },
         },
       },

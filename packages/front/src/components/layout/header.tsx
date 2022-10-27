@@ -1,5 +1,5 @@
 import { isProd } from "@/utils/helpers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HashLink } from "react-router-hash-link";
 
 const routes = [
@@ -37,7 +37,11 @@ const socials = [
 ];
 
 export function Header() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+
+  useEffect(() => {
+    document.body.style.overflowY = isOpen ? "hidden" : "";
+  }, [isOpen]);
 
   return (
     <div className="absolute w-full mx-auto pt-[50px] px-[30px]">
@@ -69,50 +73,54 @@ export function Header() {
           </button>
         </div>
 
-        {isOpen && (
-          <div className="md:hidden motion-safe:animate-scale-up absolute bg-white inset-0 w-60 h-[170px] rounded-br-[70%]">
-            <button
-              onClick={() => setIsOpen(false)}
-              className="block ml-auto px-3"
+        <div
+          className={`md:hidden ${
+            isOpen
+              ? "motion-safe:animate-slider-right"
+              : "motion-safe:animate-collapsed"
+          } absolute bg-purple-0 inset-0 w-60 h-[100vh] z-[1]`}
+        >
+          <button
+            onClick={() => setIsOpen(false)}
+            className="block px-3 mt-4 mb-4 text-white"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-6 h-6 font-bold"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="w-6 h-6 font-bold"
-              >
-                <path d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <nav>
-              <ul className="flex flex-col ml-5 gap-2">
-                {routes.map(({ label, path }) => (
-                  <li
-                    key={`mmc-navbar-route-${label}-to-${path}`}
-                    className="black uppercase text-[12px] leading-[15px] font-[300] cursor-pointer tracking-[0px] hover:opacity-[.8]"
-                    onClick={() => setIsOpen(false)}
+              <path d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <nav>
+            <ul className="flex flex-col ml-5 gap-4">
+              {routes.map(({ label, path }) => (
+                <li
+                  key={`mmc-navbar-route-${label}-to-${path}`}
+                  className="text-white uppercase text-[12px] leading-[15px] font-[400] cursor-pointer tracking-[0px] hover:opacity-[.8]"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <HashLink
+                    to={"/" + path}
+                    _hover={{
+                      textDecoration: "unset",
+                    }}
+                    scroll={(el) =>
+                      el.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      })
+                    }
                   >
-                    <HashLink
-                      to={"/" + path}
-                      _hover={{
-                        textDecoration: "unset",
-                      }}
-                      scroll={(el) =>
-                        el.scrollIntoView({
-                          behavior: "smooth",
-                          block: "start",
-                        })
-                      }
-                    >
-                      {label}
-                    </HashLink>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-        )}
+                    {label}
+                  </HashLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
 
         <div className="flex items-center space-x-[32px]">
           {socials.map(({ icon, path }, i) => (
