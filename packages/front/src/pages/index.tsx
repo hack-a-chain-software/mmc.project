@@ -59,11 +59,13 @@ export const Index = () => {
           </div>
         </section>
 
-        <div className="w-screen overflow-hidden pointer-events-none h-[470px] w-[1920px]">
-          <img
-            src="./svgs/scene-1_expanded_silhouette.svg"
-            className="shrink-0"
-          />
+        <div className="w-screen overflow-hidden pointer-events-none max-w-full">
+          <div className="w-[1920px] h-[470px]">
+            <img
+              src="./svgs/scene-1_expanded_silhouette.svg"
+              className="shrink-0"
+            />
+          </div>
         </div>
       </div>
 
