@@ -31,7 +31,7 @@ export const Index = () => {
             <img
               src="./images/hero.webp"
               loading="eager"
-              className="xl:max-w-[780px] xl:mx-auto"
+              className="xl:max-w-[750px] xl:mx-auto"
             />
           </div>
 

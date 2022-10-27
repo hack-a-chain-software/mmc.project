@@ -18,6 +18,7 @@ export default defineConfig({
     }),
     Pages({
       pagesDir: "src/pages",
+      importMode: () => "async",
     }),
   ],
   esbuild: {},
