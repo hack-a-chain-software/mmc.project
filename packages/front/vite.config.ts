@@ -3,6 +3,9 @@ import { defineConfig } from "vite";
 import Pages from "vite-plugin-pages";
 import react from "@vitejs/plugin-react";
 import reactRefresh from "@vitejs/plugin-react-refresh";
+
+const inject = require("@rollup/plugin-inject");
+
 import NodeGlobalsPolyfillPlugin from "@esbuild-plugins/node-globals-polyfill";
 
 export default defineConfig({
@@ -15,6 +18,7 @@ export default defineConfig({
     }),
     Pages({
       pagesDir: "src/pages",
+      importMode: () => "async",
     }),
   ],
   esbuild: {},
