@@ -82,7 +82,10 @@ export function Item({
         </div>
       </div>
 
-      <Button onClick={() => getRandomImage()} className="px-[19px]">
+      <Button
+        onClick={() => getRandomImage()}
+        className="px-[19px] text-[18px]"
+      >
         {hide ? "Open" : "Close"}
       </Button>
     </div>

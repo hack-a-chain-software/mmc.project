@@ -71,29 +71,29 @@ const items = [
 export function About() {
   return (
     <div>
-      <div className="hidden sm:flex flex-col justify-between items-center space-y-[120px] xl:flex-row xl:items-start xl:space-y-0">
+      <div className="hidden sm:flex flex-col justify-between items-center space-y-[120px] xl:flex-row xl:items-start xl:space-y-0 pt-[90px]">
         {items.map(({ icon, title, items }, index) => (
           <div
             className="
               text-white
               text-center
-              max-w-[290px]
+              max-w-[340px]
               flex flex-col items-center justify-center
             "
             key={"about-item" + index}
           >
-            <div className="mb-[25px]">
+            <div className="mb-[42px]">
               <img
                 loading="lazy"
                 src={`./images/${icon}.png`}
-                className="h-[100px]"
+                className="h-[115px]"
               />
             </div>
 
-            <div className="max-w-[290px] text-center mb-[25px] h-[54px]">
+            <div className="max-w-[200px] text-center mb-[120px] h-[54px]">
               <span
                 children={title}
-                className="uppercase text-[20px] leading-[30px] font-[300]"
+                className="uppercase text-[22px] leading-[30px] font-[400]"
               />
             </div>
 

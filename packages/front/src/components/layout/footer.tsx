@@ -31,12 +31,12 @@ const socials = [
 export function Footer() {
   return (
     <div className="py-[60px] min-h-[300px] bg-purple-0">
-      <div className="container mx-auto flex flex-col space-y-[30px] md:space-y-[120px] lg:space-y-0 lg:justify-between lg:flex-row max-w-[1290px] px-[30px]">
+      <div className="container mx-auto flex flex-col space-y-[30px] md:space-y-[120px] lg:space-y-0 lg:justify-between lg:flex-row max-w-[1280px] px-[30px]">
         <div>
           <img
             loading="lazy"
             src="./svgs/mmc-tt_white.svg"
-            className="h-[132px]"
+            className="h-[175px]"
           />
         </div>
 
@@ -48,7 +48,7 @@ export function Footer() {
                 key={`mmc-navbar-social-${i}`}
                 className="cursor-pointer hover:opacity-[.8]"
               >
-                <img loading="lazy" src={icon} className="h-[20px]" />
+                <img loading="lazy" src={icon} className="h-[28px]" />
               </a>
             ))}
           </div>
@@ -59,7 +59,7 @@ export function Footer() {
                 <li
                   children={label}
                   key={`mmc-navbar-route-${label}-to-${path}`}
-                  className="text-white uppercase text-[12px] leading-[15px] font-[200] cursor-pointer hover:opacity-[.8]"
+                  className="text-white uppercase text-[14px] leading-[15px] font-[200] cursor-pointer hover:opacity-[.8]"
                 />
               ))}
             </ul>

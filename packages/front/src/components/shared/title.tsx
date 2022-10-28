@@ -6,11 +6,11 @@ export function Title({
   className,
 }: PropsWithChildren<{ className?: string }>) {
   return (
-    <div className="text-center pb-[50px]">
+    <div className="text-center pb-[56px]">
       <span
         children={children}
         className={twMerge(
-          "uppercase text-white text-[20px] md:text-[20px] md:leading-[24px]",
+          "uppercase text-white text-[20px] md:text-[34px] md:leading-[42px] font-heavy",
           className
         )}
       />

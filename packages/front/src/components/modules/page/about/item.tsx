@@ -2,26 +2,26 @@ import { ReactNode } from "react";
 
 export function Item({ title, text }: { title: string; text: ReactNode }) {
   return (
-    <div className="flex flex-col items-center max-w-[290px] mb-[25px]">
+    <div className="flex flex-col items-center mb-[120px]">
       <div
         className="
-          mb-[25px]
+          mb-[60px]
           bg-purple-0
-          max-w-[290px]
           flex items-center justify-center
-          border border-[1px] h-[40px] w-[415px]
+          border border-[2px] h-[75px] w-[340px]
+          rounded-[48px]
         "
       >
         <span
           children={title}
-          className="uppercase text-[20px] leading-[40px] font-[300]"
+          className="uppercase text-[22px] leading-[40px] font-[300]"
         />
       </div>
 
       <div className="flex items-center justify-center h-[68px]">
         <div
           children={text}
-          className="uppercase text-[16px] leading-[25px] font-[300]"
+          className="uppercase text-[18px] leading-[40px] font-[300]"
         />
       </div>
     </div>
