@@ -61,5 +61,3 @@ jobs:
           install-command: yarn
           build: yarn front build
           start: yarn front dev
-
-
