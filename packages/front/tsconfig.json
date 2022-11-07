@@ -20,7 +20,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["vite-plugin-pages/client-react", "vite/client"],
+    "types": ["vite-plugin-pages/client-react", "vite/client"]
   },
   "include": ["./src"],
   "exclude": ["tailwind.config.js"],

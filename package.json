@@ -10,10 +10,12 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn prettier --config .prettierrc --write"
+      "eslint --fix",
+      "prettier --write"
     ],
     "*.{js,jsx}": [
-      "yarn prettier --config .prettierrc --write"
+      "eslint --fix",
+      "prettier --write"
     ],
     "*.rs": [
       "sh ./format_rust.sh"
@@ -42,13 +44,19 @@
     "@commitlint/cli": "^16.0.1",
     "@commitlint/config-conventional": "^16.0.0",
     "@types/jest": "^27.5.0",
-    "@typescript-eslint/eslint-plugin": "^5.22.0",
-    "@typescript-eslint/parser": "^5.22.0",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "cypress": "^10.6.0",
     "eslint": "^8.15.0",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-typescript": "^3.5.2",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^8.0.1",
-    "lint-staged": "^12.4.1",
+    "lint-staged": "^13.0.3",
     "nodemon": "^2.0.15",
     "prettier": "^2.6.2"
   }
