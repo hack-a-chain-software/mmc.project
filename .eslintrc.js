@@ -17,7 +17,8 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+    tsconfigRootDir: __dirname,
+    project: ['./tsconfig.json', './packages/**/tsconfig.json'],
   },
   rules: {
     'react/jsx-filename-extension': [0],
