@@ -11,16 +11,17 @@
     "strict": true,
     "sourceMap": false,
     "skipLibCheck": true,
-    "types": ["react", "jest", "node"],
+    "lib": ["es5", "dom"],
+    "types": ["react", "jest", "cypress", "node"],
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "skipDefaultLibCheck": true,
     "importsNotUsedAsValues": "error",
-    "isolatedModules": true,
+    "isolatedModules": false,
     "typeRoots": ["@types/"],
     "baseUrl": ".",
   },
   "exclude": ["node_modules"],
-  "include": ["./packages/**/*"]
+  "include": ["./packages/**/*", "./cypress/e2e/*"]
 }
