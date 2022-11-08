@@ -6,7 +6,9 @@
   "scripts": {
     "postinstall": "yarn husky install",
     "front": "yarn workspace @near/front",
-    "contracts": "yarn workspace @near/contracts"
+    "contracts": "yarn workspace @near/contracts",
+    "lint": "eslint --ext .js,.ts,.vue --ignore-path .prettierignore --fix .eslintrc.js packages/front",
+    "format:check": "prettier --ignore-path .prettierignore packages/** --check"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
