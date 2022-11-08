@@ -1,22 +1,63 @@
-<img src="https://avatars.githubusercontent.com/u/104990779?s=200&v=4">
+[The Murder Mystery Collective](https://www.playmmc.io/)
+==========
 
-# NEAR Hackachain Monorepo
+## Guidelines
+* Use the present tense ("Add feature" not "Added feature") and the imperative mood ("Move class to..." not "Moves class to...") on commits and use the name issue on pull requests.
+* Pull requests must be reviewed before merged.
+* Done is better than perfect. Does it work as expected? Ship now, iterate later.
+* All contributions must have tests. Remember to verify the [Github Actions CI status](https://github.com/hack-a-chain-software/mmc.project/actions/workflows/CI.yml).
+* Every commit is checked using [Github Actions](https://github.com/hack-a-chain-software/mmc.project/actions).
+* If the CI status are not passing, the deploy will not work.
 
-This is how a real application structure should look like for near projects using react and rust smart contracts
+## Coding Style
 
-## Contents
+- CSS: https://github.com/airbnb/css
+- Javascript: https://github.com/airbnb/javascript
+- React: https://github.com/airbnb/javascript/tree/master/react
+- CSS in Javascript: https://github.com/airbnb/javascript/tree/master/css-in-javascript
 
-Here inside this project we have configured
+## Task Management
+* Jira Issues is used to track all tasks that needed to be done.
+* Jira MMC board is used to get a decent look on what's going on wright now.
+* Every two weeks all done tasks are put together in a Milestone and the current Sprint is closed.
+* Issues Board: https://hackachain.atlassian.net/jira/software/projects/MMC/boards/9
 
-- Github Actions
-- Commitlint
-- ESLint
-- EditorConfig
-- Prettier
-- Typescript
-- React Vite Web App + Tailwind + Zustand + Near
-- Smart Contract Written in Rust + Rust Tests + Lib Contract Integration Tests
+## Installation
 
-## Contributing
+MMC is powered by [**Vite**](https://vitejs.dev/).
 
-To Contribute fork this repo and send us a pull request following the patterns!
+If you have any problems configuring your enviroment, remember to read the [Vite Documentation](https://vitejs.dev/).
+
+-----------------
+
+#### Steps
+
+1) Clone the repository:
+```bash
+$ git clone git@github.com:hack-a-chain-software/mmc.project.git
+$ cd mmc.project
+```
+
+2) Copy the .env.example file and edit it with your environment config:
+```bash
+$ cp .env.example .env
+```
+
+3) Install frontend dependencies via YARN
+```bash
+$ yarn
+```
+
+When working on frontend, run `yarn front dev`. Files will be compiled, concatenated and the browser will auto update via `browsersync`.
+
+### Cypress
+
+Run cypress tests
+```bash
+$ yarn cypress run
+```
+
+Run to debug tests
+```bash
+$ yarn cypress open
+```
