@@ -1,16 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esnext",
-    "target": "esnext",
-    "moduleResolution": "node",
-    "jsx": "preserve",
-    "downlevelIteration": true,
-    /* noEmit - Snowpack builds (emits) files, not tsc. */
-    "noEmit": true,
-    /* Additional Options */
-    "strict": true,
-    "sourceMap": false,
-    "skipLibCheck": true,
+    "target": "es5",
     "lib": ["es5", "dom"],
     "types": ["react", "jest", "cypress", "node"],
     "forceConsistentCasingInFileNames": true,
@@ -21,7 +11,8 @@
     "isolatedModules": false,
     "typeRoots": ["@types/"],
     "baseUrl": ".",
+    "moduleResolution": "node",
   },
-  "exclude": ["node_modules"],
-  "include": ["./packages/**/*", "./cypress/e2e/*"]
+  "exclude": ["node_modules", "./tsconfig.json"],
+  "include": ["./packages/**/*", "./cypress/e2e/*", ".eslintrc.js"]
 }
