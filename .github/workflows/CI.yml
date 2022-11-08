@@ -40,6 +40,12 @@ jobs:
       - name: Install Yarn Globally
         run: npm install -g yarn
 
+      - name: Check Prettier
+        run: yarn format:check
+
+      - name: Check Lint
+        run: yarn lint
+
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
