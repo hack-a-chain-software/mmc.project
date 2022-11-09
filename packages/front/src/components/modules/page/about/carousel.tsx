@@ -4,7 +4,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const items = [
   {
-    icon: "mint ",
+    icon: "mint",
     title: "Mint your characters",
     items: [
       {
