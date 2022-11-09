@@ -38,7 +38,7 @@ $ git clone git@github.com:hack-a-chain-software/mmc.project.git
 $ cd mmc.project
 ```
 
-2) Copy the .env.example file and edit it with your environment config:
+2) Check all packages and copy the .env.example file and edit it with your environment config:
 ```bash
 $ cp .env.example .env
 ```
