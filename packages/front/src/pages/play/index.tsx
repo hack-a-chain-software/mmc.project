@@ -2,13 +2,13 @@ import { Scene } from "@/components";
 import scenes from "@/scenes.json";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import { useNearWalletSelector } from "@/utils/context/wallet";
+import { useWalletSelector } from "@/utils/context/wallet";
 import { prefix } from "@/utils/helpers";
 
 export const Play = () => {
   const navigate = useNavigate();
 
-  const { accountId } = useNearWalletSelector();
+  const { accountId } = useWalletSelector();
 
   useEffect(() => {
     if (!accountId) {
