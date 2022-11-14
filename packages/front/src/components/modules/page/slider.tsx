@@ -5,8 +5,7 @@ export function Slider() {
         py-[25px] border-y-[2px]
         overflow-hidden
         z-[20]
-        absolute
-        top-0
+        relative
       "
     >
       <div

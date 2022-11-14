@@ -37,7 +37,7 @@ const socials = [
 
 export function Header() {
   return (
-    <div className="absolute w-full mx-auto pt-[125px] px-[30px] z-[9]">
+    <div className="absolute w-full mx-auto pt-[40px] px-[30px] z-[9]">
       <nav className="flex justify-between items-center max-w-[1280px] mx-auto">
         <ul className="hidden md:flex space-x-[38px]">
           {routes.map(({ label, path }) => (

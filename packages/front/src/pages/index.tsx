@@ -30,8 +30,8 @@ export const Index = () => {
             z-[2]
             relative
             flex flex-col items-center
-            pt-[175px]
-            space-y-[130px]
+            pt-[50px]
+            space-y-[60px]
             mx-auto
             mb-[307px]
           "
@@ -40,7 +40,7 @@ export const Index = () => {
             <img
               src="./images/hero.webp"
               loading="eager"
-              className="w-[64vw] max-w-[880px] xl:mx-auto"
+              className="w-[64vw] max-w-[820px] xl:mx-auto"
             />
           </div>
 
