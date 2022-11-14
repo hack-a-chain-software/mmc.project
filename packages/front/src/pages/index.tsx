@@ -30,16 +30,17 @@ export const Index = () => {
             z-[2]
             relative
             flex flex-col items-center
-            pt-[64px]
-            space-y-[60px]
+            pt-[175px]
+            space-y-[130px]
             mx-auto
+            mb-[307px]
           "
         >
           <div className="px-[30px] xl:px-0">
             <img
               src="./images/hero.webp"
               loading="eager"
-              className="w-[64vw] max-w-[820px] xl:mx-auto"
+              className="w-[64vw] max-w-[880px] xl:mx-auto"
             />
           </div>
 
@@ -53,7 +54,7 @@ export const Index = () => {
             <div>
               <Button
                 onClick={() => {}}
-                className="text-[16px] sm:text-[22px] h-[60px] border-[2px] font-[400] shadow-0 px-[24px] h-[52px]"
+                className="text-[16px] sm:text-[22px] h-[60px] border-[2px] font-[400] shadow-0 px-[32px] h-[58px]"
               >
                 Join the Collective
               </Button>
@@ -74,7 +75,7 @@ export const Index = () => {
 
       <div
         id="the-case"
-        className="container mx-auto mb-[200px] px-[30px] xl:px-0 max-w-[1280px] z-[2] relative pt-[56px]"
+        className="container mx-auto mb-[225px] px-[30px] xl:px-0 max-w-[1280px] z-[2] relative pt-[56px] mt-[-22%]"
       >
         <FadeInTransition>
           <section className="w-full">
@@ -109,10 +110,10 @@ export const Index = () => {
                 </span>
               </div>
 
-              <div className="h-[100px] w-[100px] bg-[#A500FB] rounded-full border flex items-center justify-center">
+              <div className="h-[100px] w-[100px] flex items-center justify-center">
                 <img
                   loading="lazy"
-                  src="./svgs/question.svg"
+                  src="./images/question.png"
                   className="relative left-[4px] h-[100px] w-[100px]"
                 />
               </div>
@@ -136,13 +137,13 @@ export const Index = () => {
 
       <div
         id="roadmap"
-        className="container mx-auto relative overflow-hidden mb-[23px] px-[30px] xl:px-0 max-w-screen-xl pt-[141px]"
+        className="container mx-auto relative overflow-hidden px-[30px] xl:px-0 max-w-screen-xl pt-[50px]"
       >
         <FadeInTransition>
           <section className="relative">
             <img
               src="./images/pins.png"
-              className="hidden xl:block absolute scale-[1] left-[18px] top-[-17px]"
+              className="hidden xl:block absolute scale-[1] left-[18px] top-[80px]"
             />
 
             <Title>Roadmap</Title>
@@ -154,7 +155,7 @@ export const Index = () => {
 
       <div
         id="sneak-peeks"
-        className="container mx-auto pb-[71px] mb-[54px] bg-[url('/svgs/bricks.svg')] bg-[length:auto_100%] px-[30px] xl:px-0 pt-[165px]"
+        className="container mx-auto pb-[71px] mb-[54px] bg-[url('/svgs/bricks.svg')] bg-[length:auto_100%] px-[30px] xl:px-0 pt-[108px]"
       >
         <FadeInTransition>
           <section className="container mx-auto max-w-screen-xl">

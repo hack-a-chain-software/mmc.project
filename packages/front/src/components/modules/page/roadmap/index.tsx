@@ -40,7 +40,7 @@ const roadmap = [
 export function Roadmap() {
   return (
     <div>
-      <div className="hidden sm:flex flex-col items-center space-y-[120px] justify-between xl:flex-row xl:items-start xl:space-y-0">
+      <div className="hidden sm:flex flex-col items-center space-y-[120px] justify-between xl:flex-row xl:items-start xl:space-y-0 pt-[98px]">
         {roadmap.map((item) => (
           <Item {...item} key={"roadmap-" + item.title} />
         ))}

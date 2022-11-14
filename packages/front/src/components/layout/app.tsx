@@ -1,7 +1,7 @@
 import routes from "~react-pages";
 import { Header } from "./header";
 import { Footer } from "./footer";
-import { Fallback } from "./fallback";
+import { Loader } from '@/components';
 import { BrowserRouter as Router, useRoutes } from "react-router-dom";
 import {
   useReadyStateEffect,
@@ -33,7 +33,7 @@ export const App = () => {
   useReadyStateEffect(() => setLoading(false), [], "complete");
 
   if (loading) {
-    return <Fallback />;
+    return <Loader />;
   }
 
   return (
