@@ -20,7 +20,7 @@ export function SneakPeeks() {
       space-y-[50px]
       z-[10]
       relative
-      pt-[30px]
+      pt-[50px]
     "
     >
       <Item

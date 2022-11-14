@@ -5,7 +5,7 @@ export function Item({ title, text }: { title: string; text: ReactNode }) {
     <div className="flex flex-col items-center mb-[120px]">
       <div
         className="
-          mb-[60px]
+          mb-[82px]
           bg-purple-0
           flex items-center justify-center
           border border-[2px] h-[75px] w-[340px]

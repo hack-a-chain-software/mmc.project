@@ -23,6 +23,7 @@ module.exports = {
       animation: {
         sliding: "sliding 32s linear infinite",
         slider: "scroll 120s linear infinite",
+        color: "colors 1s alternate infinite",
       },
       keyframes: {
         sliding: {
@@ -39,6 +40,14 @@ module.exports = {
           },
           to: {
             transform: "translateX(calc(-594px * 7))",
+          },
+        },
+        colors: {
+          '0%': {
+            color: "#A429E4",
+          },
+          '100%': {
+            color: "#F124AD",
           },
         },
       },

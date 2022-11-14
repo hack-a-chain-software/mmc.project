@@ -71,7 +71,7 @@ const items = [
 export function About() {
   return (
     <div>
-      <div className="hidden sm:flex flex-col justify-between items-center space-y-[120px] xl:flex-row xl:items-start xl:space-y-0 pt-[90px]">
+      <div className="hidden sm:flex flex-col justify-between items-center space-y-[120px] xl:flex-row xl:items-start xl:space-y-0 pt-[105px]">
         {items.map(({ icon, title, items }, index) => (
           <div
             className="
@@ -82,7 +82,7 @@ export function About() {
             "
             key={"about-item" + index}
           >
-            <div className="mb-[42px]">
+            <div className="mb-[32px]">
               <img
                 loading="lazy"
                 src={`./images/${icon}.png`}
@@ -90,10 +90,10 @@ export function About() {
               />
             </div>
 
-            <div className="max-w-[200px] text-center mb-[120px] h-[54px]">
+            <div className="max-w-[200px] text-center mb-[155px] h-[54px]">
               <span
                 children={title}
-                className="uppercase text-[22px] leading-[30px] font-[400]"
+                className="uppercase text-[24px] leading-[48px] font-[400]"
               />
             </div>
 

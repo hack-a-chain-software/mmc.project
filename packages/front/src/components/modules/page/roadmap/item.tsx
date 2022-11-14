@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export function Item({ title, items }: { title: string; items: ReactNode[] }) {
   return (
-    <div className="text-white w-max space-y-[61px] min-w-[310px] max-w-[290px] w-screen">
+    <div className="text-white w-max space-y-[56px] min-w-[310px] max-w-[290px] w-screen">
       <div
         className="
           bg-pink-0
