@@ -16,7 +16,7 @@ export function Item({
   const [image, setImage] = useState(1);
 
   const getRandomImage = () => {
-    const newValue = Math.max(Math.floor(Math.random() * 35), 1);
+    const newValue = Math.max(Math.floor(Math.random() * 15), 1);
 
     if (selected.includes(newValue)) {
       return getRandomImage();
