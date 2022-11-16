@@ -2,7 +2,7 @@ export function Slider() {
   return (
     <div
       className="
-        py-[25px] border-y-[2px]
+        py-[18px] border-y-[1px]
         overflow-hidden
         z-[20]
         relative
@@ -19,7 +19,7 @@ export function Slider() {
         {[...Array(14)].map((_, index) => (
           <span
             key={"slider-item-" + index}
-            className="w-[594px] block text-white text-[14px] font-bold leading-[15px] whitespace-nowrap pr-[4px] tracking-[0px]"
+            className="w-[594px] block text-white text-xs font-bold leading-[15px] whitespace-nowrap pr-[4px] tracking-[0px]"
           >
             ALERT • THERE’S BEEN A MURDER • CALLING ALL VOLUNTEERS •
           </span>

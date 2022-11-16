@@ -6,14 +6,14 @@ import {
   Roadmap,
   SneakPeeks,
   FadeInTransition,
-} from "@/components";
+} from '@/components';
 
 export const Index = () => {
   return (
     <main className="w-screen min-h-screen">
       <div
         className="
-          bg-no-repeat bg-[url('/images/background-home.jpg')] bg-[length:100%_100%] pt-[117px] min-h-[100vh]
+          bg-no-repeat bg-[url('/images/background-home.jpg')] bg-[length:100%_100%] pt-[110px] min-h-[100vh]
         "
       >
         <Slider />
@@ -30,7 +30,7 @@ export const Index = () => {
             z-[2]
             relative
             flex flex-col items-center
-            pt-[50px]
+            pt-[32px]
             space-y-[60px]
             mx-auto
             mb-[307px]
@@ -40,13 +40,20 @@ export const Index = () => {
             <img
               src="./images/hero.webp"
               loading="eager"
-              className="w-[64vw] max-w-[820px] xl:mx-auto"
+              className="w-[80vw] max-w-[52rem] xl:mx-auto"
             />
           </div>
 
           <div className="flex flex-col space-y-[12px] items-center xl:flex-row xl:space-y-0 xl:space-x-[40px]">
             <div>
-              <span className="uppercase text-white font-[400] leading-[30px] text-[15px] sm:text-[22px]">
+              <span
+                className="
+                  uppercase
+                  font-[400]
+                  leading-[30px]
+                  text-white text-sm sm:text-lg
+                "
+              >
                 Minting soon
               </span>
             </div>
@@ -54,14 +61,27 @@ export const Index = () => {
             <div>
               <Button
                 onClick={() => {}}
-                className="text-[16px] sm:text-[22px] h-[60px] border-[2px] font-[400] shadow-0 px-[32px] h-[58px]"
+                className="
+                  shadow-0
+                  font-[400]
+                  border-[2px]
+                  px-[24px] h-[46px]
+                  text-sm sm:text-lg
+                "
               >
                 Join the Collective
               </Button>
             </div>
 
             <div>
-              <span className="uppercase text-white font-[400] leading-[30px] text-[15px] sm:text-[22px]">
+              <span
+                className="
+                  uppercase
+                  font-[400]
+                  leading-[30px]
+                  text-white text-[15px] sm:text-lg
+                "
+              >
                 Limited supply
               </span>
             </div>
@@ -75,14 +95,26 @@ export const Index = () => {
 
       <div
         id="the-case"
-        className="container mx-auto mb-[225px] px-[30px] xl:px-0 max-w-[1280px] z-[2] relative pt-[56px] mt-[-22%]"
+        className="
+          z-[2]
+          relative
+          container
+          px-[32px] pt-[56px] xl:px-0
+          mx-auto mb-[225px] mt-[-22%]
+          md:max-w-[980px]
+        "
       >
         <FadeInTransition>
           <section className="w-full">
             <Title>The Case</Title>
 
             <div className="flex flex-col items-center space-y-[56px]">
-              <div className="text-white text-[16px] md:text-[22px] md:leading-[38px] font-[300] text-center flex flex-col space-y-[40px]">
+              <div
+                className="
+                  text-white text-lg
+                  font-[300] text-center flex flex-col space-y-[40px]
+                "
+              >
                 <span>
                   John Norris, a reporter for the Durum County Times and
                   community pest, was discovered in the parking lot of the new
@@ -96,16 +128,16 @@ export const Index = () => {
                 </span>
               </div>
 
-              <div className="">
-                <span className="text-[28px] font-heavy text-white text-center">
+              <div className="text-center">
+                <span className="text-[28px] font-heavy text-white">
                   "THERE’S MORE THAN A STORE..."
                 </span>
               </div>
 
               <div className="text-center">
-                <span className="text-white text-[16px] md:text-[22px] md:leading-[38px] font-[300] text-center">
-                  Police Chief Ima Resting has requested the assistance of{" "}
-                  <br /> public volunteers to help in solving this high-profile
+                <span className="text-white text-lg md:leading-[38px] font-[300] text-center">
+                  Police Chief Ima Resting has requested the assistance of
+                   public volunteers to help in solving this high-profile
                   case.
                 </span>
               </div>
@@ -124,7 +156,7 @@ export const Index = () => {
 
       <div
         id="how-to-play"
-        className="container mx-auto relative overflow-hidden px-[30px] xl:px-0 max-w-screen-xl"
+        className="container mx-auto relative px-[32px] max-w-[1140px]"
       >
         <FadeInTransition>
           <section>
@@ -137,13 +169,13 @@ export const Index = () => {
 
       <div
         id="roadmap"
-        className="container mx-auto relative overflow-hidden px-[30px] xl:px-0 max-w-screen-xl pt-[50px]"
+        className="container mx-auto relative px-[32px] max-w-[1140px] pt-[50px]"
       >
         <FadeInTransition>
           <section className="relative">
             <img
               src="./images/pins.png"
-              className="hidden xl:block absolute scale-[1] left-[18px] top-[80px]"
+              className="hidden xl:block absolute scale-[1] left-[18px] top-[100px]"
             />
 
             <Title>Roadmap</Title>

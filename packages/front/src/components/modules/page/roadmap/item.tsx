@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export function Item({ title, items }: { title: string; items: ReactNode[] }) {
   return (
-    <div className="text-white w-max space-y-[56px] min-w-[310px] max-w-[290px] w-screen">
+    <div className="text-white w-max space-y-[56px] max-w-[270px] w-screen flex-1">
       <div
         className="
           bg-pink-0
@@ -12,7 +12,7 @@ export function Item({ title, items }: { title: string; items: ReactNode[] }) {
       >
         <span
           children={title}
-          className="uppercase text-[28px] leading-[40px] font-[200]"
+          className="uppercase text-xl font-[300]"
         />
       </div>
 
@@ -21,7 +21,7 @@ export function Item({ title, items }: { title: string; items: ReactNode[] }) {
           <span
             children={value}
             key={title + "-roadmap-item-" + index}
-            className="uppercase text-[22px] leading-[40px] font-[300]"
+            className="uppercase text-lg font-[300]"
           />
         ))}
       </div>

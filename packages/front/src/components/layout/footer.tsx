@@ -36,7 +36,7 @@ export function Footer() {
           <img
             loading="lazy"
             src="./svgs/mmc-tt_white.svg"
-            className="h-[175px]"
+            className="h-[10rem]"
           />
         </div>
 
@@ -48,7 +48,7 @@ export function Footer() {
                 key={`mmc-navbar-social-${i}`}
                 className="cursor-pointer hover:opacity-[.8]"
               >
-                <img loading="lazy" src={icon} className="h-[28px]" />
+                <img loading="lazy" src={icon} className="h-6" />
               </a>
             ))}
           </div>
@@ -59,14 +59,14 @@ export function Footer() {
                 <li
                   children={label}
                   key={`mmc-navbar-route-${label}-to-${path}`}
-                  className="text-white uppercase text-[14px] leading-[15px] font-[200] cursor-pointer hover:opacity-[.8]"
+                  className="text-white uppercase text-sm font-[200] cursor-pointer hover:opacity-[.8]"
                 />
               ))}
             </ul>
           </div>
 
           <div className="text-center">
-            <span className="text-white text-[14px] leading-[18px] font-[200]">
+            <span className="text-white text-sm font-[200]">
               © Scribble Labs, The Murder Mystery Collective 2022
             </span>
           </div>
