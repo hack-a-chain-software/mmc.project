@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { isProd } from "@/utils/helpers";
 import { HashLink } from "react-router-hash-link";
+import NavbarModal from "./navbar-modal";
 
 const routes = [
   {
@@ -31,7 +33,7 @@ const socials = [
   },
   {
     icon: "/svgs/twitter.svg",
-    path: "#",
+    path: "https://twitter.com/playmmc",
   },
 ];
 
@@ -63,15 +65,18 @@ export function Header() {
             </ul>
           </div>
 
-          <div className="flex items-center pr-[54px] relative top-[-6px]">
+          <NavbarModal/>
+
+          <div className="flex items-center md:pr-[54px] relative">
             <div
-              className="flex items-center"
+              className="flex items-center space-x-[32px]"
             >
               {socials.map(({ icon, path }, i) => (
                 <a
                   href={path}
+                  target="_blank"
                   key={`mmc-navbar-social-${i}`}
-                  className="cursor-pointer hover:opacity-[.8] ml-[32px]"
+                  className="cursor-pointer hover:opacity-[.8]"
                 >
                   <img loading="lazy" src={icon} className="h-6" />
                 </a>

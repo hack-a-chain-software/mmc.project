@@ -24,7 +24,7 @@ const socials = [
   },
   {
     icon: "/svgs/twitter.svg",
-    path: "#",
+    path: "https://twitter.com/playmmc",
   },
 ];
 
@@ -45,6 +45,7 @@ export function Footer() {
             {socials.map(({ icon, path }, i) => (
               <a
                 href={path}
+                target="_blank"
                 key={`mmc-navbar-social-${i}`}
                 className="cursor-pointer hover:opacity-[.8]"
               >

@@ -49,13 +49,14 @@ module.exports = {
           },
         },
         colors: {
-        '0%': {
-          color: "#A429E4",
+          '0%': {
+            color: "#A429E4",
+          },
+          '100%': {
+            color: "#F124AD",
+          },
         },
-        '100%': {
-          color: "#F124AD",
-        },
-        "slider-right": {
+        'slider-right': {
           from: {
             transform: "translateX(-300px)",
           },
