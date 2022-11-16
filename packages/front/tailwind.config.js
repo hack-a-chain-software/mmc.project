@@ -20,10 +20,16 @@ module.exports = {
           0: "#F124AD",
         },
       },
+      gridTemplateColumns: {
+        "auto-fit": "repeat(auto-fit, minmax(18rem, 1fr))",
+      },
       animation: {
         sliding: "sliding 32s linear infinite",
         slider: "scroll 120s linear infinite",
         color: "colors 1s alternate infinite",
+        "slider-right":
+          "slider-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both",
+        collapsed: "collapsed 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both",
       },
       keyframes: {
         sliding: {
@@ -43,11 +49,26 @@ module.exports = {
           },
         },
         colors: {
-          '0%': {
-            color: "#A429E4",
+        '0%': {
+          color: "#A429E4",
+        },
+        '100%': {
+          color: "#F124AD",
+        },
+        "slider-right": {
+          from: {
+            transform: "translateX(-300px)",
           },
-          '100%': {
-            color: "#F124AD",
+          to: {
+            transform: "translateX(0)",
+          },
+        },
+        collapsed: {
+          from: {
+            transform: "translateX(0)",
+          },
+          to: {
+            transform: "translateX(-300px)",
           },
         },
       },

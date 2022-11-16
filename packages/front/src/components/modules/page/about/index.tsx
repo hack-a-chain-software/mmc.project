@@ -81,6 +81,7 @@ export function About() {
         {items.map(({ icon, title, items }, index) => (
           <div
             className="
+              w-[100%]
               text-white
               text-center
               max-w-[280px]
