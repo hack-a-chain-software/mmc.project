@@ -1,5 +1,4 @@
 [workspace]
-#Add location of contracts here
 members = [
     "./locked_token",
     "./fungible_token",
