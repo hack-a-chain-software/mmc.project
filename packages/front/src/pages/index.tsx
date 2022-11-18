@@ -10,7 +10,9 @@ import {
 
 export const Index = () => {
   return (
-    <main className="w-screen min-h-screen">
+    <div
+      className="mx-auto bodypage"
+    >
       <div
         className="
           bg-no-repeat bg-[url('/images/background-home.jpg')] bg-[length:100%_100%] pt-[110px] min-h-[100vh]
@@ -21,7 +23,7 @@ export const Index = () => {
         <div className="absolute top-[100px] z-[0] left-0 right-0 max-w-screen overflow-hidden flex items-center justify-center">
           <img
             src="/svgs/clouds.svg"
-            className="relative w-full max-w-[1920px]"
+            className="relative w-full max-w-[1920px] min-w-screen"
           />
         </div>
 
@@ -51,6 +53,7 @@ export const Index = () => {
                   uppercase
                   font-[400]
                   leading-[30px]
+                  whitespace-nowrap
                   text-white text-sm sm:text-lg
                 "
               >
@@ -67,6 +70,7 @@ export const Index = () => {
                   border-[2px]
                   px-[24px] h-[46px]
                   text-sm sm:text-lg
+                  whitespace-nowrap
                 "
               >
                 Join the Collective
@@ -79,6 +83,7 @@ export const Index = () => {
                   uppercase
                   font-[400]
                   leading-[30px]
+                  whitespace-nowrap
                   text-white text-[15px] sm:text-lg
                 "
               >
@@ -197,7 +202,7 @@ export const Index = () => {
           </section>
         </FadeInTransition>
       </div>
-    </main>
+    </div>
   );
 };
 

@@ -24,22 +24,11 @@ module.exports = {
         "auto-fit": "repeat(auto-fit, minmax(18rem, 1fr))",
       },
       animation: {
-        sliding: "sliding 32s linear infinite",
         slider: "scroll 120s linear infinite",
         color: "colors 1s alternate infinite",
-        "slider-right":
-          "slider-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both",
-        collapsed: "collapsed 1s cubic-bezier(0.250, 0.460, 0.450, 0.940) both",
+        loader: "sliding 2s alternate infinite",
       },
       keyframes: {
-        sliding: {
-          from: {
-            transform: "translateX(100%)",
-          },
-          to: {
-            transform: "translateX(-100%)",
-          },
-        },
         scroll: {
           from: {
             transform: "translateX(0)",
@@ -49,27 +38,23 @@ module.exports = {
           },
         },
         colors: {
-          '0%': {
+          from: {
             color: "#A429E4",
           },
-          '100%': {
+          to: {
             color: "#F124AD",
           },
         },
-        'slider-right': {
-          from: {
-            transform: "translateX(-300px)",
+        'sliding': {
+          '0%': {
+            left: '1px',
+            color: "#A429E4",
+            right: '174px',
           },
-          to: {
-            transform: "translateX(0)",
-          },
-        },
-        collapsed: {
-          from: {
-            transform: "translateX(0)",
-          },
-          to: {
-            transform: "translateX(-300px)",
+          '100%': {
+            right: '1px',
+            color: "#F124AD",
+            left: '174px',
           },
         },
       },

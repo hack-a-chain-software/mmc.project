@@ -1,36 +1,25 @@
-const routes = [
-  {
-    label: "About",
-    path: "#",
-  },
-  {
-    label: "Contact",
-    path: "#",
-  },
-  {
-    label: "Term & Conditions",
-    path: "#",
-  },
-  {
-    label: "Privacy Policy",
-    path: "#",
-  },
-];
-
-const socials = [
-  {
-    icon: "/svgs/discord.svg",
-    path: "#",
-  },
-  {
-    icon: "/svgs/twitter.svg",
-    path: "https://twitter.com/playmmc",
-  },
-];
+import routes from '@/utils/json/routes.json';
+import socials from '@/utils/json/socials.json';
+import { useLocation } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
+import { useMemo } from 'react';
+import { Socials } from '@/components';
 
 export function Footer() {
+  const {
+    pathname,
+  } = useLocation();
+
+  const isVisible = useMemo(() => {
+    return pathname !== '/play';
+  }, [pathname]);
+
   return (
-    <div className="py-[60px] min-h-[300px] bg-purple-0">
+    <div
+      className={
+        twMerge('py-[60px] min-h-[300px] bg-purple-0', !isVisible && 'hidden')
+      }
+    >
       <div className="container mx-auto flex flex-col space-y-[30px] md:space-y-[120px] lg:space-y-0 lg:justify-between lg:flex-row max-w-[1280px] px-[30px]">
         <div>
           <img
@@ -41,20 +30,9 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col lg:items-end text-white">
-          <div className="flex space-x-[32px] mb-[58px]">
-            {socials.map(({ icon, path }, i) => (
-              <a
-                href={path}
-                target="_blank"
-                key={`mmc-navbar-social-${i}`}
-                className="cursor-pointer hover:opacity-[.8]"
-              >
-                <img loading="lazy" src={icon} className="h-6" />
-              </a>
-            ))}
-          </div>
+          <Socials/>
 
-          <div className="mb-[25px]">
+          <div className="mb-[25px] mt-[58px]">
             <ul className="flex flex-col md:flex-row space-y-[12px] md:space-y-0 md:space-x-[32px]">
               {routes.map(({ label, path }) => (
                 <li

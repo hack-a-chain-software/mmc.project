@@ -1,30 +1,8 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { HashLink } from "react-router-hash-link";
-
-const routes = [
-  {
-    label: "Home",
-    path: "/",
-  },
-  {
-    label: "The Case",
-    path: "#the-case",
-  },
-  {
-    label: "Play",
-    path: "#how-to-play",
-  },
-  {
-    label: "Roadmap",
-    path: "#roadmap",
-  },
-  {
-    label: "Sneak Peaks",
-    path: "#sneak-peeks",
-  },
-];
+import { HashLink } from 'react-router-hash-link';
+import routes from '@/utils/json/routes.json';
 
 export const NavbarModal = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

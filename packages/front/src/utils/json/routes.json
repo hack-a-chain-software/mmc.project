@@ -1,0 +1,22 @@
+[
+  {
+    "label": "Home",
+    "path": "/"
+  },
+  {
+    "label": "The Case",
+    "path": "#the-case"
+  },
+  {
+    "label": "Play",
+    "path": "#how-to-play"
+  },
+  {
+    "label": "Roadmap",
+    "path": "#roadmap"
+  },
+  {
+    "label": "Sneak Peaks",
+    "path": "#sneak-peeks"
+  }
+]
