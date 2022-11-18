@@ -35,14 +35,6 @@ export default defineConfig({
   define: {
     "process.env": {},
   },
-  build: {
-    target: ["es2020"],
-    rollupOptions: {
-      output: {
-        format: "cjs",
-      },
-    },
-  },
   optimizeDeps: {
     include: ["buffer", "process"],
   },
