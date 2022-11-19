@@ -22,6 +22,11 @@ module.exports = {
   },
   rules: {
     'react/jsx-filename-extension': [0],
+    '@typescript-eslint/no-unsafe-member-access': [0],
+    '@typescript-eslint/no-unsafe-assignment': [0],
+    '@typescript-eslint/no-var-requires': [0],
+    '@typescript-eslint/no-unsafe-call': [0],
+    '@typescript-eslint/no-unsafe-return': [0],
     'import/extensions': [
       'error',
       'ignorePackages',
