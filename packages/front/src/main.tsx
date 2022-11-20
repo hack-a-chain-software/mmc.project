@@ -6,7 +6,7 @@ import { WalletSelectorContextProvider } from '@/utils/context/wallet';
 import { RelayEnvironment } from './relay';
 import { RelayEnvironmentProvider } from 'react-relay';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<WalletSelectorContextProvider>
 			<RelayEnvironmentProvider environment={RelayEnvironment}>
