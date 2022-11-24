@@ -1,8 +1,6 @@
 # Build
 FROM node:18 AS build
 
-LABEL org.opencontainers.image.source https://github.com/hack-a-chain-software/mmc.project
-
 WORKDIR /usr/src/app
 
 RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
@@ -20,6 +18,8 @@ RUN yarn cache clean
 
 # Prod
 FROM node:18-bullseye-slim
+
+LABEL org.opencontainers.image.source https://github.com/hack-a-chain-software/mmc.project
 
 WORKDIR /usr/src/app
 USER node
