@@ -1,34 +1,49 @@
 services:
-  back:
-    image: ghcr.io/hack-a-chain-software/mmc.project/back:latest
-    build:
-      context: .
-      dockerfile: ./packages/back/Dockerfile
-    ports:
-      - "443:3000"
-    networks:
-      - mmc
-    environment:
-      - PORT=3000
-      - RECEIVER_ID=nft.test.near
-      - NFT_CONTRACT_ID=nft.test.near
-      - ACCOUNT_KEYPAIR=ed25519:3tU5BE8BnNQ9pX89DKepzMAZKQ7NPGCaY63cEtaueTS8iPyarB2rSXBuWLeZQ4LDL9m4oYRZXx936S3oS5MtjyoF
-      - NEAR_NETWORK=localnet
-      - JWT_SECRET=abacaba
-      - JWT_VALID_FOR_S=180
-      - AUTH_MESSAGE_VALID_FOR_MS=60000
+  # back:
+  #   image: ghcr.io/hack-a-chain-software/mmc.project/back:latest
+  #   build:
+  #     context: .
+  #     dockerfile: ./packages/back/Dockerfile
+  #   ports:
+  #     - "443:3000"
+  #   networks:
+  #     - mmc
+  #   environment:
+  #     - PORT=3000
+  #     - RECEIVER_ID=nft.test.near
+  #     - NFT_CONTRACT_ID=nft.test.near
+  #     - ACCOUNT_KEYPAIR=ed25519:3tU5BE8BnNQ9pX89DKepzMAZKQ7NPGCaY63cEtaueTS8iPyarB2rSXBuWLeZQ4LDL9m4oYRZXx936S3oS5MtjyoF
+  #     - NEAR_NETWORK=localnet
+  #     - JWT_SECRET=abacaba
+  #     - JWT_VALID_FOR_S=180
+  #     - AUTH_MESSAGE_VALID_FOR_MS=60000
 
-  db:
-    image: ghcr.io/hack-a-chain-software/mmc.project/db:latest
+  # db:
+  #   image: ghcr.io/hack-a-chain-software/mmc.project/db:latest
+  #   build:
+  #     context: .
+  #     dockerfile: ./packages/db/Dockerfile
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - mmc
+  #   environment:
+  #     - POSTGRES_PASSWORD=${PG_PASSWORD}
+
+  front:
+    container_name: mmc-front
+    image: ghcr.io/hack-a-chain-software/mmc.project/front:latest
     build:
       context: .
-      dockerfile: ./packages/db/Dockerfile
+      dockerfile: ./packages/front/Dockerfile
     ports:
-      - "5432:5432"
+      - 3000:3000
     networks:
       - mmc
     environment:
-      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - VITE_CONTRACT=dev-1652055476064-95220052886384
+      - VITE_NEAR_NETWORK=testnet
+
 
 networks:
   mmc: {}

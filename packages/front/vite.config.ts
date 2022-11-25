@@ -4,7 +4,7 @@ import Pages from "vite-plugin-pages";
 import react from "@vitejs/plugin-react";
 import reactRefresh from "@vitejs/plugin-react-refresh";
 
-const inject = require("@rollup/plugin-inject");
+// const inject = require('@rollup/plugin-inject');
 
 import NodeGlobalsPolyfillPlugin from "@esbuild-plugins/node-globals-polyfill";
 

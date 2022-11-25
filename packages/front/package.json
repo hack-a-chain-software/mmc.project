@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "relay": "relay-compiler --watch",
     "build": "relay-compiler --validate && tsc --noEmit && vite build"
   },
@@ -20,7 +20,6 @@
     "@near-wallet-selector/core": "^7.0.3",
     "@near-wallet-selector/near-wallet": "^7.0.3",
     "@near-wallet-selector/sender": "^7.0.3",
-    "@near/contracts": "*",
     "@rollup/plugin-inject": "^4.0.4",
     "autoprefixer": "^10.4.7",
     "buffer": "^6.0.3",
