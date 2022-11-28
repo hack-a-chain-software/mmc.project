@@ -9,6 +9,12 @@ import { useNavigate } from 'react-router';
 
 const duration = 1.8;
 
+const loadSceneImage = (url, callback) => {
+	const image = new Image();
+	image.src = url;
+	image.onload = callback;
+};
+
 export const Play = () => {
 	const navigate = useNavigate();
 
@@ -19,7 +25,7 @@ export const Play = () => {
 	useEffect(() => {
 		setTimeout(() => {
 			setScene(scenes[0]);
-			setLoading(false);
+			loadSceneImage(scenes[0].image, () => setLoading(false));
 		}, 4000);
 	}, []);
 
@@ -28,7 +34,7 @@ export const Play = () => {
 
 		setTimeout(() => {
 			setScene(scenes[1] ?? null);
-			setLoading(false);
+			loadSceneImage(scenes[1].image, () => setLoading(false));
 		}, 4000);
 	}, [loading, scene]);
 
@@ -56,7 +62,7 @@ export const Play = () => {
               w-screen min-h-screen relative
             "
 					>
-						<div className="absolute w-full max-w-[1280px] pt-[32px] z-[9] flex items-center justify-end space-x-[32px] left-1/2 -translate-x-1/2">
+						<div className="absolute px-[30px] w-full max-w-[1340px] pt-[32px] z-[9] flex items-center justify-end space-x-[32px] left-1/2 -translate-x-1/2">
 							<button
 								onClick={() => navigate('/')}
 								className="mr-auto flex space-x-[8px] items-center"
