@@ -13,14 +13,6 @@ const Pages = () => {
 };
 
 export const App = () => {
-  const [loading, setLoading] = useState(true);
-
-  useReadyStateEffect(() => setLoading(false), [], 'complete');
-
-  if (loading) {
-    return <Fallback />;
-  }
-
   return (
     <Router>
       <Header />

@@ -9,7 +9,7 @@ export const NavbarModal = () => {
 
   return (
     <>
-      <div className="block md:hidden mr-auto">
+      <div className="block lg:hidden mr-auto">
         <button onClick={() => setIsOpen(true)}>
           <img src="./svgs/plus.svg" className="h-[32px]" />
         </button>

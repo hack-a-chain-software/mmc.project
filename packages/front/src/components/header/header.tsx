@@ -21,7 +21,7 @@ export function Header() {
 			<header className="absolute w-full mx-auto pt-[32px] z-[9]">
 				<nav className="flex justify-between items-center w-[calc(100%-96px)] max-w-[1280px] h-[56px] mx-auto">
 					<div>
-						<ul className="hidden md:flex space-x-[38px]">
+						<ul className="hidden lg:flex space-x-[38px]">
 							{routes.map(({ label, path }) => (
 								<li
 									key={`mmc-navbar-route-${label as string}-to-${
