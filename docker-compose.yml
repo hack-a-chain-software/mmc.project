@@ -23,8 +23,7 @@ services:
 
   contracts:
     build:
-      context: .
-      dockerfile: ./packages/contracts/Dockerfile
+      context: ./packages/contracts/
     networks:
       - mmc
 

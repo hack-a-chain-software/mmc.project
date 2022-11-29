@@ -17,13 +17,17 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # db
-          - dockerfile: ./packages/db/Dockerfile
-            image: ghcr.io/${{ github.repository }}/db
-
           # back
           - dockerfile: ./packages/back/Dockerfile
             image: ghcr.io/${{ github.repository }}/back
+
+          # contracts
+          - dockerfile: ./packages/contracts/Dockerfile
+            image: ghcr.io/${{ github.repository }}/contracts
+
+          # db
+          - dockerfile: ./packages/db/Dockerfile
+            image: ghcr.io/${{ github.repository }}/db
 
     permissions:
       contents: read
