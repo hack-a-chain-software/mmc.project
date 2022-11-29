@@ -1,0 +1,14 @@
+{
+  "name": "db",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "commit": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate commit",
+    "uncommit": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate uncommit",
+    "seed": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate run src/seeds.sql"
+  },
+  "devDependencies": {
+    "graphile-migrate": "^1.4.0"
+  }
+}
