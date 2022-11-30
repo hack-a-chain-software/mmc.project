@@ -1,9 +1,9 @@
-describe("home", () => {
+describe('home', () => {
   beforeEach(function () {
-    cy.visit("/");
+    cy.visit('/');
   });
 
-  it("passes", () => {
-    cy.get("body", { log: true });
+  it('passes', () => {
+    cy.get('body', { log: true });
   });
 });
