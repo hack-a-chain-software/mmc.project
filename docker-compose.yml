@@ -22,6 +22,7 @@ services:
       - contracts
 
   contracts:
+    image: ghcr.io/hack-a-chain-software/mmc.project/contracts:latest
     build:
       context: ./packages/contracts/
     networks:

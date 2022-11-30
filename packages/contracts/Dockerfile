@@ -1,5 +1,7 @@
 FROM rust:1.65.0
 
+WORKDIR /usr/src/app
+
 RUN rustup target add wasm32-unknown-unknown
 
 COPY . .

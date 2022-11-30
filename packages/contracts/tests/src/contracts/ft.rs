@@ -7,7 +7,7 @@ use crate::{
   transactions::{deploy_contract, transact_call_json, transact_call},
 };
 
-const FT_WASM_BYTES: &[u8] = include_bytes!("../../../target/wasm32-unknown-unknown/release/fungible_token.wasm");
+const FT_WASM_BYTES: &[u8] = include_bytes!("../../../target/wasm32-unknown-unknown/debug/fungible_token.wasm");
 
 pub struct FtContract {
   contract: Contract,
