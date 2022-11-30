@@ -7,12 +7,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # TODO: We should consider some way to share the image between the jobs faster. It's wasteful that we just built the image
-  # but another job will need to pull it from the Container Registry.
-  # Look into: https://github.com/docker/build-push-action/blob/master/docs/advanced/share-image-jobs.md
-  # Instead of running a build & push matrix, we could abstract the build-and-push-image job as an action, and make it the first
-  # step of the testing job for each package. The problem would be how to only install dependencies once - instead of both in the job
-  # and when building the image -, as the job won't run inside the container.
+  # TODO: We should consider some faster way to share the image between jobs. It's wasteful that right after we build an image,
+  # another job will pull it from the Container Registry. Instead of running a build & push matrix, we could abstract the
+  # build-and-push-image job as an action, and make it the first step of the testing job for each package. The problem would be
+  # how to only install dependencies once - instead of both in the job and when building the image -, as the job won't run inside
+  # the container.
+  # READ: https://github.com/docker/build-push-action/blob/master/docs/advanced/share-image-jobs.md
   build-and-push-image:
     runs-on: ubuntu-latest
 
@@ -134,7 +134,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: cypress/browsers:node18.12.0-chrome103-ff107
-      options: --user 1001
+      options: --user 1001 # READ: https://github.com/cypress-io/github-action/issues/446
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -165,7 +165,6 @@ jobs:
           name: build
           path: ./packages/front/dist
           if-no-files-found: error
-
 
   cypress-run:
     needs: cypress-install
