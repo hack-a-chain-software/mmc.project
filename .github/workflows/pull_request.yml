@@ -82,6 +82,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Output Yarn cache directory
+        id: yarn-cache-dir
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Persist the Yarn build cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install package dependencies
         run: yarn
 
@@ -110,17 +122,62 @@ jobs:
           cd tests
           cargo test
 
-  cypress-run:
+  cypress-install:
     runs-on: ubuntu-latest
-    container: cypress/browsers:node18.12.0-chrome103-ff107
+    container:
+      image: cypress/browsers:node18.12.0-chrome103-ff107
+      options: --user 1001
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Output Yarn cache directory
+        id: yarn-cache-dir
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Persist the Yarn build cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v4
+        with:
+          browser: chrome
+          runTests: false
+          install-command: yarn
+          build: yarn front build
+
+      - name: Save build folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: ./packages/front/dist
+          if-no-files-found: error
+
+
+  cypress-run:
+    needs: cypress-install
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node18.12.0-chrome103-ff107
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download build folder
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: ./packages/front/dist
         
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
-          record: false
           browser: chrome
           install-command: yarn
           build: yarn front build
