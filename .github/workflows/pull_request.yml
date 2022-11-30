@@ -63,7 +63,7 @@ jobs:
 
       - name: Extract image metadata
         id: meta
-        uses: docker/metadata-action@v4 # TODO: re-evaluate this version
+        uses: docker/metadata-action@v4
         with:
           images: ${{ matrix.image }}
           tags: |
@@ -134,7 +134,7 @@ jobs:
         working-directory: /usr/src/app
     steps:
       - name: Unit tests
-        run: cargo test
+        run: cargo test # TODO: cache this compilation (possibly during the image build)
 
       - name: Integration tests
         run: |
