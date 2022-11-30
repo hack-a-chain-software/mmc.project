@@ -1,56 +1,24 @@
 [
   {
     "image": "./images/scenes/1.png",
-    "name": "Scene 1",
+    "name": "South Entrance Garden",
     "clues": [
       {
-        "name": "point 1",
-        "about": "About the point 1 is it",
-        "action": "functiondddd",
-        "type": "clue",
+        "name": "Car",
+        "owner": "mateuexample134",
+        "about": "The Car is of a sneaker, approximately size 11. It is heading out towards the parking lot.",
         "position": {
-          "top": "12%",
+          "top": "72%",
           "left": "42.5%"
         }
       },
       {
-        "name": "point 2",
-        "about": "About the point 2 is it",
-        "action": "functiondddd",
-        "type": "clue",
+        "name": "Clouds",
+        "owner": "mateuexample134",
+        "about": "The print is of a sneaker, approximately size 11. It is heading out towards the parking lot.",
         "position": {
-          "top": "42%",
-          "left": "62.5%"
-        }
-      },
-      {
-        "name": "point 3",
-        "about": "About the point 3 is it",
-        "action": "functiondddd",
-        "type": "clue",
-        "position": {
-          "top": "22%",
-          "left": "42.5%"
-        }
-      },
-      {
-        "name": "point 4",
-        "about": "About the point 4 is it",
-        "action": "functiondddd",
-        "type": "clue",
-        "position": {
-          "top": "62%",
-          "right": "62.5%"
-        }
-      },
-      {
-        "name": "point 5",
-        "about": "About the point 5 is it",
-        "action": "functiondddd",
-        "type": "clue",
-        "position": {
-          "top": "22%",
-          "right": "42.5%"
+          "top": "52%",
+          "left": "68.5%"
         }
       }
     ]

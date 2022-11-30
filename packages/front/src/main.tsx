@@ -1,22 +1,19 @@
 import './index.css';
-import React, { Suspense } from 'react';
-import { App, Loader, WalletSelectorModal } from '@/components';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { App, WalletSelectorModal } from '@/components';
 import { WalletSelectorContextProvider } from '@/utils/context/wallet';
-
-import { RelayEnvironmentProvider } from 'react-relay';
 import { RelayEnvironment } from './relay';
+import { RelayEnvironmentProvider } from 'react-relay';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <WalletSelectorContextProvider>
-      <RelayEnvironmentProvider environment={RelayEnvironment}>
-        <Suspense fallback={<Loader />}>
-          <App />
-        </Suspense>
-      </RelayEnvironmentProvider>
+	<React.StrictMode>
+		<WalletSelectorContextProvider>
+			<RelayEnvironmentProvider environment={RelayEnvironment}>
+				<App />
+			</RelayEnvironmentProvider>
 
-      <WalletSelectorModal />
-    </WalletSelectorContextProvider>
-  </React.StrictMode>,
+			<WalletSelectorModal />
+		</WalletSelectorContextProvider>
+	</React.StrictMode>
 );

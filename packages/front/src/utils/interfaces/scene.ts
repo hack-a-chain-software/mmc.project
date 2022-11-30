@@ -5,10 +5,9 @@ export interface SceneInterface {
 }
 
 export interface ClueInterface {
-  type: string;
   name?: string;
   about?: string;
-  action?: string;
+  owner?: string | null;
   position: position;
 }
 
