@@ -38,10 +38,8 @@ impl Contract {
   }
 }
 
-#[allow(unused_imports)]
 #[cfg(test)]
 mod tests {
-  use near_contract_standards::non_fungible_token::metadata::TokenMetadata;
   use near_sdk::{testing_env, AccountId};
   use rstest::rstest;
 
@@ -49,54 +47,57 @@ mod tests {
   use crate::tests::*;
 
   #[rstest]
-  pub fn test_stake(
-    mut contract: Contract,
-    owner: AccountId,
-    token_id: TokenId,
-    token_metadata: TokenMetadata,
-  ) {
+  pub fn test_stake(mut contract: Contract, account_id: AccountId, owned_token_id: TokenId) {
     // Arrange
     let mut context = get_context();
-    context.predecessor_account_id(owner.clone());
-    context.attached_deposit(5650000000000000000000);
+    context.predecessor_account_id(account_id.clone());
     testing_env!(context.build());
 
-    contract
-      .tokens
-      .internal_mint(token_id.clone(), owner.clone(), Some(token_metadata));
-
     // Act
-    contract.stake(&token_id);
+    contract.stake(&owned_token_id);
 
     // Assert
-    assert!(contract.is_token_owner(&env::current_account_id(), &token_id));
-    assert_eq!(contract.staked_tokens.get(&token_id), Some(owner));
+    assert!(contract.is_token_owner(&env::current_account_id(), &owned_token_id));
+    assert_eq!(
+      contract.staked_tokens.get(&owned_token_id),
+      Some(account_id)
+    );
   }
 
   #[rstest]
   pub fn test_stake_staked(
     mut contract: Contract,
-    owner: AccountId,
-    token_id: TokenId,
-    token_metadata: TokenMetadata,
+    account_id: AccountId,
+    staked_token_id: TokenId,
   ) {
     // Arrange
     let mut context = get_context();
-    context.predecessor_account_id(owner.clone());
-    context.attached_deposit(5650000000000000000000);
+    context.predecessor_account_id(account_id.clone());
     testing_env!(context.build());
-
-    contract
-      .tokens
-      .internal_mint(token_id.clone(), owner.clone(), Some(token_metadata));
-
-    contract.staked_tokens.insert(&token_id, &owner);
 
     std::panic::set_hook(Box::new(|_| {}));
 
     // Act
     let panicked = std::panic::catch_unwind(move || {
-      contract.stake(&token_id);
+      contract.stake(&staked_token_id);
+    });
+
+    // Assert
+    assert!(panicked.is_err());
+  }
+
+  #[rstest]
+  pub fn test_stake_owned(mut contract: Contract, owner: AccountId, owned_token_id: TokenId) {
+    // Arrange
+    let mut context = get_context();
+    context.predecessor_account_id(owner.clone());
+    testing_env!(context.build());
+
+    std::panic::set_hook(Box::new(|_| {}));
+
+    // Act
+    let panicked = std::panic::catch_unwind(move || {
+      contract.stake(&owned_token_id);
     });
 
     // Assert

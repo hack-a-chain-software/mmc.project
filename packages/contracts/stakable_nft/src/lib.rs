@@ -10,6 +10,7 @@ use near_contract_standards::{
   impl_non_fungible_token_enumeration,
 };
 
+mod auth;
 mod mint;
 mod stake;
 
@@ -52,13 +53,16 @@ pub(crate) mod tests {
   use std::str::FromStr;
 
   use near_contract_standards::non_fungible_token::metadata::{NFTContractMetadata, TokenMetadata};
-  use near_sdk::{test_utils::VMContextBuilder, AccountId};
+  use near_sdk::{test_utils::VMContextBuilder, AccountId, testing_env};
   use rstest::fixture;
 
   use super::*;
 
   pub fn get_context() -> VMContextBuilder {
-    VMContextBuilder::new()
+    let mut context = VMContextBuilder::new();
+    context.attached_deposit(6650000000000000000000);
+
+    context
   }
 
   #[fixture]
@@ -80,8 +84,8 @@ pub(crate) mod tests {
   }
 
   #[fixture]
-  pub fn contract(owner: AccountId, contract_metadata: NFTContractMetadata) -> Contract {
-    Contract::new(owner, contract_metadata)
+  pub fn account_id() -> AccountId {
+    AccountId::from_str("account.near").unwrap()
   }
 
   #[fixture]
@@ -105,5 +109,54 @@ pub(crate) mod tests {
       reference: None,
       reference_hash: None,
     }
+  }
+
+  #[fixture]
+  pub fn staked_token_id() -> TokenId {
+    "#2".to_string()
+  }
+
+  #[fixture]
+  pub fn owned_token_id() -> TokenId {
+    "#3".to_string()
+  }
+
+  #[fixture]
+  pub fn contract(
+    owner: AccountId,
+    contract_metadata: NFTContractMetadata,
+    account_id: AccountId,
+    token_id: TokenId,
+    token_metadata: TokenMetadata,
+    staked_token_id: TokenId,
+    owned_token_id: TokenId,
+  ) -> Contract {
+    let context = get_context();
+    testing_env!(context.build());
+
+    let mut contract = Contract::new(owner, contract_metadata);
+
+    // Available token
+    contract.tokens.internal_mint(
+      token_id,
+      env::current_account_id(),
+      Some(token_metadata.clone()),
+    );
+
+    // Staked token
+    contract.staked_tokens.insert(&staked_token_id, &account_id);
+
+    contract.tokens.internal_mint(
+      staked_token_id,
+      env::current_account_id(),
+      Some(token_metadata.clone()),
+    );
+
+    // Owned token
+    contract
+      .tokens
+      .internal_mint(owned_token_id, account_id, Some(token_metadata));
+
+    contract
   }
 }

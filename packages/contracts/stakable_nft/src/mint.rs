@@ -1,37 +1,8 @@
-use near_sdk::{near_bindgen, env, AccountId};
+use near_sdk::{near_bindgen, env};
 use near_contract_standards::non_fungible_token::{Token, TokenId};
 use near_contract_standards::non_fungible_token::metadata::TokenMetadata;
 
 use crate::{Contract, ContractExt};
-
-impl Contract {
-  pub fn is_token_owner(&self, account_id: &AccountId, token_id: &TokenId) -> bool {
-    self
-      .tokens
-      .owner_by_id
-      .get(&token_id)
-      .map(|id| &id == account_id)
-      .unwrap_or(false)
-  }
-
-  pub fn is_token_staked(&self, token_id: &TokenId) -> bool {
-    self.staked_tokens.contains_key(&token_id)
-  }
-
-  pub fn assert_token_available(&self, token_id: &TokenId) {
-    let is_owned_by_contract = self.is_token_owner(&env::current_account_id(), token_id);
-    let is_staked = self.is_token_staked(token_id);
-
-    assert!(
-      is_owned_by_contract && !is_staked,
-      "Token was already picked"
-    );
-  }
-
-  pub fn assert_owner(&self, account_id: &AccountId) {
-    assert_eq!(account_id, &self.tokens.owner_id, "Unauthorized");
-  }
-}
 
 #[near_bindgen]
 impl Contract {
@@ -63,16 +34,105 @@ impl Contract {
   }
 }
 
-#[allow(unused_imports)]
 #[cfg(test)]
 mod tests {
-  use near_sdk::{test_utils::VMContextBuilder, AccountId, testing_env};
+  use near_sdk::{AccountId, testing_env};
   use rstest::{rstest, fixture};
 
   use super::*;
+  use crate::tests::*;
 
-  // TODO: test assert available: owned, staked, available.
-  // TODO: test assert owner: unauthorized, authorized.
-  // TODO: test mint: unauthorized, duplicate pk, success.
-  // TODO: test pick: unavailable (2), available.
+  #[fixture]
+  fn unminted_token_id() -> TokenId {
+    "#unminted".to_string()
+  }
+
+  #[rstest]
+  fn test_mint(
+    mut contract: Contract,
+    owner: AccountId,
+    unminted_token_id: TokenId,
+    token_metadata: TokenMetadata,
+  ) {
+    // Arrange
+    let mut context = get_context();
+    context.predecessor_account_id(owner.clone());
+    testing_env!(context.build());
+
+    // Act
+    let token = contract.mint(unminted_token_id, Some(token_metadata));
+
+    // Assert
+    assert_eq!(token.owner_id, env::current_account_id());
+  }
+
+  #[rstest]
+  fn test_mint_unauthorized(
+    mut contract: Contract,
+    account_id: AccountId,
+    unminted_token_id: TokenId,
+    token_metadata: TokenMetadata,
+  ) {
+    // Arrange
+    let mut context = get_context();
+    context.predecessor_account_id(account_id.clone());
+    testing_env!(context.build());
+
+    // Act
+    let panicked =
+      std::panic::catch_unwind(move || contract.mint(unminted_token_id, Some(token_metadata)));
+
+    // Assert
+    assert!(panicked.is_err());
+  }
+
+  #[rstest]
+  fn test_mint_minted(
+    mut contract: Contract,
+    owner: AccountId,
+    token_id: TokenId,
+    token_metadata: TokenMetadata,
+  ) {
+    // Arrange
+    let mut context = get_context();
+    context.predecessor_account_id(owner.clone());
+    testing_env!(context.build());
+
+    // Act
+    let panicked = std::panic::catch_unwind(move || contract.mint(token_id, Some(token_metadata)));
+
+    // Assert
+    assert!(panicked.is_err());
+  }
+
+  #[rstest]
+  fn test_pick(mut contract: Contract, account_id: AccountId, token_id: TokenId) {
+    // Arrange
+    let mut context = get_context();
+    context.predecessor_account_id(account_id);
+    testing_env!(context.build());
+
+    // Act
+    contract.pick(token_id);
+
+    // Assert
+  }
+
+  #[rstest]
+  fn test_pick_unavailable(
+    mut contract: Contract,
+    account_id: AccountId,
+    staked_token_id: TokenId,
+  ) {
+    // Arrange
+    let mut context = get_context();
+    context.predecessor_account_id(account_id);
+    testing_env!(context.build());
+
+    // Act
+    let panicked = std::panic::catch_unwind(move || contract.pick(staked_token_id));
+
+    // Assert
+    assert!(panicked.is_err());
+  }
 }
