@@ -241,6 +241,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "clues_contract"
+version = "1.0.0"
+dependencies = [
+ "borsh",
+ "near-contract-standards",
+ "near-sdk",
+ "rstest 0.16.0",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "convert_case"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1320,18 +1332,6 @@ name = "spin"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
-
-[[package]]
-name = "stakable_nft"
-version = "1.0.0"
-dependencies = [
- "borsh",
- "near-contract-standards",
- "near-sdk",
- "rstest 0.16.0",
- "serde",
- "serde_json",
-]
 
 [[package]]
 name = "static_assertions"
