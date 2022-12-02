@@ -8,7 +8,8 @@
     "build": "relay-compiler --validate && tsc --noEmit && vite build"
   },
   "engines": {
-    "node": "19.1.0"
+    "yarn": ">=1.22.0 <2.0.0",
+    "node": ">=17.5.0"
   },
   "relay": {
     "src": "./src",

@@ -11,6 +11,10 @@
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .prettierignore --fix .eslintrc.js packages/front --ignore-pattern '!.eslintrc.js'",
     "format:check": "prettier --ignore-path .prettierignore packages/** --check"
   },
+  "engines": {
+    "yarn": ">=1.22.0 <2.0.0",
+    "node": ">=17.5.0"
+  },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
