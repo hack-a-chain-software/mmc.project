@@ -11,9 +11,6 @@
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .prettierignore --fix .eslintrc.js packages/front --ignore-pattern '!.eslintrc.js'",
     "format:check": "prettier --ignore-path .prettierignore packages/** --check"
   },
-  "engines": {
-    "node": "19.x"
-  },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
