@@ -32,7 +32,7 @@ export const RelayEnvironment = new Environment({
         sink.next(payload);
         sink.complete();
       });
-    })
+    }),
   ),
   store: new Store(new RecordSource()),
 });
