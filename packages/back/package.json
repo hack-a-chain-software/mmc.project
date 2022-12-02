@@ -25,6 +25,7 @@
     "node": ">=17.5.0"
   },
   "dependencies": {
+    "@graphile-contrib/pg-simplify-inflector": "^6.1.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
@@ -34,6 +35,7 @@
     "near-api-js": "^1.1.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
+    "postgraphile": "^4.12.12",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
