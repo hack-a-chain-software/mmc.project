@@ -89,8 +89,8 @@ export function AboutCarousel() {
   };
 
   return (
-    <div className="carousel relative min-h-[640px] flex sm:hidden">
-      <div className="absolute top-[30px] left-0 right-0 pointer-events-none z-[4]">
+    <div className="carousel relative min-h-[920px] flex sm:hidden">
+      <div className="absolute top-[80px] left-0 right-0 pointer-events-none z-[4]">
         <div className="w-full flex space-between mx-auto">
           <ChevronLeftIcon className="h-[80px] text-[#972DF2]" />
 
@@ -108,7 +108,7 @@ export function AboutCarousel() {
             <Fragment>
               <div className="carousel__snapper" />
 
-              <div className="absolute top-[30px] left-0 right-0 flex space-between">
+              <div className="absolute top-[80px] left-0 right-0 flex space-between">
                 <div className="max-w-[408px] w-full flex space-between mx-auto">
                   <a
                     href={"#about-carousel-item-" + getPrev(index)}
@@ -128,8 +128,7 @@ export function AboutCarousel() {
                 text-white
                 text-center
                 max-w-full
-                md:space-y-[48px]
-                space-y-[14px]
+                space-y-[48px]
                 px-[30px]
                 flex flex-col items-center justify-center overflow-hidden
               "
@@ -145,7 +144,7 @@ export function AboutCarousel() {
               <div className="md:max-w-[360px] text-center">
                 <span
                   children={title}
-                  className="uppercase text-[16px] sm:text-[22px] leading-[50px] font-[300]"
+                  className="uppercase text-[16px] sm:text-[22px] font-[300]"
                 />
               </div>
 
