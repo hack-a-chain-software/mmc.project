@@ -13,7 +13,7 @@ export const Scene = ({ name, clues, setLoading, controls }: SceneInterface & { 
 
   const [image, setImage] = useState('./images/scenes/1.png');
 
-  const data = useLazyLoadQuery<RepositoriesQuery>(
+  const data = useLazyLoadQuery(
     graphql`
       query sceneQuery($owner: String!, $name: String!) {
         repository(owner: $owner, name: $name) {
@@ -53,7 +53,7 @@ export const Scene = ({ name, clues, setLoading, controls }: SceneInterface & { 
           <Clue
             {...clue}
             sceneName={name}
-            key={`scene-${name as string}-point-${i as string}`}
+            key={`scene-${name as string}-point-${i as number}`}
           />
         ))}
 

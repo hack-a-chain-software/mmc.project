@@ -11,6 +11,11 @@ const resourceMap = new Map();
  * argument - it allows accessing the state of the resource.
  */
 class Resource {
+  _error: any;
+  _loader: any;
+  _promise: any;
+  _result: any;
+
   constructor(loader) {
     this._error = null;
     this._loader = loader;
