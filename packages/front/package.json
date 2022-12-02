@@ -7,6 +7,9 @@
     "relay": "relay-compiler --watch",
     "build": "relay-compiler --validate && tsc --noEmit && vite build"
   },
+  "engines": {
+    "node": "19.1.0"
+  },
   "relay": {
     "src": "./src",
     "schema": "./src/schema.graphql",
