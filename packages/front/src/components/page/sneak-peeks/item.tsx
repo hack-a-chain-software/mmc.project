@@ -30,16 +30,16 @@ export function Item({
   return (
     <div
       className={twMerge(
-        "flex flex-col items-center space-y-[42px] flex-grow overflow-hidden]",
+        "flex flex-col items-center space-y-[42px] aspect-[45/49] flex-grow overflow-hidden]",
         className
       )}
     >
-      <div className="relative aspect-[5/7] w-full max-h-[490px] max-w-[450px]">
+      <div className="relative aspect-[45/49] w-full max-h-[490px] max-w-[450px]">
         <div className="absolute top-0 w-full h-[40px] overflow-hidden">
           <img src="./svgs/blinds.svg" className="w-full" />
         </div>
 
-        <div className="absolute top-0 left-0 w-full overflow-hidden max-h-[470px]">
+        <div className="absolute top-0 left-0 w-full overflow-hidden max-h-[470px] aspect-[45/49]">
           <AnimatePresence initial={false}>
             {hide && (
               <motion.section
@@ -58,7 +58,7 @@ export function Item({
           </AnimatePresence>
         </div>
 
-        <div className="w-full h-full border border-[25px] border-purple-1">
+        <div className="w-full h-full aspect-[45/49] border border-[25px] border-purple-1">
           <div className="w-full h-full border border-purple-0 border-[18px]">
             {!hide && (
               <motion.div
@@ -84,7 +84,7 @@ export function Item({
 
       <Button
         onClick={() => getRandomImage()}
-        className="px-[19px] text-[18px]"
+        className="px-[19px] text-[18px] w-[122px] flex items-center justify-center"
       >
         {hide ? "Open" : "Close"}
       </Button>
