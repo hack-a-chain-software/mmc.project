@@ -1,34 +1,46 @@
 use near_contract_standards::non_fungible_token::TokenId;
 use near_sdk::{AccountId, env};
 
-use crate::Contract;
+use crate::{
+  Contract,
+  errors::{INEXISTENT_ERR, UNAUTHORIZED_ERR},
+};
 
 impl Contract {
   pub fn is_token_owner(&self, account_id: &AccountId, token_id: &TokenId) -> bool {
-    self
+    let owner_id = self
       .tokens
       .owner_by_id
       .get(&token_id)
-      .map(|id| &id == account_id)
-      .unwrap_or(false)
+      .expect(INEXISTENT_ERR);
+
+    account_id == &owner_id
   }
 
-  pub fn is_token_staked(&self, token_id: &TokenId) -> bool {
-    self.staked_tokens.contains_key(&token_id)
-  }
-
-  pub fn assert_token_available(&self, token_id: &TokenId) {
-    let is_owned_by_contract = self.is_token_owner(&env::current_account_id(), token_id);
-    let is_staked = self.is_token_staked(token_id);
-
+  pub fn assert_token_owner(&self, account_id: &AccountId, token_id: &TokenId) {
     assert!(
-      is_owned_by_contract && !is_staked,
-      "Token was already picked"
+      self.is_token_owner(&account_id, &token_id),
+      "{}",
+      UNAUTHORIZED_ERR
     );
   }
 
-  pub fn assert_owner(&self, account_id: &AccountId) {
-    assert_eq!(account_id, &self.tokens.owner_id, "Unauthorized");
+  pub fn assert_contract_owner(&self) {
+    assert_eq!(
+      env::predecessor_account_id(),
+      self.tokens.owner_id,
+      "{}",
+      UNAUTHORIZED_ERR
+    );
+  }
+
+  pub fn assert_detective_transfer(&self) {
+    assert_eq!(
+      env::predecessor_account_id(),
+      self.detective_token_address,
+      "{}",
+      UNAUTHORIZED_ERR
+    );
   }
 }
 
@@ -38,7 +50,7 @@ mod tests {
   use rstest::rstest;
 
   use super::*;
-  use crate::tests::*;
+  use crate::test_utils::{fixtures::*, unwind};
 
   #[rstest]
   fn test_is_token_owner(mut contract: Contract, account_id: AccountId, token_id: TokenId) {
@@ -79,71 +91,24 @@ mod tests {
   }
 
   #[rstest]
-  fn test_assert_owner(contract: Contract, owner: AccountId) {
+  fn test_assert_contract_owner(contract: Contract, owner: AccountId) {
     // Arrange
-    let context = get_context();
+    let mut context = get_context();
+    context.predecessor_account_id(owner);
     testing_env!(context.build());
 
     // Act / Assert
-    contract.assert_owner(&owner);
+    contract.assert_contract_owner();
   }
 
   #[rstest]
-  fn test_assert_owner_unauthorized(contract: Contract, account_id: AccountId) {
+  fn test_assert_contract_owner_unauthorized(contract: Contract, account_id: AccountId) {
     // Arrange
-    let context = get_context();
-    testing_env!(context.build());
-
-    // Act
-    let panicked = std::panic::catch_unwind(|| {
-      contract.assert_owner(&account_id);
-    });
-
-    // Assert
-    assert!(panicked.is_err());
-  }
-
-  #[rstest]
-  fn test_assert_token_available(contract: Contract, token_id: TokenId) {
-    // Arrange
-    let context = get_context();
+    let mut context = get_context();
+    context.predecessor_account_id(account_id);
     testing_env!(context.build());
 
     // Act / Assert
-    contract.assert_token_available(&token_id);
-  }
-
-  #[rstest]
-  fn test_assert_token_available_staked(contract: Contract, staked_token_id: TokenId) {
-    // Arrange
-    let context = get_context();
-    testing_env!(context.build());
-
-    std::panic::set_hook(Box::new(|_| {}));
-
-    // Act
-    let panicked = std::panic::catch_unwind(|| {
-      contract.assert_token_available(&staked_token_id);
-    });
-
-    // Assert
-    assert!(panicked.is_err());
-  }
-
-  #[rstest]
-  fn test_assert_token_available_owned(contract: Contract, owned_token_id: TokenId) {
-    // Arrange
-    let context = get_context();
-    testing_env!(context.build());
-
-    std::panic::set_hook(Box::new(|_| {}));
-
-    // Act
-    let panicked = std::panic::catch_unwind(|| {
-      contract.assert_token_available(&owned_token_id);
-    });
-
-    // Assert
-    assert!(panicked.is_err());
+    unwind::assert_unwind_error(|| contract.assert_contract_owner(), UNAUTHORIZED_ERR);
   }
 }
