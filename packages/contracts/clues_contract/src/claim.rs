@@ -10,7 +10,7 @@ impl Contract {
     assert!(is_owned_by_contract, "{}", UNAVAILABLE_ERR);
   }
 
-  pub fn pick(&mut self, token_id: TokenId, account_id: AccountId) -> bool {
+  pub fn claim(&mut self, token_id: TokenId, account_id: AccountId) -> bool {
     self.assert_detective_transfer();
     self.assert_token_available(&token_id);
 
@@ -38,13 +38,13 @@ mod tests {
   };
 
   #[rstest]
-  fn test_pick(mut contract: Contract, account_id: AccountId, token_id: TokenId) {
+  fn test_claim(mut contract: Contract, account_id: AccountId, token_id: TokenId) {
     // Arrange
     let context = get_context();
     testing_env!(context.build());
 
     // Act
-    let returned_detective = contract.pick(token_id.clone(), account_id.clone());
+    let returned_detective = contract.claim(token_id.clone(), account_id.clone());
 
     // Assert
     assert_eq!(
@@ -56,7 +56,7 @@ mod tests {
   }
 
   #[rstest]
-  fn test_pick_unavailable(
+  fn test_claim_unavailable(
     mut contract: Contract,
     account_id: AccountId,
     staked_token_id: TokenId,
@@ -67,13 +67,13 @@ mod tests {
 
     // Act / Assert
     unwind::assert_unwind_error(
-      move || contract.pick(staked_token_id, account_id),
+      move || contract.claim(staked_token_id, account_id),
       UNAVAILABLE_ERR,
     );
   }
 
   #[rstest]
-  pub fn test_pick_predecessor(mut contract: Contract, account_id: AccountId, token_id: TokenId) {
+  pub fn test_claim_predecessor(mut contract: Contract, account_id: AccountId, token_id: TokenId) {
     // Arrange
     let mut context = get_context();
     context.predecessor_account_id(account_id.clone());
@@ -81,7 +81,7 @@ mod tests {
 
     // Act / Assert
     unwind::assert_unwind_error(
-      move || contract.pick(token_id, account_id),
+      move || contract.claim(token_id, account_id),
       UNAUTHORIZED_ERR,
     );
   }

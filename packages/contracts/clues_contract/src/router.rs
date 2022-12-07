@@ -6,7 +6,7 @@ use crate::{Contract, ContractExt};
 
 #[derive(Deserialize)]
 enum NftRoute {
-  Pick { account_id: AccountId },
+  Claim { account_id: AccountId },
   Stake { account_id: AccountId },
 }
 
@@ -24,7 +24,7 @@ impl Contract {
     let route = serde_json::from_str::<NftRoute>(&msg).unwrap();
 
     match route {
-      NftRoute::Pick { account_id } => self.pick(token_id, account_id),
+      NftRoute::Claim { account_id } => self.claim(token_id, account_id),
       NftRoute::Stake { account_id } => self.stake(token_id, account_id),
     }
   }

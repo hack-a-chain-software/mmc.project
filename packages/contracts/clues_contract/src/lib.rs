@@ -11,9 +11,9 @@ use near_contract_standards::non_fungible_token::metadata::{
 use near_contract_standards::impl_non_fungible_token_enumeration;
 
 mod auth;
+mod claim;
 mod errors;
 mod mint;
-mod pick;
 mod router;
 mod stake;
 
