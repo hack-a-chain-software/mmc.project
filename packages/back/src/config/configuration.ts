@@ -26,7 +26,7 @@ export function configuration(): Configuration {
 
       account: {
         id: process.env.ACCOUNT_ID,
-        keyPair: process.env.ACCOUNT_KEYPAR,
+        keyPair: process.env.ACCOUNT_KEYPAIR,
       },
 
       connection: {
