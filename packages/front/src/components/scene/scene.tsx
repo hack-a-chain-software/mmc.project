@@ -2,9 +2,9 @@ import { Clue } from './clue';
 import { Portal } from './portal';
 import { SceneInterface } from '@/utils/interfaces';
 
-export const Scene = ({ image, name, clues, fetchScene }: SceneInterface & { fetchScene: () => any }) => {
+export const Scene = ({ image, name, clues, fetchScene, portal }: SceneInterface & { fetchScene: (id: number) => any }) => {
   return (
-    <div className="relative">
+    <div className="relative bg-blue-100">
       <img src={image} />
 
       {clues &&
@@ -17,7 +17,7 @@ export const Scene = ({ image, name, clues, fetchScene }: SceneInterface & { fet
         ))}
 
         <Portal
-          onClick={() => fetchScene()}
+          onClick={() => fetchScene(portal)}
           position={{
             top: '61.3%',
             left: '37%',

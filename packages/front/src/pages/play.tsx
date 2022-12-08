@@ -29,12 +29,17 @@ export const Play = () => {
 		}, 4000);
 	}, []);
 
-	const fetchScene = useCallback(() => {
+	const fetchScene = useCallback((id: number = 0) => {
 		setLoading(true);
 
+		window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
 		setTimeout(() => {
-			setScene(scenes[1] ?? null);
-			loadSceneImage(scenes[1].image, () => setLoading(false));
+			setScene(scenes[id] ?? null);
+			loadSceneImage(scenes[id].image, () => setLoading(false));
 		}, 4000);
 	}, [loading, scene]);
 
@@ -77,7 +82,7 @@ export const Play = () => {
 							<WalletDropdown />
 						</div>
 
-						<Scene {...scenes[0]} fetchScene={() => fetchScene()} />
+						<Scene {...scene as SceneInterface} fetchScene={(id: number) => { fetchScene(id) }} />
 					</motion.div>
 				)}
 			</AnimatePresence>

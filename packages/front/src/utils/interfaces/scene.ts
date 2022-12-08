@@ -1,6 +1,7 @@
 export interface SceneInterface {
   image: string;
   name: string;
+  portal: number;
   clues: ClueInterface[];
 }
 
