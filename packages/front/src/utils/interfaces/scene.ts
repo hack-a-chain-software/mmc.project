@@ -1,4 +1,5 @@
 export interface SceneInterface {
+  bg?: string;
   image: string;
   name: string;
   portal: number;

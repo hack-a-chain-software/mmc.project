@@ -9,33 +9,47 @@ const positions = [
     left: '11%',
   },
   {
-    top: '67.0%',
-    left: '31%',
+    top: '53%',
+    left: '15%',
   },
 ];
 
-export const Scene = ({ image, name, clues, fetchScene, portal }: SceneInterface & { fetchScene: (id: number) => any }) => {
-
-  const portalPos = useMemo(() => {
-    return
-  }, [portal])
+export const Scene = ({ image, name, clues, fetchScene, bg, portal }: SceneInterface & { fetchScene: (id: number) => any }) => {
   return (
-    <div className="relative bg-blue-100">
-      <img src={image} />
+    <div className="relative bg-blue-100 overflow-hidden min-h-screen flex items-end">
+      {bg && (
+        <img
+          src={bg}
+          className="absolute top-0"
+        />
+      )}
+    {/*    <img
+          src={image}
+          className="relative z-[2]"
+        />*/}
 
-      {clues &&
-        clues.map((clue, i) => (
-          <Clue
-            {...clue}
-            sceneName={name}
-            key={`scene-${name}-point-${i}`}
-          />
-        ))}
+      <div
+        className="relative z-[99999999999]"
+      >
+        <img
+          src={image}
+          className="relative z-[2] w-screen"
+        />
+
+        {clues &&
+          clues.map((clue, i) => (
+            <Clue
+              {...clue}
+              sceneName={name}
+              key={`scene-${name}-point-${i}`}
+            />
+          ))}
 
         <Portal
           onClick={() => fetchScene(portal)}
           position={positions[portal || 0]}
         />
+      </div>
     </div>
   );
 };

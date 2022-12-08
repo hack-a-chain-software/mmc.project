@@ -61,7 +61,7 @@ export const ClueModal = ({
                   className="w-[250px] h-[250px] border-white mt-1"
                 >
                   <img
-                    src="./images/clue-example.png"
+                    src="./images/clue-ramen.png"
                   />
                 </div>
 

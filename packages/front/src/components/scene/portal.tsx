@@ -15,7 +15,7 @@ export const Portal = ({ position, onClick = () => {} }: PortalInterface) => {
 		<div
 			style={position}
 			onClick={() => onClick()}
-			className="w-[32px] h-[32px] lg:w-[48px] lg:h-[48px] xl:w-[96px] xl:h-[96px] rounded-full bg-blue-100/[0.75] absolute"
+			className="w-[24px] h-[24px] lg:w-[48px] lg:h-[48px] xl:w-[48px] xl:h-[48px] rounded-full bg-blue-100/[0.75] absolute z-[9]"
 		/>
 	);
 };

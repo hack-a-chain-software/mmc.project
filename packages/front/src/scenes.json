@@ -1,13 +1,16 @@
 [
   {
     "portal": 1,
-    "image": "./images/scenes/1.png",
+    "image": "./images/scenes/1-expanded.svg",
+    "bg": "./images/scenes/1-bg.png",
     "name": "South Entrance Garden",
     "clues": []
   },
   {
     "portal": 0,
-    "image": "./images/scenes/2.png",
+    "image": [
+      "./images/scenes/2.png"
+    ],
     "name": "John's Truck Cabin",
     "clues": [
       {
