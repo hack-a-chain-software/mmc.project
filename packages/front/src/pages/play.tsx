@@ -45,7 +45,7 @@ export const Play = () => {
 
 	return (
 		<>
-			{loading && <Fallback />}
+			<Fallback />
 
 			<AnimatePresence>
 				{!loading && (
@@ -64,7 +64,7 @@ export const Play = () => {
 							duration,
 						}}
 						className="
-              w-screen min-h-screen relative
+              w-screen min-h-screen relative bg-blue-100
             "
 					>
 						<div className="absolute px-[30px] w-full max-w-[1340px] pt-[32px] z-[9] flex items-center justify-end space-x-[32px] left-1/2 -translate-x-1/2">

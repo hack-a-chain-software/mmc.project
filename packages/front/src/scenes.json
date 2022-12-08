@@ -3,48 +3,20 @@
     "portal": 1,
     "image": "./images/scenes/1.png",
     "name": "South Entrance Garden",
-    "clues": [
-      {
-        "name": "Car",
-        "owner": "mateuexample134",
-        "about": "The Car is of a sneaker, approximately size 11. It is heading out towards the parking lot.",
-        "position": {
-          "top": "72%",
-          "left": "42.5%"
-        }
-      },
-      {
-        "name": "Clouds",
-        "owner": "mateuexample134",
-        "about": "The print is of a sneaker, approximately size 11. It is heading out towards the parking lot.",
-        "position": {
-          "top": "52%",
-          "left": "68.5%"
-        }
-      }
-    ]
+    "clues": []
   },
   {
     "portal": 0,
     "image": "./images/scenes/2.png",
-    "name": "South Entrance Garden",
+    "name": "John's Truck Cabin",
     "clues": [
       {
-        "name": "Car",
+        "name": "Ramen",
         "owner": "mateuexample134",
-        "about": "The Car is of a sneaker, approximately size 11. It is heading out towards the parking lot.",
+        "about": "The package of FSM Ramen noodles appears unopened and there is a sticky note attached to it that says 'CHECK'.",
         "position": {
-          "top": "72%",
-          "left": "42.5%"
-        }
-      },
-      {
-        "name": "Clouds",
-        "owner": "mateuexample134",
-        "about": "The print is of a sneaker, approximately size 11. It is heading out towards the parking lot.",
-        "position": {
-          "top": "52%",
-          "left": "68.5%"
+          "top": "70%",
+          "left": "64.5%"
         }
       }
     ]

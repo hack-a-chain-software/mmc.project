@@ -54,11 +54,11 @@ export const ClueModal = ({
                   flex
                   items-start
                   justify-center
-                  space-x-[18px]
+                  space-x-[32px]
                 "
               >
                 <div
-                  className="w-[150px] h-[150px] border-white mt-1"
+                  className="w-[250px] h-[250px] border-white mt-1"
                 >
                   <img
                     src="./images/clue-example.png"
@@ -68,12 +68,14 @@ export const ClueModal = ({
                 <div
                   className="flex flex-col"
                 >
-                  <div>
+                  <div
+                  	className="mb-[32px]"
+                  >
                     <span
                       className="
                         uppercase
-                        text-[#A522FB]
-                        text-3xl
+                        text-white
+                        text-xl
                       "
                     >
                       {!!owner ? 'Founded' : 'Available'}
@@ -85,7 +87,8 @@ export const ClueModal = ({
                       className="
                         uppercase
                         text-white
-                        text-2xl
+                        text-xl
+                        font-[300]
                       "
                     >
                       Clue: {name}
@@ -100,6 +103,7 @@ export const ClueModal = ({
                         uppercase
                         text-white
                         text-xl
+                        font-[300]
                       "
                     >
                       Location: {sceneName}
@@ -114,6 +118,7 @@ export const ClueModal = ({
                         uppercase
                         text-white
                         text-xl
+                        font-[300]
                       "
                     >
                       {about}
