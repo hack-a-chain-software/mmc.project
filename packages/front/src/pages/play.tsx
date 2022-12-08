@@ -25,7 +25,7 @@ export const Play = () => {
 	useEffect(() => {
 		setTimeout(() => {
 			setScene(scenes[0]);
-			loadSceneImage(scenes[0].image, () => setLoading(false));
+			setLoading(false);
 		}, 4000);
 	}, []);
 
@@ -39,7 +39,7 @@ export const Play = () => {
 
 		setTimeout(() => {
 			setScene(scenes[id] ?? null);
-			loadSceneImage(scenes[id].image, () => setLoading(false));
+			setLoading(false);
 		}, 4000);
 	}, [loading, scene]);
 

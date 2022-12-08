@@ -9,7 +9,7 @@ const positions = [
     left: '11%',
   },
   {
-    top: '53%',
+    top: '48%',
     left: '15%',
   },
 ];

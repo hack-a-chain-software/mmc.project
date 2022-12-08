@@ -1,7 +1,7 @@
 [
   {
     "portal": 1,
-    "image": "./images/scenes/1-expanded.svg",
+    "image": "./images/scenes/1-expanded.png",
     "bg": "./images/scenes/1-bg.png",
     "name": "South Entrance Garden",
     "clues": []
