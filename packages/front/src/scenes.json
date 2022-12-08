@@ -8,9 +8,7 @@
   },
   {
     "portal": 0,
-    "image": [
-      "./images/scenes/2.png"
-    ],
+    "image":  "./images/scenes/2.png",
     "name": "John's Truck Cabin",
     "clues": [
       {

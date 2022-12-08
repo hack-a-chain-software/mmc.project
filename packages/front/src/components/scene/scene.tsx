@@ -23,10 +23,6 @@ export const Scene = ({ image, name, clues, fetchScene, bg, portal }: SceneInter
           className="absolute top-0"
         />
       )}
-    {/*    <img
-          src={image}
-          className="relative z-[2]"
-        />*/}
 
       <div
         className="relative z-[99999999999]"
