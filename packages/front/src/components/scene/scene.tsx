@@ -12,7 +12,7 @@ export const Scene = ({
 	clues,
 	setLoading,
 	controls,
-}: SceneInterface & { setLoading: (a: any) => any; controls: any }) => {
+}: SceneInterface & { setLoading: () => void; controls: any }) => {
 	const [repo, setRepo] = useState({
 		owner: '1mateus',
 		name: 'single',
@@ -29,9 +29,7 @@ export const Scene = ({
 				}
 			}
 		`,
-		{
-			...repo,
-		}
+		{ ...repo }
 	);
 
 	useEffect(() => {
@@ -80,10 +78,7 @@ export const Scene = ({
 				scene.warps.map((portal, index) => (
 					<Portal
 						onClick={() => handePortal()}
-						position={{
-							top: '61.3%',
-							left: '37%',
-						}}
+						position={{ top: '61.3%', left: '37%' }}
 					/>
 				))}
 		</div>

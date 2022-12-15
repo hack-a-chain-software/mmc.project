@@ -5,6 +5,7 @@
     "bg": "./images/scenes/1-bg.png",
     "name": "South Entrance Garden",
     "warps": [],
+    "clues": []
   },
   {
     "portal": 0,
@@ -14,6 +15,7 @@
     "clues": [
       {
         "name": "Ramen",
+        "media": "",
         "owner": "mateuexample134",
         "about": "The package of FSM Ramen noodles appears unopened and there is a sticky note attached to it that says 'CHECK'.",
         "position": {
