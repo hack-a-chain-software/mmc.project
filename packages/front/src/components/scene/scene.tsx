@@ -1,9 +1,11 @@
 import { Clue } from './clue';
-import { useState, useEffect } from 'react';
 import { Portal } from './portal';
-import { SceneInterface } from '@/utils/interfaces';
-import { graphql, useLazyLoadQuery } from 'react-relay';
+import scenes from '@/scenes.json';
+import isArray from 'lodash/isArray';
 import { SuspenseImage } from '@/components';
+import { SceneInterface } from '@/utils/interfaces';
+import { useState, useEffect, useMemo } from 'react';
+import { graphql, useLazyLoadQuery } from 'react-relay';
 
 export const Scene = ({ name, clues, setLoading, controls }: SceneInterface & { setLoading: (a: any) => any, controls: any}) => {
   const [repo, setRepo] = useState({
@@ -11,7 +13,7 @@ export const Scene = ({ name, clues, setLoading, controls }: SceneInterface & { 
     name: 'single',
   });
 
-  const [image, setImage] = useState('./images/scenes/1.png');
+  const [scene, setScene] = useState(scenes[0]);
 
   const data = useLazyLoadQuery(
     graphql`
@@ -38,18 +40,34 @@ export const Scene = ({ name, clues, setLoading, controls }: SceneInterface & { 
       owner: '1mateus',
       name: 'dotfiles',
     });
-
-    setImage('https://images7.alphacoders.com/403/403331.png');
   };
 
-  console.log(JSON.stringify(data));
+  const assets = useMemo(() => {
+    if (!scene) {
+      return [];
+    }
+
+    const {
+      image,
+    } = scene;
+
+    return [
+      ...(isArray(scene.image) ? image : [image]),
+    ];
+  }, [scene]);
 
   return (
     <div className="relative">
-      <SuspenseImage src={image} />
+      {assets && assets.map((asset, id) => (
+        <SuspenseImage
+          src={asset}
+          key={`scene-${scene.id}-asset-${id}`}
+        />
+      ))}
 
-      {clues &&
-        clues.map((clue, i) => (
+
+      {scene &&
+        scene.clues.map((clue, i) => (
           <Clue
             {...clue}
             sceneName={name}

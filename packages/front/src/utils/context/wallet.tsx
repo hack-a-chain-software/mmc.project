@@ -5,20 +5,23 @@ import React, {
   useState,
   PropsWithChildren,
 } from 'react';
+import { keyStores } from 'near-api-js';
+import { KeyPair } from 'near-api-js/lib/utils';
 import type { AccountView } from 'near-api-js/lib/providers/provider';
 import { map, distinctUntilChanged } from 'rxjs';
 import { setupWalletSelector } from '@near-wallet-selector/core';
 import type { WalletSelector, AccountState } from '@near-wallet-selector/core';
-import { setupNearWallet } from '@near-wallet-selector/near-wallet';
-import { setupMeteorWallet } from '@near-wallet-selector/meteor-wallet';
+import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 
 interface WalletContextValue {
+  accountKeyPair: any;
   selector: WalletSelector;
   accounts: AccountState[];
   accountId: string | null;
   showModal: boolean;
   signOut: () => Promise<void>;
   toggleModal: () => void;
+  signMessage: () => any;
 }
 
 export type Account = AccountView & {
@@ -31,6 +34,7 @@ const WalletContext =
 export const WalletSelectorContextProvider: React.FC<
   PropsWithChildren<Record<any, any>>
 > = ({ children }) => {
+  const [accountKeyPair, setKeypair] = useState<any>();
   const [accountId, setAccountId] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
   const [accounts, setAccounts] = useState<AccountState[]>([]);
@@ -49,16 +53,16 @@ export const WalletSelectorContextProvider: React.FC<
   };
 
   const init = useCallback(async () => {
-    const _selector = await setupWalletSelector({
+    const newSelector = await setupWalletSelector({
       network: import.meta.env.VITE_NEAR_NETWORK || 'testnet',
       debug: true,
-      modules: [setupNearWallet(), setupMeteorWallet()],
+      modules: [setupMyNearWallet()],
     });
 
-    const state = _selector.store.getState();
+    const state = newSelector.store.getState();
 
     setAccounts(state.accounts);
-    setSelector(_selector);
+    setSelector(newSelector);
   }, []);
 
   useEffect(() => {
@@ -75,8 +79,8 @@ export const WalletSelectorContextProvider: React.FC<
 
     const subscription = selector.store.observable
       .pipe(
-        map(({ accounts }) => accounts),
-        distinctUntilChanged()
+        map(({ accounts: storeAccounts }) => storeAccounts),
+        distinctUntilChanged(),
       )
       .subscribe((nextAccounts) => {
         setAccounts(nextAccounts);
@@ -86,11 +90,35 @@ export const WalletSelectorContextProvider: React.FC<
     return () => subscription.unsubscribe();
   }, [selector]);
 
+  const signMessage = () => {
+    const {
+      signature,
+      publicKey,
+    } = accountKeyPair.sign(message);
+
+    return {
+      message,
+      signature,
+      publicKey: publicKey.toString(),
+    };
+  };
+
   useEffect(() => {
     const newAccount =
       accounts.find((account) => account.active)?.accountId || "";
 
     setAccountId(newAccount);
+
+    (async () => {
+      const keystore = new keyStores.BrowserLocalStorageKeyStore();
+
+      const keyPair = await keystore.getKey(
+        import.meta.env.VITE_NEAR_NETWORK,
+        newAccount,
+      );
+
+      setKeypair(keyPair);
+    })();
   }, [accounts]);
 
   if (!selector) {
@@ -100,12 +128,14 @@ export const WalletSelectorContextProvider: React.FC<
   return (
     <WalletContext.Provider
       value={{
+        signOut,
         selector,
         accounts,
         accountId,
         showModal,
-        signOut,
         toggleModal,
+        signMessage,
+        accountKeyPair,
       }}
     >
       {children}

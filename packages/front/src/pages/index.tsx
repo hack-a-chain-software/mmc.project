@@ -9,8 +9,6 @@ import {
 } from '@/components';
 
 export const Index = (props) => {
-  console.log(props, 'pagepros');
-
   return (
     <div
       className="mx-auto bodypage"
