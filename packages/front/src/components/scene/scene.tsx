@@ -8,8 +8,6 @@ import { useState, useEffect, useMemo } from 'react';
 import { graphql, useLazyLoadQuery } from 'react-relay';
 
 export const Scene = ({
-	name,
-	clues,
 	setLoading,
 	controls,
 }: SceneInterface & { setLoading: () => void; controls: any }) => {
@@ -69,8 +67,8 @@ export const Scene = ({
 				scene.clues.map((clue, i) => (
 					<Clue
 						{...clue}
-						sceneName={name}
-						key={`scene-${name as string}-point-${i as number}`}
+						sceneName={scene.name}
+						key={`scene-${scene?.name as string}-point-${i as number}`}
 					/>
 				))}
 
