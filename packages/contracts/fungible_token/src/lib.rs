@@ -10,7 +10,7 @@ use near_sdk::{
   collections::LazyOption,
   env,
   json_types::U128,
-  near_bindgen, PanicOnDefault, AccountId, Balance,
+  near_bindgen, PanicOnDefault, PromiseOrValue, AccountId, Balance,
 };
 
 pub mod errors;
@@ -45,6 +45,7 @@ impl Contract {
   }
 }
 
+near_contract_standards::impl_fungible_token_core!(Contract, token);
 near_contract_standards::impl_fungible_token_storage!(Contract, token, on_account_closed);
 
 #[near_bindgen]
