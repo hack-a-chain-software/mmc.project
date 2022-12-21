@@ -12,9 +12,11 @@ services:
       - NFT_CONTRACT_ID=nft.test.near
       - ACCOUNT_KEYPAIR=ed25519:3tU5BE8BnNQ9pX89DKepzMAZKQ7NPGCaY63cEtaueTS8iPyarB2rSXBuWLeZQ4LDL9m4oYRZXx936S3oS5MtjyoF
       - NEAR_NETWORK=localnet
+      - NEAR_NODE_URL=http://contracts:21817
       - JWT_SECRET=abacaba
       - JWT_VALID_FOR_S=180
       - AUTH_MESSAGE_VALID_FOR_MS=60000
+      - DATABASE_URL=postgres://postgres:${POSTGRES_PASSWORD}@db:5432/mmc
     networks:
       - mmc
     depends_on:
@@ -25,6 +27,9 @@ services:
     image: ghcr.io/hack-a-chain-software/mmc.project/contracts:latest
     build:
       context: ./packages/contracts/
+    ports:
+      - "1337:1337"
+      - "1338:1338"
     networks:
       - mmc
 
