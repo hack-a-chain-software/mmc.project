@@ -1,4 +1,4 @@
-use serde::de::DeserializeOwned;
+use near_sdk::serde::de::DeserializeOwned;
 use workspaces::{
   operations::{CallTransaction, CreateAccountTransaction},
   result::{Result, ExecutionSuccess},
@@ -7,9 +7,7 @@ use workspaces::{
 
 use crate::constants::balances::{USER_ACCOUNT_BALANCE, CONTRACT_ACCOUNT_BALANCE};
 
-pub async fn transact_call<'a, 'b>(
-  call_transaction: CallTransaction<'a, 'b>,
-) -> Result<ExecutionSuccess> {
+pub async fn transact_call<'a>(call_transaction: CallTransaction<'a>) -> Result<ExecutionSuccess> {
   call_transaction
     .transact()
     .await?
@@ -17,8 +15,9 @@ pub async fn transact_call<'a, 'b>(
     .map_err(workspaces::error::Error::from)
 }
 
-pub async fn transact_call_json<'a, 'b, Response: DeserializeOwned>(
-  call_transaction: CallTransaction<'a, 'b>,
+#[allow(dead_code)]
+pub async fn transact_call_json<'a, Response: DeserializeOwned>(
+  call_transaction: CallTransaction<'a>,
 ) -> Result<Response> {
   transact_call(call_transaction)
     .await

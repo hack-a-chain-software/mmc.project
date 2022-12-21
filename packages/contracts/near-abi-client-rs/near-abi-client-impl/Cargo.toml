@@ -1,0 +1,20 @@
+[package]
+name = "near-abi-client-impl"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/near/near-abi-client-rs"
+
+[dependencies]
+proc-macro2 = "1.0"
+near-abi = { version =  "0.3.0", features = ["__chunked-entries"] } # TODO: remove feature
+
+anyhow = "1.0"
+quote = "1.0"
+schemars = { version = "0.8.11" }
+serde_json = "1.0"
+serde_path_to_error = "0.1"
+
+# schemafy_lib = { git = "https://github.com/near/schemafy", rev = "4fc8de1ef94f66db1f45889feebb9cf6b931dd94" }
+schemafy_lib = { git = "https://github.com/near/schemafy", rev = "264d197f561af5ced4e3640de3d217b967e7e5ea" }
