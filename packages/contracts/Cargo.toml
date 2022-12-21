@@ -23,6 +23,8 @@ near-contract-standards = "4.1.1"
 near-sdk = { version = "4.1.1", features = ["abi"] }
 near-units = "0.2.0"
 
+schemars = "0.8.11"
+
 # PATCH:
 near-abi-client = { path = "near-abi-client-rs/near-abi-client"}
 workspaces = { path = "workspaces-rs/workspaces" }
