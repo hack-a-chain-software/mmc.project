@@ -12,3 +12,4 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 near-contract-standards = { workspace = true }
 near-sdk = { workspace = true }
+schemars = { workspace = true }

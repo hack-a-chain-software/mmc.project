@@ -27,6 +27,7 @@ near-abi-client = { workspace = true }
 near-sdk = { workspace = true }
 near-units = { workspace = true }
 workspaces = { workspace = true }
+schemars = { workspace = true }
 
 anyhow = "1.0"
 serde = "1"
