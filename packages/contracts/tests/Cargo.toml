@@ -3,15 +3,33 @@ name = "tests"
 version = "0.1.0"
 edition = "2021"
 
+[dependencies.fungible-token]
+path = "../fungible_token"
+target = "wasm32-unknown-unknown"
+artifact = "cdylib"
+lib = true
+
+[dependencies.locked-token]
+path = "../locked_token"
+target = "wasm32-unknown-unknown"
+artifact = "cdylib"
+lib = true
+
+[dependencies.vesting-contract]
+path = "../vesting_contract"
+target = "wasm32-unknown-unknown"
+artifact = "cdylib"
+lib = true
+
 [dependencies]
+# Workspace dependencies (better to have compatible NEAR libs across crates)
+near-abi-client = { workspace = true }
+near-sdk = { workspace = true }
+near-units = { workspace = true }
+workspaces = { workspace = true }
+
 anyhow = "1.0"
-borsh = "0.9"
-near-units = "0.2.0"
-near-contract-standards = "4.1.0"
-serde = "1.0"
+serde = "1"
 serde_json = { version = "1.0", features = ["arbitrary_precision"] }
 tokio = { version = "1.10.0", features = ["full"] }
-workspaces = "0.6.0"
 futures = "0.3.21"
-
-[workspace]

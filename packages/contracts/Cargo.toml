@@ -1,16 +1,28 @@
+cargo-features = ["profile-rustflags"]
+
 [workspace]
 members = [
     "./locked_token",
     "./fungible_token",
     "./vesting_contract",
+    "./tests"
 ]
 
 [profile.release]
 codegen-units = 1
-# s = optimize for binary size ("z" would additionally turn off loop vectorization)
-opt-level = "z"
-# link time optimization
-lto = true
+opt-level = "z" # optimize for binary size without loop vectorization
+lto = true # link time optimization
 debug = false
 panic = "abort"
 overflow-checks = true
+rustflags = ['-Z unstable-options']
+
+[workspace.dependencies]
+# NEAR libraries
+near-contract-standards = "4.1.1"
+near-sdk = { version = "4.1.1", features = ["abi"] }
+near-units = "0.2.0"
+
+# PATCH:
+near-abi-client = { path = "near-abi-client-rs/near-abi-client"}
+workspaces = { path = "workspaces-rs/workspaces" }
