@@ -1,9 +1,8 @@
 --! Previous: -
---! Hash: sha1:779179110cc4e7dbc4b657678396e14831463f86
+--! Hash: sha1:27616a795513eb399ecfc2370474d851600aec22
 
 --! split: 0001-scenes.sql
 drop table if exists scenes cascade;
-
 create table scenes (
     id uuid primary key default gen_random_uuid(),
     description text not null, 
@@ -17,7 +16,6 @@ comment on column scenes.available_at is 'A timestamp indicating when the scene 
 
 --! split: 0002-clues.sql
 drop table if exists clues cascade;
-
 create table clues (
     id uuid primary key default gen_random_uuid(),
     scene_id uuid not null references scenes (id),
@@ -33,6 +31,7 @@ create table clues (
     owner text
 );
 
+drop index if exists clues_scene_id_idx;
 create index on clues (scene_id);
 
 comment on table clues is 'Clues the user can find and mint when navigating scenes.';
@@ -47,7 +46,6 @@ comment on column clues.owner is 'The account ID of the user who minted the clue
 
 --! split: 0003-warps.sql
 drop table if exists warps cascade;
-
 create table warps (
     id uuid primary key default gen_random_uuid(),
     scene_id uuid not null references scenes (id),
@@ -60,6 +58,7 @@ create table warps (
     warps_to uuid unique references scenes (id)
 );
 
+drop index if exists warps_scene_id_idx;
 create index on warps (scene_id);
 
 comment on table warps is 'Clickable regions of a scene that will navigate (warp) the user to another one.';
