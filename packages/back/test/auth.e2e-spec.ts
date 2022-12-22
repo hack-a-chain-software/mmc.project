@@ -35,7 +35,9 @@ describe("Auth", () => {
     "Content-Type": "application/json",
   });
 
-  async function nestSetup(config: Pick<Configuration, "near" | "nft">) {
+  async function nestSetup(
+    config: Pick<Configuration, "near" | "nft" | "postgraphile">
+  ) {
     const authConfig: AuthConfiguration = {
       jwt: {
         secret: "abacaba",
@@ -53,6 +55,7 @@ describe("Auth", () => {
           auth: authConfig,
           near: config.near,
           nft: config.nft,
+          postgraphile: config.postgraphile,
         })
       )
       .compile();
@@ -117,12 +120,13 @@ describe("Auth", () => {
   beforeEach(async () => {
     jest.restoreAllMocks();
 
-    console.log("QAasdasd");
-
+    const pgConfig = {
+      postgraphile: {
+        databaseUrl: "postgres://mmc:abacaba@localhost:5432/mmc",
+      },
+    }; // TODO: configure
     const nearConfig = await nearSetup();
-    console.log("QAasdasdsdadas");
-    await nestSetup(nearConfig);
-    console.log("QAasdasdsdadaasdasdasds");
+    await nestSetup({ ...nearConfig, ...pgConfig });
   });
 
   afterEach(async () => {
@@ -133,8 +137,6 @@ describe("Auth", () => {
   describe("authentication & authorization flow", () => {
     it("should authenticate valid credentials with a JWT, and then authorize a NFT owner that provides the JWT", async () => {
       // Arrange
-
-      console.log("asdasd");
 
       const keyPair = await accounts.user.getKey();
       await accounts.user.updateAccessKey(keyPair, {
