@@ -1,44 +1,86 @@
-/*
- * Graphile Migrate configuration.
- *
- * If you decide to commit this file (recommended) please ensure that it does
- * not contain any secrets (passwords, etc) - we recommend you manage these
- * with environmental variables instead.
- *
- * This file is in JSON5 format, in VSCode you can use "JSON with comments" as
- * the file format.
- */
-{
-  /*
-   * connectionString: this tells Graphile Migrate where to find the database
-   * to run the migrations against.
-   *
-   * RECOMMENDATION: use `DATABASE_URL` envvar instead.
-   */
-  // "connectionString": "postgres://appuser:apppassword@host:5432/appdb",
-  /*
-   * shadowConnectionString: like connectionString, but this is used for the
-   * shadow database (which will be reset frequently).
-   *
-   * RECOMMENDATION: use `SHADOW_DATABASE_URL` envvar instead.
-   */
-  // "shadowConnectionString": "postgres://appuser:apppassword@host:5432/appdb_shadow",
-  /*
-   * rootConnectionString: like connectionString, but this is used for
-   * dropping/creating the database in `graphile-migrate reset`. This isn't
-   * necessary, shouldn't be used in production, but helps during development.
-   *
-   * RECOMMENDATION: use `ROOT_DATABASE_URL` envvar instead.
-   */
-  // "rootConnectionString": "postgres://adminuser:adminpassword@host:5432/postgres",
+require("dotenv").config();
+
+const LOCAL_ENV = {
+  base: {
+    user: "mmc",
+    password: process.env.MMC_PASSWORD || "abacaba",
+    host: "localhost",
+    port: 5432,
+    database: "mmc",
+    tls: false,
+  },
+  shadow: {
+    database: "mmc_shadow",
+  },
+  root: {
+    user: "postgres",
+    database: "postgres",
+    password: process.env.POSTGRES_PASSWORD || "abacaba",
+  },
+};
+
+// TODO: decide what to hard-code and what to use env vars for.
+// I used the current production values as defaults for host & port and hard-coded the rest, except for secrets.
+const PROD_ENV = {
+  user: "mmc",
+  password: process.env.MMC_PASSWORD,
+  host: process.env.HOST,
+  port: process.env.PORT,
+  database: "mmc",
+  tls: true,
+  cert: "tls/do-ca.crt",
+};
+
+const buildQueryString = ({ tls, cert }) =>
+  tls ? `?sslmode=verify-full&sslrootcert=${cert}` : "?sslmode=disable";
+
+const buildConnectionString = ({
+  user,
+  password,
+  host,
+  port = 5432,
+  database,
+  tls,
+  cert,
+}) =>
+  `postgresql://${user}:${password}@${host}:${port}/${database}${buildQueryString(
+    { tls, cert }
+  )}`;
+const buildShadowConnectionString = ({ base, shadow }) =>
+  buildConnectionString({ ...base, ...shadow });
+const buildRootConnectionString = ({ base, root }) =>
+  buildConnectionString({ ...base, ...root });
+
+function buildEnvironmentConfiguration() {
+  // TODO: we'll probably need different environments for local and remove development, so maybe NODE_ENV isn't ideal.
+  switch (process.env.NODE_ENV) {
+    case "development":
+      return {
+        connectionString: buildConnectionString(LOCAL_ENV.base),
+        shadowConnectionString: buildShadowConnectionString(LOCAL_ENV),
+        rootConnectionString: buildRootConnectionString(LOCAL_ENV),
+      };
+    case "production":
+      return {
+        connectionString: buildConnectionString(PROD_ENV),
+      };
+    default:
+      throw new Error("Unrecognized environment");
+  }
+}
+
+module.exports = {
+  ...buildEnvironmentConfiguration(),
+
   /*
    * pgSettings: key-value settings to be automatically loaded into PostgreSQL
    * before running migrations, using an equivalent of `SET LOCAL <key> TO
    * <value>`
    */
-  "pgSettings": {
+  pgSettings: {
     // "search_path": "app_public,app_private,app_hidden,public",
   },
+
   /*
    * placeholders: substituted in SQL files when compiled/executed. Placeholder
    * keys should be prefixed with a colon and in all caps, like
@@ -56,7 +98,7 @@
    * `:DATABASE_OWNER` placeholders, and you should not attempt to override
    * these.
    */
-  "placeholders": {
+  placeholders: {
     // ":DATABASE_VISITOR": "!ENV", // Uses process.env.DATABASE_VISITOR
   },
   /*
@@ -77,14 +119,14 @@
   /*
    * afterReset: actions executed after a `graphile-migrate reset` command.
    */
-  "afterReset": [
+  afterReset: [
     // "afterReset.sql",
     // { "_": "command", "command": "graphile-worker --schema-only" },
   ],
   /*
    * afterAllMigrations: actions executed once all migrations are complete.
    */
-  "afterAllMigrations": [
+  afterAllMigrations: [
     // {
     //   "_": "command",
     //   "shadow": true,
@@ -95,7 +137,7 @@
    * afterCurrent: actions executed once the current migration has been
    * evaluated (i.e. in watch mode).
    */
-  "afterCurrent": [
+  afterCurrent: [
     // {
     //   "_": "command",
     //   "shadow": true,
@@ -122,5 +164,5 @@
    * migrationsFolder: path to the folder in which to store your migrations.
    */
   // migrationsFolder: "./migrations",
-  "//generatedWith": "1.4.0"
-}
+  "//generatedWith": "1.4.0",
+};
