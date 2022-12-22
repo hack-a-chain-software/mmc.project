@@ -1,0 +1,1336 @@
+"""The root query type which gives access points into the data universe."""
+type Query implements Node {
+  """
+  Exposes the root query type nested one level down. This is helpful for Relay 1
+  which can only query top level fields if they are in a particular form.
+  """
+  query: Query!
+
+  """
+  The root query type must be a `Node` to work well with Relay 1 mutations. This just resolves to `query`.
+  """
+  nodeId: ID!
+
+  """Fetches an object given its globally unique `ID`."""
+  node(
+    """The globally unique `ID`."""
+    nodeId: ID!
+  ): Node
+
+  """Reads and enables pagination through a set of `Clue`."""
+  clues(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Clue`."""
+    orderBy: [CluesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ClueCondition
+  ): CluesConnection
+
+  """Reads and enables pagination through a set of `Scene`."""
+  scenes(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Scene`."""
+    orderBy: [ScenesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: SceneCondition
+  ): ScenesConnection
+
+  """Reads and enables pagination through a set of `Warp`."""
+  warps(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Warp`."""
+    orderBy: [WarpsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: WarpCondition
+  ): WarpsConnection
+  clue(id: UUID!): Clue
+  scene(id: UUID!): Scene
+  warp(id: UUID!): Warp
+  warpByWarpsTo(warpsTo: UUID!): Warp
+
+  """Reads a single `Clue` using its globally unique `ID`."""
+  clueByNodeId(
+    """The globally unique `ID` to be used in selecting a single `Clue`."""
+    nodeId: ID!
+  ): Clue
+
+  """Reads a single `Scene` using its globally unique `ID`."""
+  sceneByNodeId(
+    """The globally unique `ID` to be used in selecting a single `Scene`."""
+    nodeId: ID!
+  ): Scene
+
+  """Reads a single `Warp` using its globally unique `ID`."""
+  warpByNodeId(
+    """The globally unique `ID` to be used in selecting a single `Warp`."""
+    nodeId: ID!
+  ): Warp
+}
+
+"""An object with a globally unique `ID`."""
+interface Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+}
+
+"""A connection to a list of `Clue` values."""
+type CluesConnection {
+  """A list of `Clue` objects."""
+  nodes: [Clue]!
+
+  """
+  A list of edges which contains the `Clue` and cursor to aid in pagination.
+  """
+  edges: [CluesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Clue` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""Clues the user can find and mint when navigating scenes."""
+type Clue implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: UUID!
+  sceneId: UUID!
+
+  """
+  The CSS position_top value of the clue clickable area, as a percentage.
+  """
+  positionTop: BigFloat!
+
+  """
+  The CSS position_left value of the clue clickable area, as a percentage.
+  """
+  positionLeft: BigFloat!
+
+  """The CSS width of the clue clickable area, in px units."""
+  width: Int!
+
+  """The CSS height of the clue clickable area, in px units."""
+  height: Int!
+
+  """A reference to the static asset of the clue's image."""
+  media: UUID!
+
+  """The ID of the clue's NFT."""
+  nftContract: String!
+  nftId: String!
+
+  """
+  The account ID of the user who minted the clue's NFT (null until that happens).
+  """
+  owner: String
+
+  """Reads a single `Scene` that is related to this `Clue`."""
+  scene: Scene
+}
+
+"""
+A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122).
+"""
+scalar UUID
+
+"""
+A floating point number that requires more precision than IEEE 754 binary 64
+"""
+scalar BigFloat
+
+"""
+The game's screens. They are composed of a background image with clickable areas for interaction (clues and warps).
+"""
+type Scene implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: UUID!
+  description: String!
+
+  """A reference to the static asset of the scene's image."""
+  media: UUID!
+
+  """A timestamp indicating when the scene will become available for users"""
+  availableAt: Datetime!
+
+  """Reads and enables pagination through a set of `Clue`."""
+  clues(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Clue`."""
+    orderBy: [CluesOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: ClueCondition
+  ): CluesConnection!
+
+  """Reads and enables pagination through a set of `Warp`."""
+  warps(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Warp`."""
+    orderBy: [WarpsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: WarpCondition
+  ): WarpsConnection!
+
+  """Reads a single `Warp` that is related to this `Scene`."""
+  warpByWarpsTo: Warp
+
+  """Reads and enables pagination through a set of `Warp`."""
+  warpsByWarpsTo(
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """The method to use when ordering `Warp`."""
+    orderBy: [WarpsOrderBy!] = [PRIMARY_KEY_ASC]
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: WarpCondition
+  ): WarpsConnection! @deprecated(reason: "Please use warpByWarpsTo instead")
+}
+
+"""
+A point in time as described by the [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
+"""
+scalar Datetime
+
+"""A location in a connection that can be used for resuming pagination."""
+scalar Cursor
+
+"""Methods to use when ordering `Clue`."""
+enum CluesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  SCENE_ID_ASC
+  SCENE_ID_DESC
+  POSITION_TOP_ASC
+  POSITION_TOP_DESC
+  POSITION_LEFT_ASC
+  POSITION_LEFT_DESC
+  WIDTH_ASC
+  WIDTH_DESC
+  HEIGHT_ASC
+  HEIGHT_DESC
+  MEDIA_ASC
+  MEDIA_DESC
+  NFT_CONTRACT_ASC
+  NFT_CONTRACT_DESC
+  NFT_ID_ASC
+  NFT_ID_DESC
+  OWNER_ASC
+  OWNER_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Clue` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input ClueCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: UUID
+
+  """Checks for equality with the object’s `sceneId` field."""
+  sceneId: UUID
+
+  """Checks for equality with the object’s `positionTop` field."""
+  positionTop: BigFloat
+
+  """Checks for equality with the object’s `positionLeft` field."""
+  positionLeft: BigFloat
+
+  """Checks for equality with the object’s `width` field."""
+  width: Int
+
+  """Checks for equality with the object’s `height` field."""
+  height: Int
+
+  """Checks for equality with the object’s `media` field."""
+  media: UUID
+
+  """Checks for equality with the object’s `nftContract` field."""
+  nftContract: String
+
+  """Checks for equality with the object’s `nftId` field."""
+  nftId: String
+
+  """Checks for equality with the object’s `owner` field."""
+  owner: String
+}
+
+"""A connection to a list of `Warp` values."""
+type WarpsConnection {
+  """A list of `Warp` objects."""
+  nodes: [Warp]!
+
+  """
+  A list of edges which contains the `Warp` and cursor to aid in pagination.
+  """
+  edges: [WarpsEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Warp` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""
+Clickable regions of a scene that will navigate (warp) the user to another one.
+"""
+type Warp implements Node {
+  """
+  A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+  """
+  nodeId: ID!
+  id: UUID!
+  sceneId: UUID!
+
+  """
+  The CSS position_top value of the warp clickable area, as a percentage.
+  """
+  positionTop: BigFloat!
+
+  """
+  The CSS position_left value of the warp clickable area, as a percentage.
+  """
+  positionLeft: BigFloat!
+
+  """The CSS width of the warp clickable area, in px units."""
+  width: Int!
+
+  """The CSS height of the warp clickable area, in px units."""
+  height: Int!
+
+  """The ID of the scene the user will navigate to when clicking the warp."""
+  warpsTo: UUID
+
+  """Reads a single `Scene` that is related to this `Warp`."""
+  scene: Scene
+
+  """Reads a single `Scene` that is related to this `Warp`."""
+  sceneByWarpsTo: Scene
+}
+
+"""A `Warp` edge in the connection."""
+type WarpsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Warp` at the end of the edge."""
+  node: Warp
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: Cursor
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: Cursor
+}
+
+"""Methods to use when ordering `Warp`."""
+enum WarpsOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  SCENE_ID_ASC
+  SCENE_ID_DESC
+  POSITION_TOP_ASC
+  POSITION_TOP_DESC
+  POSITION_LEFT_ASC
+  POSITION_LEFT_DESC
+  WIDTH_ASC
+  WIDTH_DESC
+  HEIGHT_ASC
+  HEIGHT_DESC
+  WARPS_TO_ASC
+  WARPS_TO_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Warp` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input WarpCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: UUID
+
+  """Checks for equality with the object’s `sceneId` field."""
+  sceneId: UUID
+
+  """Checks for equality with the object’s `positionTop` field."""
+  positionTop: BigFloat
+
+  """Checks for equality with the object’s `positionLeft` field."""
+  positionLeft: BigFloat
+
+  """Checks for equality with the object’s `width` field."""
+  width: Int
+
+  """Checks for equality with the object’s `height` field."""
+  height: Int
+
+  """Checks for equality with the object’s `warpsTo` field."""
+  warpsTo: UUID
+}
+
+"""A `Clue` edge in the connection."""
+type CluesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Clue` at the end of the edge."""
+  node: Clue
+}
+
+"""A connection to a list of `Scene` values."""
+type ScenesConnection {
+  """A list of `Scene` objects."""
+  nodes: [Scene]!
+
+  """
+  A list of edges which contains the `Scene` and cursor to aid in pagination.
+  """
+  edges: [ScenesEdge!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Scene` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Scene` edge in the connection."""
+type ScenesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Scene` at the end of the edge."""
+  node: Scene
+}
+
+"""Methods to use when ordering `Scene`."""
+enum ScenesOrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+  DESCRIPTION_ASC
+  DESCRIPTION_DESC
+  MEDIA_ASC
+  MEDIA_DESC
+  AVAILABLE_AT_ASC
+  AVAILABLE_AT_DESC
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+}
+
+"""
+A condition to be used against `Scene` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input SceneCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: UUID
+
+  """Checks for equality with the object’s `description` field."""
+  description: String
+
+  """Checks for equality with the object’s `media` field."""
+  media: UUID
+
+  """Checks for equality with the object’s `availableAt` field."""
+  availableAt: Datetime
+}
+
+"""
+The root mutation type which contains root level fields which mutate data.
+"""
+type Mutation {
+  """Creates a single `Clue`."""
+  createClue(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateClueInput!
+  ): CreateCluePayload
+
+  """Creates a single `Scene`."""
+  createScene(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateSceneInput!
+  ): CreateScenePayload
+
+  """Creates a single `Warp`."""
+  createWarp(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateWarpInput!
+  ): CreateWarpPayload
+
+  """Updates a single `Clue` using its globally unique id and a patch."""
+  updateClueByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateClueByNodeIdInput!
+  ): UpdateCluePayload
+
+  """Updates a single `Clue` using a unique key and a patch."""
+  updateClue(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateClueInput!
+  ): UpdateCluePayload
+
+  """Updates a single `Scene` using its globally unique id and a patch."""
+  updateSceneByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateSceneByNodeIdInput!
+  ): UpdateScenePayload
+
+  """Updates a single `Scene` using a unique key and a patch."""
+  updateScene(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateSceneInput!
+  ): UpdateScenePayload
+
+  """Updates a single `Warp` using its globally unique id and a patch."""
+  updateWarpByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateWarpByNodeIdInput!
+  ): UpdateWarpPayload
+
+  """Updates a single `Warp` using a unique key and a patch."""
+  updateWarp(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateWarpInput!
+  ): UpdateWarpPayload
+
+  """Updates a single `Warp` using a unique key and a patch."""
+  updateWarpByWarpsTo(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateWarpByWarpsToInput!
+  ): UpdateWarpPayload
+
+  """Deletes a single `Clue` using its globally unique id."""
+  deleteClueByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteClueByNodeIdInput!
+  ): DeleteCluePayload
+
+  """Deletes a single `Clue` using a unique key."""
+  deleteClue(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteClueInput!
+  ): DeleteCluePayload
+
+  """Deletes a single `Scene` using its globally unique id."""
+  deleteSceneByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteSceneByNodeIdInput!
+  ): DeleteScenePayload
+
+  """Deletes a single `Scene` using a unique key."""
+  deleteScene(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteSceneInput!
+  ): DeleteScenePayload
+
+  """Deletes a single `Warp` using its globally unique id."""
+  deleteWarpByNodeId(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteWarpByNodeIdInput!
+  ): DeleteWarpPayload
+
+  """Deletes a single `Warp` using a unique key."""
+  deleteWarp(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteWarpInput!
+  ): DeleteWarpPayload
+
+  """Deletes a single `Warp` using a unique key."""
+  deleteWarpByWarpsTo(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteWarpByWarpsToInput!
+  ): DeleteWarpPayload
+}
+
+"""The output of our create `Clue` mutation."""
+type CreateCluePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Clue` that was created by this mutation."""
+  clue: Clue
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Scene` that is related to this `Clue`."""
+  scene: Scene
+
+  """An edge for our `Clue`. May be used by Relay 1."""
+  clueEdge(
+    """The method to use when ordering `Clue`."""
+    orderBy: [CluesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): CluesEdge
+}
+
+"""All input for the create `Clue` mutation."""
+input CreateClueInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Clue` to be created by this mutation."""
+  clue: ClueInput!
+}
+
+"""An input for mutations affecting `Clue`"""
+input ClueInput {
+  id: UUID
+  sceneId: UUID!
+
+  """
+  The CSS position_top value of the clue clickable area, as a percentage.
+  """
+  positionTop: BigFloat!
+
+  """
+  The CSS position_left value of the clue clickable area, as a percentage.
+  """
+  positionLeft: BigFloat!
+
+  """The CSS width of the clue clickable area, in px units."""
+  width: Int!
+
+  """The CSS height of the clue clickable area, in px units."""
+  height: Int!
+
+  """A reference to the static asset of the clue's image."""
+  media: UUID!
+
+  """The ID of the clue's NFT."""
+  nftContract: String!
+  nftId: String!
+
+  """
+  The account ID of the user who minted the clue's NFT (null until that happens).
+  """
+  owner: String
+}
+
+"""The output of our create `Scene` mutation."""
+type CreateScenePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Scene` that was created by this mutation."""
+  scene: Scene
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Scene`. May be used by Relay 1."""
+  sceneEdge(
+    """The method to use when ordering `Scene`."""
+    orderBy: [ScenesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ScenesEdge
+}
+
+"""All input for the create `Scene` mutation."""
+input CreateSceneInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Scene` to be created by this mutation."""
+  scene: SceneInput!
+}
+
+"""An input for mutations affecting `Scene`"""
+input SceneInput {
+  id: UUID
+  description: String!
+
+  """A reference to the static asset of the scene's image."""
+  media: UUID!
+
+  """A timestamp indicating when the scene will become available for users"""
+  availableAt: Datetime!
+}
+
+"""The output of our create `Warp` mutation."""
+type CreateWarpPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Warp` that was created by this mutation."""
+  warp: Warp
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Scene` that is related to this `Warp`."""
+  scene: Scene
+
+  """Reads a single `Scene` that is related to this `Warp`."""
+  sceneByWarpsTo: Scene
+
+  """An edge for our `Warp`. May be used by Relay 1."""
+  warpEdge(
+    """The method to use when ordering `Warp`."""
+    orderBy: [WarpsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): WarpsEdge
+}
+
+"""All input for the create `Warp` mutation."""
+input CreateWarpInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `Warp` to be created by this mutation."""
+  warp: WarpInput!
+}
+
+"""An input for mutations affecting `Warp`"""
+input WarpInput {
+  id: UUID
+  sceneId: UUID!
+
+  """
+  The CSS position_top value of the warp clickable area, as a percentage.
+  """
+  positionTop: BigFloat!
+
+  """
+  The CSS position_left value of the warp clickable area, as a percentage.
+  """
+  positionLeft: BigFloat!
+
+  """The CSS width of the warp clickable area, in px units."""
+  width: Int!
+
+  """The CSS height of the warp clickable area, in px units."""
+  height: Int!
+
+  """The ID of the scene the user will navigate to when clicking the warp."""
+  warpsTo: UUID
+}
+
+"""The output of our update `Clue` mutation."""
+type UpdateCluePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Clue` that was updated by this mutation."""
+  clue: Clue
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Scene` that is related to this `Clue`."""
+  scene: Scene
+
+  """An edge for our `Clue`. May be used by Relay 1."""
+  clueEdge(
+    """The method to use when ordering `Clue`."""
+    orderBy: [CluesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): CluesEdge
+}
+
+"""All input for the `updateClueByNodeId` mutation."""
+input UpdateClueByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Clue` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Clue` being updated.
+  """
+  patch: CluePatch!
+}
+
+"""Represents an update to a `Clue`. Fields that are set will be updated."""
+input CluePatch {
+  id: UUID
+  sceneId: UUID
+
+  """
+  The CSS position_top value of the clue clickable area, as a percentage.
+  """
+  positionTop: BigFloat
+
+  """
+  The CSS position_left value of the clue clickable area, as a percentage.
+  """
+  positionLeft: BigFloat
+
+  """The CSS width of the clue clickable area, in px units."""
+  width: Int
+
+  """The CSS height of the clue clickable area, in px units."""
+  height: Int
+
+  """A reference to the static asset of the clue's image."""
+  media: UUID
+
+  """The ID of the clue's NFT."""
+  nftContract: String
+  nftId: String
+
+  """
+  The account ID of the user who minted the clue's NFT (null until that happens).
+  """
+  owner: String
+}
+
+"""All input for the `updateClue` mutation."""
+input UpdateClueInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Clue` being updated.
+  """
+  patch: CluePatch!
+  id: UUID!
+}
+
+"""The output of our update `Scene` mutation."""
+type UpdateScenePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Scene` that was updated by this mutation."""
+  scene: Scene
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Scene`. May be used by Relay 1."""
+  sceneEdge(
+    """The method to use when ordering `Scene`."""
+    orderBy: [ScenesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ScenesEdge
+}
+
+"""All input for the `updateSceneByNodeId` mutation."""
+input UpdateSceneByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Scene` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Scene` being updated.
+  """
+  patch: ScenePatch!
+}
+
+"""
+Represents an update to a `Scene`. Fields that are set will be updated.
+"""
+input ScenePatch {
+  id: UUID
+  description: String
+
+  """A reference to the static asset of the scene's image."""
+  media: UUID
+
+  """A timestamp indicating when the scene will become available for users"""
+  availableAt: Datetime
+}
+
+"""All input for the `updateScene` mutation."""
+input UpdateSceneInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Scene` being updated.
+  """
+  patch: ScenePatch!
+  id: UUID!
+}
+
+"""The output of our update `Warp` mutation."""
+type UpdateWarpPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Warp` that was updated by this mutation."""
+  warp: Warp
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Scene` that is related to this `Warp`."""
+  scene: Scene
+
+  """Reads a single `Scene` that is related to this `Warp`."""
+  sceneByWarpsTo: Scene
+
+  """An edge for our `Warp`. May be used by Relay 1."""
+  warpEdge(
+    """The method to use when ordering `Warp`."""
+    orderBy: [WarpsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): WarpsEdge
+}
+
+"""All input for the `updateWarpByNodeId` mutation."""
+input UpdateWarpByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Warp` to be updated.
+  """
+  nodeId: ID!
+
+  """
+  An object where the defined keys will be set on the `Warp` being updated.
+  """
+  patch: WarpPatch!
+}
+
+"""Represents an update to a `Warp`. Fields that are set will be updated."""
+input WarpPatch {
+  id: UUID
+  sceneId: UUID
+
+  """
+  The CSS position_top value of the warp clickable area, as a percentage.
+  """
+  positionTop: BigFloat
+
+  """
+  The CSS position_left value of the warp clickable area, as a percentage.
+  """
+  positionLeft: BigFloat
+
+  """The CSS width of the warp clickable area, in px units."""
+  width: Int
+
+  """The CSS height of the warp clickable area, in px units."""
+  height: Int
+
+  """The ID of the scene the user will navigate to when clicking the warp."""
+  warpsTo: UUID
+}
+
+"""All input for the `updateWarp` mutation."""
+input UpdateWarpInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Warp` being updated.
+  """
+  patch: WarpPatch!
+  id: UUID!
+}
+
+"""All input for the `updateWarpByWarpsTo` mutation."""
+input UpdateWarpByWarpsToInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  An object where the defined keys will be set on the `Warp` being updated.
+  """
+  patch: WarpPatch!
+
+  """The ID of the scene the user will navigate to when clicking the warp."""
+  warpsTo: UUID!
+}
+
+"""The output of our delete `Clue` mutation."""
+type DeleteCluePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Clue` that was deleted by this mutation."""
+  clue: Clue
+  deletedClueNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Scene` that is related to this `Clue`."""
+  scene: Scene
+
+  """An edge for our `Clue`. May be used by Relay 1."""
+  clueEdge(
+    """The method to use when ordering `Clue`."""
+    orderBy: [CluesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): CluesEdge
+}
+
+"""All input for the `deleteClueByNodeId` mutation."""
+input DeleteClueByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Clue` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteClue` mutation."""
+input DeleteClueInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: UUID!
+}
+
+"""The output of our delete `Scene` mutation."""
+type DeleteScenePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Scene` that was deleted by this mutation."""
+  scene: Scene
+  deletedSceneNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """An edge for our `Scene`. May be used by Relay 1."""
+  sceneEdge(
+    """The method to use when ordering `Scene`."""
+    orderBy: [ScenesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): ScenesEdge
+}
+
+"""All input for the `deleteSceneByNodeId` mutation."""
+input DeleteSceneByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Scene` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteScene` mutation."""
+input DeleteSceneInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: UUID!
+}
+
+"""The output of our delete `Warp` mutation."""
+type DeleteWarpPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """The `Warp` that was deleted by this mutation."""
+  warp: Warp
+  deletedWarpNodeId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `Scene` that is related to this `Warp`."""
+  scene: Scene
+
+  """Reads a single `Scene` that is related to this `Warp`."""
+  sceneByWarpsTo: Scene
+
+  """An edge for our `Warp`. May be used by Relay 1."""
+  warpEdge(
+    """The method to use when ordering `Warp`."""
+    orderBy: [WarpsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): WarpsEdge
+}
+
+"""All input for the `deleteWarpByNodeId` mutation."""
+input DeleteWarpByNodeIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """
+  The globally unique `ID` which will identify a single `Warp` to be deleted.
+  """
+  nodeId: ID!
+}
+
+"""All input for the `deleteWarp` mutation."""
+input DeleteWarpInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: UUID!
+}
+
+"""All input for the `deleteWarpByWarpsTo` mutation."""
+input DeleteWarpByWarpsToInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The ID of the scene the user will navigate to when clicking the warp."""
+  warpsTo: UUID!
+}
