@@ -20,25 +20,41 @@ module.exports = {
           0: "#F124AD",
         },
       },
+      gridTemplateColumns: {
+        "auto-fit": "repeat(auto-fit, minmax(18rem, 1fr))",
+      },
       animation: {
-        sliding: "sliding 32s linear infinite",
         slider: "scroll 120s linear infinite",
+        color: "colors 1s alternate infinite",
+        loader: "sliding 2s alternate infinite",
       },
       keyframes: {
-        sliding: {
-          from: {
-            transform: "translateX(100%)",
-          },
-          to: {
-            transform: "translateX(-100%)",
-          },
-        },
         scroll: {
           from: {
             transform: "translateX(0)",
           },
           to: {
             transform: "translateX(calc(-594px * 7))",
+          },
+        },
+        colors: {
+          from: {
+            color: "#A429E4",
+          },
+          to: {
+            color: "#F124AD",
+          },
+        },
+        'sliding': {
+          '0%': {
+            left: '1px',
+            color: "#A429E4",
+            right: '174px',
+          },
+          '100%': {
+            right: '1px',
+            color: "#F124AD",
+            left: '174px',
           },
         },
       },
