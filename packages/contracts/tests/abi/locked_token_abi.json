@@ -1,0 +1,832 @@
+{
+  "schema_version": "0.3.0",
+  "metadata": {
+    "name": "locked-token",
+    "version": "1.0.0",
+    "authors": [
+      "jack the dev <joao@hackachain.io>"
+    ]
+  },
+  "body": {
+    "functions": [
+      {
+        "name": "add_minter",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "new_minter",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "alter_config",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "new_config",
+              "type_schema": {
+                "$ref": "#/definitions/ContractConfig"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "callback_base_token_transfer",
+        "kind": "call",
+        "modifiers": [
+          "private"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "recipient",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "quantity_withdrawn",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "vesting_id",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "callback_send_to_xtoken",
+        "kind": "call",
+        "modifiers": [
+          "private"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "quantity",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "ft_balance_of",
+        "kind": "view",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "account_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "ft_metadata",
+        "kind": "view",
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/FungibleTokenMetadata"
+          }
+        }
+      },
+      {
+        "name": "ft_on_transfer",
+        "kind": "call",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "sender_id",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "amount",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "msg",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "ft_resolve_transfer",
+        "kind": "call",
+        "modifiers": [
+          "private"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "sender_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "receiver_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "amount",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "ft_total_supply",
+        "kind": "view",
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "ft_transfer",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "receiver_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "amount",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "memo",
+              "type_schema": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "ft_transfer_call",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "receiver_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "amount",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "memo",
+              "type_schema": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            {
+              "name": "msg",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/PromiseOrValueString"
+          }
+        }
+      },
+      {
+        "name": "new",
+        "kind": "call",
+        "modifiers": [
+          "init"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "locked_token_name",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "locked_token_symbol",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "locked_token_icon",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "locked_token_decimals",
+              "type_schema": {
+                "type": "integer",
+                "format": "uint8",
+                "numbers": {
+                  "minimum": 0.0
+                }
+              }
+            },
+            {
+              "name": "contract_config",
+              "type_schema": {
+                "$ref": "#/definitions/ContractConfig"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "remove_minter",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "remove_minter",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "send_pending_tokens_to_xtoken",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/Promise"
+          }
+        }
+      },
+      {
+        "name": "storage_balance_bounds",
+        "kind": "view",
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/StorageBalanceBounds"
+          }
+        }
+      },
+      {
+        "name": "storage_balance_of",
+        "kind": "view",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "account_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/StorageBalance"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "storage_deposit",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "account_id",
+              "type_schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/definitions/AccountId"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "registration_only",
+              "type_schema": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/StorageBalance"
+          }
+        }
+      },
+      {
+        "name": "storage_unregister",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "force",
+              "type_schema": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "boolean"
+          }
+        }
+      },
+      {
+        "name": "storage_withdraw",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "amount",
+              "type_schema": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/StorageBalance"
+          }
+        }
+      },
+      {
+        "name": "view_contract_data",
+        "kind": "view",
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/ContractConfig"
+          }
+        }
+      },
+      {
+        "name": "view_minters",
+        "kind": "view",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "initial_id",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "size",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/AccountId"
+            }
+          }
+        }
+      },
+      {
+        "name": "view_minters_len",
+        "kind": "view",
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "view_user",
+        "kind": "view",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "account_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/Account"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "view_vesting_paginated",
+        "kind": "view",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "account_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "initial_id",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "size",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/VestingSerializable"
+            }
+          }
+        }
+      },
+      {
+        "name": "view_vesting_vector_len",
+        "kind": "view",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "account_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "withdraw_locked_tokens",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "vesting_id",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/Promise"
+          }
+        }
+      }
+    ],
+    "root_schema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "String",
+      "type": "string",
+      "definitions": {
+        "Account": {
+          "type": "object",
+          "required": [
+            "account_id",
+            "storage_deposit",
+            "storage_used"
+          ],
+          "properties": {
+            "account_id": {
+              "$ref": "#/definitions/AccountId"
+            },
+            "storage_deposit": {
+              "type": "string"
+            },
+            "storage_used": {
+              "type": "string"
+            }
+          }
+        },
+        "AccountId": {
+          "type": "string"
+        },
+        "ContractConfig": {
+          "type": "object",
+          "required": [
+            "base_token",
+            "fast_pass_acceleration",
+            "fast_pass_beneficiary",
+            "fast_pass_cost",
+            "owner_id",
+            "vesting_duration"
+          ],
+          "properties": {
+            "base_token": {
+              "$ref": "#/definitions/AccountId"
+            },
+            "fast_pass_acceleration": {
+              "type": "string"
+            },
+            "fast_pass_beneficiary": {
+              "$ref": "#/definitions/AccountId"
+            },
+            "fast_pass_cost": {
+              "type": "string"
+            },
+            "owner_id": {
+              "$ref": "#/definitions/AccountId"
+            },
+            "vesting_duration": {
+              "type": "string"
+            }
+          }
+        },
+        "FungibleTokenMetadata": {
+          "type": "object",
+          "required": [
+            "decimals",
+            "name",
+            "spec",
+            "symbol"
+          ],
+          "properties": {
+            "decimals": {
+              "type": "integer",
+              "format": "uint8",
+              "number": {
+                "minimum": 0.0
+              }
+            },
+            "icon": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "reference": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "reference_hash": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "spec": {
+              "type": "string"
+            },
+            "symbol": {
+              "type": "string"
+            }
+          }
+        },
+        "Promise": {
+          "type": "object"
+        },
+        "PromiseOrValueString": {
+          "type": "string"
+        },
+        "StorageBalance": {
+          "type": "object",
+          "required": [
+            "available",
+            "total"
+          ],
+          "properties": {
+            "available": {
+              "type": "string"
+            },
+            "total": {
+              "type": "string"
+            }
+          }
+        },
+        "StorageBalanceBounds": {
+          "type": "object",
+          "required": [
+            "min"
+          ],
+          "properties": {
+            "max": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "min": {
+              "type": "string"
+            }
+          }
+        },
+        "VestingSerializable": {
+          "type": "object",
+          "required": [
+            "available_to_withdraw",
+            "beneficiary",
+            "fast_pass",
+            "locked_value",
+            "start_timestamp",
+            "vesting_duration",
+            "withdrawn_tokens"
+          ],
+          "properties": {
+            "available_to_withdraw": {
+              "type": "string"
+            },
+            "beneficiary": {
+              "$ref": "#/definitions/AccountId"
+            },
+            "fast_pass": {
+              "type": "boolean"
+            },
+            "locked_value": {
+              "type": "string"
+            },
+            "start_timestamp": {
+              "type": "string"
+            },
+            "vesting_duration": {
+              "type": "string"
+            },
+            "withdrawn_tokens": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

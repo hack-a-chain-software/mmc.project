@@ -2,6 +2,7 @@
   "name": "@near/contracts",
   "version": "0.0.1",
   "license": "UNLICENSED",
+  "private": true,
   "main": "lib/index.ts",
   "scripts": {
     "build:contract": "node compile.js",

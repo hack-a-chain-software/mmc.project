@@ -55,10 +55,9 @@ export function Header() {
 								onClick={() => {
 									navigate('/play');
 								}}
-								disabled
-								className="w-[180px] h-[30px] hidden lg:flex flex items-center justify-center bg-purple-0 text-white text-[12px] uppercase min-h-[40px] px-[13px] tracking-[0px] border border-white rounded-[50px] font-[400] hover:bg-white hover:text-purple-0 cursor-not-allowed opacity-[0.5]"
+								className="w-[130px] h-[30px] hidden lg:flex flex items-center justify-center bg-purple-0 text-white text-[12px] uppercase min-h-[40px] px-[13px] tracking-[0px] border border-white rounded-[50px] font-[400] hover:bg-white hover:text-purple-0"
 							>
-								Coming soon
+								Play Now
 							</button>
 						</div>
 					</div>

@@ -1,0 +1,369 @@
+{
+  "schema_version": "0.3.0",
+  "metadata": {
+    "name": "vesting-contract",
+    "version": "1.0.0",
+    "authors": [
+      "vote for pedro"
+    ]
+  },
+  "body": {
+    "functions": [
+      {
+        "name": "create_investment",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "category",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "account",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "total_value",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "date_in",
+              "type_schema": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "ft_on_transfer",
+        "kind": "call",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "sender_id",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "amount",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "msg",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "new",
+        "kind": "call",
+        "modifiers": [
+          "init"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "owner",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            },
+            {
+              "name": "token_contract",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "owner_withdraw_investments",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "value_to_withdraw",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "category",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "investor_account",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/Promise"
+          }
+        }
+      },
+      {
+        "name": "undo_transfer",
+        "kind": "call",
+        "modifiers": [
+          "private"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "value_to_return",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "investment_id",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "required_by",
+              "type_schema": {
+                "$ref": "#/definitions/AccountId"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "view_all_schemas",
+        "kind": "view",
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "view_investment",
+        "kind": "view",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "investment_id",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      {
+        "name": "view_schema",
+        "kind": "view",
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "schema_category",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/Schema"
+          }
+        }
+      },
+      {
+        "name": "withdraw_your_investments",
+        "kind": "call",
+        "modifiers": [
+          "payable"
+        ],
+        "params": {
+          "serialization_type": "json",
+          "args": [
+            {
+              "name": "value_to_withdraw",
+              "type_schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "category",
+              "type_schema": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "result": {
+          "serialization_type": "json",
+          "type_schema": {
+            "$ref": "#/definitions/Promise"
+          }
+        }
+      }
+    ],
+    "root_schema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "String",
+      "type": "string",
+      "definitions": {
+        "AccountId": {
+          "type": "string"
+        },
+        "CurveType": {
+          "type": "object",
+          "required": [
+            "Linear"
+          ],
+          "properties": {
+            "Linear": {
+              "type": "object",
+              "required": [
+                "discrete_period"
+              ],
+              "properties": {
+                "discrete_period": {
+                  "type": "integer",
+                  "format": "uint64",
+                  "number": {
+                    "minimum": 0.0
+                  }
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "Promise": true,
+      "Schema": {
+        "type": "object",
+        "required": [
+          "allocated_quantity",
+          "category",
+          "cliff_delta",
+          "cliff_release",
+          "curve_type",
+          "final_delta",
+          "final_release",
+          "initial_release",
+          "initial_timestamp",
+          "investments",
+          "total_quantity"
+        ],
+        "properties": {
+          "allocated_quantity": {
+            "type": "integer",
+            "format": "uint128",
+            "minimum": 0.0
+          },
+          "category": {
+            "type": "string"
+          },
+          "cliff_delta": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0.0
+          },
+          "cliff_release": {
+            "type": "integer",
+            "format": "uint128",
+            "minimum": 0.0
+          },
+          "curve_type": {
+            "$ref": "#/definitions/CurveType"
+          },
+          "final_delta": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0.0
+          },
+          "final_release": {
+            "type": "integer",
+            "format": "uint128",
+            "minimum": 0.0
+          },
+          "initial_release": {
+            "type": "integer",
+            "format": "uint128",
+            "minimum": 0.0
+          },
+          "initial_timestamp": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0.0
+          },
+          "investments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "total_quantity": {
+            "type": "integer",
+            "format": "uint128",
+            "minimum": 0.0
+          }
+        }
+      }
+    }
+  }
+}

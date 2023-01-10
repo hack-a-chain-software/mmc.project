@@ -2,12 +2,13 @@ use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::serde::{Serialize, Deserialize};
 use near_sdk::json_types::{U128, U64};
 use near_sdk::{env, AccountId};
+use schemars::JsonSchema;
 
 use crate::errors::*;
 
 pub const MIN_STORAGE_BALANCE: u128 = 500_000_000_000_000_000_000_000;
 
-#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 pub struct Account {
   pub account_id: AccountId,

@@ -1,0 +1,3 @@
+export const ENCODER_PROVIDER_KEY = 'ENCODER';
+
+export const DECODER_PROVIDER_KEY = 'DECODER';

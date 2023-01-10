@@ -1,0 +1,16 @@
+{
+  "name": "db",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "gm": "graphile-migrate",
+    "commit": "yarn run gm commit",
+    "uncommit": "yarn run gm uncommit",
+    "seed": "yarn run gm run src/seeds.sql",
+    "migrate": "yarn run gm migrate"
+  },
+  "dependencies": {
+    "graphile-migrate": "^1.4.0"
+  }
+}

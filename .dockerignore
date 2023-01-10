@@ -1,0 +1,23 @@
+# Secrets
+**/.env
+
+# Git
+**/.git
+**/.gitignore
+.github
+.husky
+
+# Docker
+**/Dockerfile
+**/.dockerignore
+
+# Packages
+**/node_modules
+**/wasm
+
+# Error logs
+**/yarn-error.log
+
+# Documents
+**/docs
+**/*.md

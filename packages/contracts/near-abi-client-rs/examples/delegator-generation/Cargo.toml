@@ -1,0 +1,15 @@
+[package]
+name = "delegator-generation"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0"
+workspaces = "0.6.0"
+
+[dev-dependencies]
+tokio = { version = "1.14", features = ["full"] }
+
+[build-dependencies]
+anyhow = "1.0"
+near-abi-client = { path = "../../near-abi-client" }
