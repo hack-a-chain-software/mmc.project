@@ -1,1 +1,8 @@
+node_modules
+.vscode
+package.json
+lib
+lerna.json
+dist
 *.js
+*.eslintrc.js

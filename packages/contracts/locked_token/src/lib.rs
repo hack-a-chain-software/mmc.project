@@ -7,7 +7,6 @@ use near_sdk::{
   env, near_bindgen, utils::assert_one_yocto, AccountId, BorshStorageKey, Gas, PanicOnDefault,
   PromiseOrValue, Promise,
 };
-
 use near_contract_standards;
 use near_contract_standards::fungible_token::events::{FtBurn, FtMint};
 use near_contract_standards::fungible_token::metadata::{
@@ -16,6 +15,7 @@ use near_contract_standards::fungible_token::metadata::{
 use near_contract_standards::fungible_token::core::FungibleTokenCore;
 use near_contract_standards::fungible_token::resolver::FungibleTokenResolver;
 use near_contract_standards::fungible_token::FungibleToken;
+use schemars::JsonSchema;
 
 mod account;
 mod actions;
@@ -23,8 +23,8 @@ mod errors;
 mod ext_interface;
 mod vesting;
 
-use vesting::{Vesting};
-use account::{Account};
+use vesting::Vesting;
+use account::Account;
 use errors::*;
 use ext_interface::{ext_token_contract, ext_self};
 
@@ -60,7 +60,7 @@ pub enum StorageKey {
   Users,
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 #[cfg_attr(test, derive(Eq, PartialEq, Debug))]
 pub struct ContractConfig {
