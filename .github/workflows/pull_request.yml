@@ -1,258 +1,201 @@
-# name: Pull Request
-
-# on: pull_request
-
-# concurrency:
-#   group: pull_request-${{ github.ref }} # TODO: validate
-#   cancel-in-progress: true
-
-# jobs:
-#   # TODO: We should consider some faster way to share the image between jobs. It's wasteful that right after we build an image,
-#   # another job will pull it from the Container Registry. Instead of running a build & push matrix, we could abstract the
-#   # build-and-push-image job as an action, and make it the first step of the testing job for each package. The problem would be
-#   # how to only install dependencies once - instead of both in the job and when building the image -, as the job won't run inside
-#   # the container.
-#   # READ: https://github.com/docker/build-push-action/blob/master/docs/advanced/share-image-jobs.md
-#   build-and-push-image:
-#     runs-on: ubuntu-latest
-
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         include:
-#           # back
-#           - dockerfile: ./packages/back/Dockerfile
-#             image: ghcr.io/${{ github.repository }}/back
-#             package: back
-
-#           # contracts
-#           - context: ./packages/contracts/
-#             image: ghcr.io/${{ github.repository }}/contracts
-#             package: contracts
-
-#           # db
-#           - dockerfile: ./packages/db/Dockerfile
-#             image: ghcr.io/${{ github.repository }}/db
-#             package: db
-
-#     permissions:
-#       contents: read
-#       packages: write
-
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
-
-#       - name: Set up Docker Buildx
-#         uses: docker/setup-buildx-action@v2
-
-#       - name: Cache Docker layers
-#         uses: actions/cache@v3
-#         with:
-#           path: /tmp/.buildx-cache
-#           key: ${{ runner.os }}-buildx-${{ matrix.package }}-${{ github.sha }}
-#           restore-keys: |
-#             ${{ runner.os }}-buildx-${{ matrix.package }}-
-
-#       - name: Log in to the Container registry
-#         uses: docker/login-action@v2
-#         with:
-#           registry: ghcr.io
-#           username: ${{ github.actor }}
-#           password: ${{ secrets.GITHUB_TOKEN }}
-
-#       - name: Extract image metadata
-#         id: meta
-#         uses: docker/metadata-action@v4
-#         with:
-#           images: ${{ matrix.image }}
-#           tags: |
-#             type=ref,event=branch
-#             type=sha,format=long
-
-#       - name: Build and push
-#         uses: docker/build-push-action@v3
-#         with:
-#           context: ${{ matrix.context }}
-#           file: ${{ matrix.dockerfile }}
-#           push: true
-#           platforms: linux/amd64
-#           tags: ${{ steps.meta.outputs.tags }}
-#           labels: ${{ steps.meta.outputs.labels }}
-#           cache-from: type=local,src=/tmp/.buildx-cache
-#           # READ: https://github.com/moby/buildkit#export-cache
-#           cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
-
-#       # READ: https://github.com/docker/build-push-action/issues/252
-#       #       https://github.com/moby/buildkit/issues/1896
-#       - name: Move cache
-#         run: |
-#           rm -rf /tmp/.buildx-cache
-#           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-
-#   back-tests:
-#     needs: build-and-push-image
-#     runs-on: ubuntu-latest
-#     container: node:18 # TODO: consider creating a Dev Container, not only for CI but for other purposes as well (e.g. local testing)
-#     defaults:
-#       run:
-#         working-directory: ./packages/back
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
-
-#       - name: Output Yarn cache directory
-#         id: yarn-cache-dir
-#         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-#       - name: Cache Yarn install
-#         uses: actions/cache@v3
-#         with:
-#           path: ${{ steps.yarn-cache-dir.outputs.dir }}
-#           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-#           restore-keys: |
-#             ${{ runner.os }}-yarn-
-
-#       - name: Install package dependencies
-#         run: yarn
-
-#       - name: Unit tests
-#         run: yarn test
-
-#       - name: Integration tests
-#         run: yarn test:e2e
-
-#   contracts-tests:
-#     needs: build-and-push-image
-#     runs-on: ubuntu-latest
-#     container: ghcr.io/${{ github.repository }}/contracts:sha-${{ github.sha }}
-#     permissions:
-#       contents: read
-#       packages: write
-#     defaults:
-#       run:
-#         working-directory: /usr/src/app
-#     steps:
-#       - name: Unit tests
-#         run: cargo test # TODO: cache this compilation (possibly during the image build)
-
-#       - name: Integration tests
-#         run: |
-#           cd tests
-#           cargo test
-
-#   cypress-install:
-#     runs-on: ubuntu-latest
-#     container:
-#       image: cypress/browsers:node18.12.0-chrome103-ff107
-#       options: --user 1001 # READ: https://github.com/cypress-io/github-action/issues/446
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
-
-#       - name: Output Yarn cache directory
-#         id: yarn-cache-dir
-#         run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-
-#       - name: Cache Yarn install
-#         uses: actions/cache@v3
-#         with:
-#           path: ${{ steps.yarn-cache-dir.outputs.dir }}
-#           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-#           restore-keys: |
-#             ${{ runner.os }}-yarn-
-
-#       - name: Cypress install
-#         uses: cypress-io/github-action@v4
-#         with:
-#           browser: chrome
-#           runTests: false
-#           install-command: yarn
-#           build: yarn front build
-
-#       - name: Save build folder
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: build
-#           path: ./packages/front/dist
-#           if-no-files-found: error
-
-#   cypress-run:
-#     needs: cypress-install
-#     runs-on: ubuntu-latest
-#     container:
-#       image: cypress/browsers:node18.12.0-chrome103-ff107
-#       options: --user 1001
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
-
-#       - name: Download build folder
-#         uses: actions/download-artifact@v3
-#         with:
-#           name: build
-#           path: ./packages/front/dist
-
-#       - name: Cypress run
-#         uses: cypress-io/github-action@v4
-#         with:
-#           browser: chrome
-#           install-command: yarn
-#           build: yarn front build
-#           start: yarn front dev
-
-name: CI
+name: Pull Request
 
 on: pull_request
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: pull_request-${{ github.ref }} # TODO: validate
   cancel-in-progress: true
 
 jobs:
-  check_build_and_tests:
+  # TODO: We should consider some faster way to share the image between jobs. It's wasteful that right after we build an image,
+  # another job will pull it from the Container Registry. Instead of running a build & push matrix, we could abstract the
+  # build-and-push-image job as an action, and make it the first step of the testing job for each package. The problem would be
+  # how to only install dependencies once - instead of both in the job and when building the image -, as the job won't run inside
+  # the container.
+  # READ: https://github.com/docker/build-push-action/blob/master/docs/advanced/share-image-jobs.md
+  build-and-push-image:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.12.1
-          cache: 'yarn'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # back
+          - dockerfile: ./packages/back/Dockerfile
+            image: ghcr.io/${{ github.repository }}/back
+            package: back
 
-      - name: Install Rust
-        run: |
-          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-          source $HOME/.cargo/env
-          rustup component add rustfmt
-          rustup target add wasm32-unknown-unknown
+          # contracts
+          - context: ./packages/contracts/
+            image: ghcr.io/${{ github.repository }}/contracts
+            package: contracts
 
-      - name: Installing Dependencies
-        run: yarn
+          # db
+          - dockerfile: ./packages/db/Dockerfile
+            image: ghcr.io/${{ github.repository }}/db
+            package: db
 
-      # - name: Rust Tests
-      #   run: yarn contracts test:rust
+    permissions:
+      contents: read
+      packages: write
 
-      # - name: Lib Tests
-      #   run: yarn contracts test:lib
-
-  cypress-run:
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.12.1
-          cache: 'yarn'
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ matrix.package }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-${{ matrix.package }}-
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract image metadata
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ matrix.image }}
+          tags: |
+            type=ref,event=branch
+            type=sha,format=long
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          # READ: https://github.com/moby/buildkit#export-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-cache-new
+          
+      # READ: https://github.com/docker/build-push-action/issues/252
+      #       https://github.com/moby/buildkit/issues/1896
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+  back-tests:
+    needs: build-and-push-image
+    runs-on: ubuntu-latest
+    container: node:18 # TODO: consider creating a Dev Container, not only for CI but for other purposes as well (e.g. local testing)
+    defaults:
+      run:
+        working-directory: ./packages/back
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Output Yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Yarn install
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install package dependencies
+        run: yarn
+
+      - name: Unit tests
+        run: yarn test
+      
+      - name: Integration tests
+        run: yarn test:e2e
+
+  contracts-tests:
+    needs: build-and-push-image
+    runs-on: ubuntu-latest
+    container: ghcr.io/${{ github.repository }}/contracts:sha-${{ github.sha }}
+    permissions:
+      contents: read
+      packages: write
+    defaults:
+      run:
+        working-directory: /usr/src/app
+    steps:
+      - name: Unit tests
+        run: cargo test # TODO: cache this compilation (possibly during the image build)
+
+      - name: Integration tests
+        run: |
+          cd tests
+          cargo test
+
+  cypress-install:
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node18.12.0-chrome103-ff107
+      options: --user 1001 # READ: https://github.com/cypress-io/github-action/issues/446
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Output Yarn cache directory
+        id: yarn-cache-dir
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Yarn install
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Cypress install
+        uses: cypress-io/github-action@v4
+        with:
+          browser: chrome
+          runTests: false
+          install-command: yarn
+          build: yarn front build
+
+      - name: Save build folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: ./packages/front/dist
+          if-no-files-found: error
+
+  cypress-run:
+    needs: cypress-install
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/browsers:node18.12.0-chrome103-ff107
+      options: --user 1001
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download build folder
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: ./packages/front/dist
+        
       - name: Cypress run
         uses: cypress-io/github-action@v4
         with:
-          record: false
           browser: chrome
           install-command: yarn
           build: yarn front build

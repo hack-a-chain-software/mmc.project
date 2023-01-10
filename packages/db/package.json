@@ -4,13 +4,11 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "gm": "graphile-migrate",
-    "commit": "yarn run gm commit",
-    "uncommit": "yarn run gm uncommit",
-    "seed": "yarn run gm run src/seeds.sql",
-    "migrate": "yarn run gm migrate"
+    "commit": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate commit",
+    "uncommit": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate uncommit",
+    "seed": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate run src/seeds.sql"
   },
-  "dependencies": {
+  "devDependencies": {
     "graphile-migrate": "^1.4.0"
   }
 }

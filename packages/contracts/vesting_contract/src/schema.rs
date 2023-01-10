@@ -1,7 +1,6 @@
 use near_sdk::{
   borsh::{BorshSerialize, BorshDeserialize},
 };
-use schemars::JsonSchema;
 use serde::{Serialize, Deserialize};
 
 use crate::{
@@ -9,9 +8,7 @@ use crate::{
   FRACTION_BASE,
 };
 
-#[derive(
-  BorshSerialize, BorshDeserialize, Serialize, Deserialize, JsonSchema, PartialEq, Debug,
-)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, PartialEq, Debug)]
 pub struct Schema {
   pub category: String,
   pub allocated_quantity: u128, // how many tokens from this schema were already 'locked'
@@ -26,9 +23,7 @@ pub struct Schema {
   pub investments: Vec<String>,
 }
 
-#[derive(
-  BorshSerialize, BorshDeserialize, Serialize, Deserialize, JsonSchema, PartialEq, Debug,
-)]
+#[derive(BorshSerialize, BorshDeserialize, Serialize, Deserialize, PartialEq, Debug)]
 pub enum CurveType {
   Linear { discrete_period: u64 },
 }

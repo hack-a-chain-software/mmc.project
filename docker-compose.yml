@@ -5,18 +5,16 @@ services:
       context: .
       dockerfile: ./packages/back/Dockerfile
     ports:
-      - "3000:3000"
+      - "443:3000"
     environment:
       - PORT=3000
       - RECEIVER_ID=nft.test.near
       - NFT_CONTRACT_ID=nft.test.near
       - ACCOUNT_KEYPAIR=ed25519:3tU5BE8BnNQ9pX89DKepzMAZKQ7NPGCaY63cEtaueTS8iPyarB2rSXBuWLeZQ4LDL9m4oYRZXx936S3oS5MtjyoF
       - NEAR_NETWORK=localnet
-      - NEAR_NODE_URL=http://contracts:1337
       - JWT_SECRET=abacaba
       - JWT_VALID_FOR_S=180
       - AUTH_MESSAGE_VALID_FOR_MS=60000
-      - DATABASE_URL=postgres://mmc:${MMC_PASSWORD}@db:5432/mmc
     networks:
       - mmc
     depends_on:
@@ -27,23 +25,24 @@ services:
     image: ghcr.io/hack-a-chain-software/mmc.project/contracts:latest
     build:
       context: ./packages/contracts/
-    ports:
-      - "1337:1337"
-      - "1338:1338"
     networks:
       - mmc
 
   db:
-    image: postgres:14.5-bullseye
+    image: ghcr.io/hack-a-chain-software/mmc.project/db:latest
+    build:
+      context: .
+      dockerfile: ./packages/db/Dockerfile
     user: postgres
     ports:
       - "5432:5432"
     environment:
+      - POSTGRES_DB=mmc
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - MMC_PASSWORD=${MMC_PASSWORD}
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./packages/db/src/init.sh:/docker-entrypoint-initdb.d/init.sh
+      - ./packages/db/migrations/committed:/docker-entrypoint-initdb.d
     networks:
       - mmc
 

@@ -3,7 +3,6 @@ use near_units::parse_near;
 use serde_json::json;
 use workspaces::{result::ExecutionFinalResult, Account, Contract};
 
-#[allow(dead_code)]
 pub async fn bulk_register_storage(
   accounts: Vec<&Account>,
   contracts: Vec<&Contract>,

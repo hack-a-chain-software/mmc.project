@@ -1,13 +1,11 @@
 import { AuthConfiguration } from 'src/auth/configuration';
 import { NearConfiguration } from 'src/near/configuration';
 import { NftConfiguration } from 'src/nft/configuration';
-// import { PostGraphileConfiguration } from "src/postgraphile/configuration";
 
 export interface Configuration {
   auth: AuthConfiguration;
   near: NearConfiguration;
   nft: NftConfiguration;
-  postgraphile: any;
 }
 
 export function configuration(): Configuration {
@@ -26,7 +24,7 @@ export function configuration(): Configuration {
 
       account: {
         id: process.env.ACCOUNT_ID,
-        keyPair: process.env.ACCOUNT_KEYPAIR,
+        keyPair: process.env.ACCOUNT_KEYPAR
       },
 
       connection: {
@@ -37,10 +35,6 @@ export function configuration(): Configuration {
 
     nft: {
       contractAccountId: process.env.NFT_CONTRACT_ID,
-    },
-
-    postgraphile: {
-      databaseUrl: process.env.DATABASE_URL,
-    },
+    }
   };
 }

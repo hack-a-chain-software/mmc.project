@@ -233,7 +233,7 @@ mod tests {
 
   pub fn get_context(
     input: Vec<u8>,
-    #[allow(unused_variables)] is_view: bool, // TODO: actually remove this
+    is_view: bool,
     attached_deposit: u128,
     account_balance: u128,
     signer_id: AccountId,

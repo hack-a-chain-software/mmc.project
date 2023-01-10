@@ -1,7 +1,5 @@
-# cargo-features = ["per-package-target", "profile-rustflags"]
-
 [package]
-name = "locked-token"
+name = "locked_token"
 version = "1.0.0"
 authors = ["jack the dev <joao@hackachain.io>"]
 edition = "2018"
@@ -10,6 +8,5 @@ edition = "2018"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-near-contract-standards = { workspace = true }
-near-sdk = { workspace = true }
-schemars = { workspace = true }
+near-sdk = "4.1.1"
+near-contract-standards = "4.1.1"

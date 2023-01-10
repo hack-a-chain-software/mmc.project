@@ -1,24 +1,33 @@
+use near_contract_standards::fungible_token::metadata::FungibleTokenMetadata;
+use workspaces::Account;
+
 use crate::{
-  contracts::{
-    ft::{FungibleTokenClient, FungibleTokenMetadata},
-    locked_token::{LockedTokenClient, ContractConfig},
-    vesting::VestingClient,
-  },
-  transactions::create_contract_subaccount,
-  accounts::Accounts,
+  contracts::ft::FtContract,
+  transactions::{create_user_subaccount, create_contract_subaccount},
 };
 
-mod accounts;
 mod constants;
 mod contracts;
 mod methods;
 mod transactions;
 mod units;
 
+#[derive(Debug)]
+struct Accounts {
+  owner: Account,
+}
+
+impl Accounts {
+  async fn from_tla(tla: &Account) -> workspaces::Result<Self> {
+    Ok(Accounts {
+      owner: create_user_subaccount(&tla, "owner").await?,
+    })
+  }
+}
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-  // TODO: consider making ports configurable. Because it is containerized, there's little point at the moment.
-  let worker = workspaces::sandbox_at(1337, 1338).await?;
+  let worker = workspaces::sandbox().await?;
 
   println!(
     "Sandbox available at: http://localhost:{}",
@@ -38,10 +47,12 @@ async fn main() -> anyhow::Result<()> {
 
   println!("All user accounts created."); // TODO: pretty print accounts
 
-  let fungible_token_contract_account = create_contract_subaccount(&root, "fungible_token").await?;
-  let _fungible_token_client = FungibleTokenClient::deploy_and_initialize(
-    &fungible_token_contract_account,
+  let ft_contract_account = create_contract_subaccount(&root, "ft").await?;
+
+  FtContract::deploy_and_initialize(
+    ft_contract_account,
     &accounts.owner,
+    1000000000000000000000,
     FungibleTokenMetadata {
       spec: "ft-1.0.0".to_string(),
       name: "name".to_string(),
@@ -51,32 +62,6 @@ async fn main() -> anyhow::Result<()> {
       reference_hash: None,
       decimals: 24,
     },
-  )
-  .await?;
-
-  let locked_token_contract_account = create_contract_subaccount(&root, "locked_token").await?;
-  let _locked_token_client = LockedTokenClient::deploy_and_initialize(
-    &locked_token_contract_account,
-    "Locked MMC".to_string(),
-    "LMMC".to_string(),
-    "".to_string(),
-    18,
-    ContractConfig {
-      owner_id: accounts.owner.id().to_string(),
-      base_token: fungible_token_contract_account.id().to_string(),
-      fast_pass_acceleration: "0".to_string(),
-      fast_pass_beneficiary: accounts.owner.id().to_string(),
-      fast_pass_cost: "0".to_string(),
-      vesting_duration: "200".to_string(),
-    },
-  )
-  .await?;
-
-  let vesting_contract_account = create_contract_subaccount(&root, "vesting").await?;
-  let _vesting_client = VestingClient::deploy_and_initialize(
-    &vesting_contract_account,
-    &accounts.owner,
-    &fungible_token_contract_account,
   )
   .await?;
 
