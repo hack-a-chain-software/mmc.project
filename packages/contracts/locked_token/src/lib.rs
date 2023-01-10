@@ -15,7 +15,6 @@ use near_contract_standards::fungible_token::metadata::{
 use near_contract_standards::fungible_token::core::FungibleTokenCore;
 use near_contract_standards::fungible_token::resolver::FungibleTokenResolver;
 use near_contract_standards::fungible_token::FungibleToken;
-use schemars::JsonSchema;
 
 mod account;
 mod actions;
@@ -60,7 +59,7 @@ pub enum StorageKey {
   Users,
 }
 
-#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, JsonSchema)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 #[cfg_attr(test, derive(Eq, PartialEq, Debug))]
 pub struct ContractConfig {
