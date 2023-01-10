@@ -4,11 +4,10 @@ use near_sdk::{
   json_types::{U128, U64},
   near_bindgen, env,
 };
-use schemars::JsonSchema;
 
 use crate::{Contract, ContractExt, ContractConfig, Account};
 
-#[derive(Serialize, JsonSchema)]
+#[derive(Serialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct VestingSerializable {
   pub beneficiary: AccountId,
