@@ -213,7 +213,13 @@ jobs:
   check_build_and_tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.12.1
+          cache: 'yarn'
 
       - name: Install Rust
         run: |
@@ -221,8 +227,6 @@ jobs:
           source $HOME/.cargo/env
           rustup component add rustfmt
           rustup target add wasm32-unknown-unknown
-      - name: Install Yarn Globally
-        run: npm install -g yarn
 
       - name: Installing Dependencies
         run: yarn
