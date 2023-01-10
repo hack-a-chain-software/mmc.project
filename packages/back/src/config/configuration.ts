@@ -1,13 +1,13 @@
-import { AuthConfiguration } from "src/auth/configuration";
-import { NearConfiguration } from "src/near/configuration";
-import { NftConfiguration } from "src/nft/configuration";
-import { PostGraphileConfiguration } from "src/postgraphile/configuration";
+import { AuthConfiguration } from 'src/auth/configuration';
+import { NearConfiguration } from 'src/near/configuration';
+import { NftConfiguration } from 'src/nft/configuration';
+// import { PostGraphileConfiguration } from "src/postgraphile/configuration";
 
 export interface Configuration {
   auth: AuthConfiguration;
   near: NearConfiguration;
   nft: NftConfiguration;
-  postgraphile: PostGraphileConfiguration;
+  postgraphile: any;
 }
 
 export function configuration(): Configuration {
