@@ -9,3 +9,4 @@ export * from './header';
 export * from './fallback';
 export * from './fade-in-transition';
 export * from './socials';
+export * from './suspense-image';
