@@ -5,10 +5,15 @@
   "private": true,
   "scripts": {
     "postinstall": "yarn husky install",
+    "back": "yarn workspace @near/back",
     "front": "yarn workspace @near/front",
     "contracts": "yarn workspace @near/contracts",
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .prettierignore --fix .eslintrc.js packages/front --ignore-pattern '!.eslintrc.js'",
     "format:check": "prettier --ignore-path .prettierignore packages/** --check"
+  },
+  "engines": {
+    "yarn": ">=1.22.0 <2.0.0",
+    "node": ">=17.5.0"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
