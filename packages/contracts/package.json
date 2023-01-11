@@ -5,15 +5,8 @@
   "private": true,
   "main": "lib/index.ts",
   "scripts": {
-    "build:contract": "node compile.js",
-    "build:contract:debug": "node compile.js --debug",
     "dev:deploy:contract": "near dev-deploy",
-    "deploy:contract": "near deploy",
-    "deploy": "npm run build:contract && npm run deploy:contract",
-    "prestart": "npm run build:contract:debug && npm run dev:deploy:contract",
-    "dev": "nodemon --watch contract/src -e rs --exec \"npm run start\"",
-    "test:rust": "npm run build:contract && cargo test -- --nocapture",
-    "test:lib": "npm run build:contract && cd tests-rs && cargo test"
+    "deploy:contract": "near deploy"
   },
   "devDependencies": {
     "env-cmd": "~10.1.0",

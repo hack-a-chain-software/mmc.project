@@ -1,4 +1,11 @@
-use crate::*;
+use near_sdk::{
+  serde::Serialize,
+  AccountId,
+  json_types::{U128, U64},
+  near_bindgen, env,
+};
+
+use crate::{Contract, ContractExt, ContractConfig, Account};
 
 #[derive(Serialize)]
 #[serde(crate = "near_sdk::serde")]

@@ -1,0 +1,17 @@
+[package]
+name = "clues_contract"
+version = "1.0.0"
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+near-contract-standards = "4.1.1"
+near-sdk = "4.1.1"
+serde = "1"
+serde_json = "1"
+borsh = "0.9.3"
+
+[dev-dependencies]
+rstest = "0.16"

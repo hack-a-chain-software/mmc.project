@@ -7,7 +7,6 @@ use near_sdk::{
   env, near_bindgen, utils::assert_one_yocto, AccountId, BorshStorageKey, Gas, PanicOnDefault,
   PromiseOrValue, Promise,
 };
-
 use near_contract_standards;
 use near_contract_standards::fungible_token::events::{FtBurn, FtMint};
 use near_contract_standards::fungible_token::metadata::{
@@ -23,8 +22,8 @@ mod errors;
 mod ext_interface;
 mod vesting;
 
-use vesting::{Vesting};
-use account::{Account};
+use vesting::Vesting;
+use account::Account;
 use errors::*;
 use ext_interface::{ext_token_contract, ext_self};
 

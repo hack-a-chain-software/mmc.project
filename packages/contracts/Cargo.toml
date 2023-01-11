@@ -1,7 +1,8 @@
 [workspace]
 members = [
-    "./locked_token",
+    "./clues_contract",
     "./fungible_token",
+    "./locked_token",
     "./vesting_contract",
 ]
 
