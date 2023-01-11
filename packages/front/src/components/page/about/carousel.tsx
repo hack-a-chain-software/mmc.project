@@ -28,7 +28,7 @@ const items = [
         text: (
           <span>
             <span className="font-[500]">SUPPLY:</span> TBD <br />{" "}
-            <span className="font-[500]">CLUE STAKING:</span> YES <br />{" "}
+            <span className="font-[500]">CLUE STAKING:</span> NO <br />{" "}
             <span className="font-[500]">REWARD ELIGABLE:</span> YES
           </span>
         ),
