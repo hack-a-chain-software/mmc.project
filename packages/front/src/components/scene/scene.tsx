@@ -1,16 +1,12 @@
 import { Clue } from './clue';
 import { Portal } from './portal';
-import scenes from '@/scenes.json';
-import isArray from 'lodash/isArray';
+import { useState, useEffect } from 'react';
+import scenes from '@/utils/json/scenes.json';
 import { SuspenseImage } from '@/components';
 import { SceneInterface } from '@/utils/interfaces';
-import { useState, useEffect, useMemo } from 'react';
 import { graphql, useLazyLoadQuery } from 'react-relay';
 
-export const Scene = ({
-	setLoading,
-	controls,
-}: SceneInterface & { setLoading: () => void; controls: any }) => {
+export const Scene = ({ controls }: SceneInterface & { controls: any }) => {
 	const [repo, setRepo] = useState({
 		owner: '1mateus',
 		name: 'single',
@@ -34,32 +30,26 @@ export const Scene = ({
 		controls.start({ clipPath: 'circle(100% at 50vw 50vh)' });
 	});
 
-	const handePortal = async () => {
+	const moveToScene = async (id) => {
 		await controls.start({ clipPath: 'circle(0% at 50vw 50vh)' });
 
 		setRepo({
 			owner: '1mateus',
 			name: 'dotfiles',
 		});
+
+		setScene(scenes[id]);
 	};
 
-	const assets = useMemo(() => {
-		if (!scene) {
-			return [];
-		}
-
-		const { image } = scene;
-
-		return [...(isArray(scene.image) ? image : [image])];
-	}, [scene]);
-
 	return (
-		<div className="relative">
-			{assets &&
-				assets.map((asset, id) => (
+		<div className="relative bg-blue-100 overflow-hidden min-h-screen">
+			{scene &&
+				scene.images.map(({ order, image }) => (
 					<SuspenseImage
-						src={asset}
-						key={`scene-${scene?.id as string}-asset-${id}`}
+						src={image}
+						style={{ zIndex: order }}
+						className="absolute bottom-0"
+						key={`scene-${scene?.name as string}-asset-${order as number}`}
 					/>
 				))}
 
@@ -73,10 +63,11 @@ export const Scene = ({
 				))}
 
 			{scene &&
-				scene.warps.map((portal, index) => (
+				scene?.warps.map(({ position, sendTo }, index) => (
 					<Portal
-						onClick={() => handePortal()}
-						position={{ top: '61.3%', left: '37%' }}
+						position={position}
+						onClick={() => moveToScene(sendTo)}
+						key={`mmc-scene-portal-${index as number}`}
 					/>
 				))}
 		</div>

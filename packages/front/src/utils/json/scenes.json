@@ -1,0 +1,55 @@
+[
+  {
+    "images": [
+      {
+        "order": 0,
+        "image": "./images/scenes/1-bg.png"
+      },
+      {
+        "order": 1,
+        "image": "./images/scenes/1-expanded.png"
+      }
+    ],
+    "name": "South Entrance Garden",
+    "clues": [],
+    "warps": [
+      {
+        "sendTo": 1,
+        "position": {
+          "top": "60.3%",
+          "left": "11%"
+        }
+      }
+    ]
+  },
+  {
+    "images":  [
+      {
+        "order": 0,
+        "image": "./images/scenes/2.png"
+      }
+    ],
+    "name": "John's Truck Cabin",
+    "clues": [
+      {
+        "name": "Ramen",
+        "owner": "mateuexample134",
+        "about": "The package of FSM Ramen noodles appears unopened and there is a sticky note attached to it that says 'CHECK'.",
+        "position": {
+          "top": "70%",
+          "left": "64.5%"
+        },
+        "image": "./images/clues/ramen.png"
+      }
+    ],
+    "warps": [
+      {
+        "sendTo": 0,
+        "position": {
+          "top": "48%",
+          "left": "15%"
+        }
+      }
+    ]
+  }
+]

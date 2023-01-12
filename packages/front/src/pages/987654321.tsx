@@ -1,8 +1,6 @@
 import { Scene, WalletDropdown, Fallback, Socials } from '@/components';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useWalletSelector } from '@/utils/context/wallet';
-import { useState, useCallback, Suspense } from 'react';
-import { SceneInterface } from '@/utils/interfaces';
+import { Suspense } from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router';
 
@@ -10,11 +8,8 @@ import { useAnimationControls } from 'framer-motion';
 
 const duration = 1.8;
 
-export const Play = (props) => {
+export const Play = () => {
 	const navigate = useNavigate();
-	const { accountId } = useWalletSelector();
-	const [loading, setLoading] = useState(true);
-	const [scene, setScene] = useState<SceneInterface | null>(null);
 	const controls = useAnimationControls();
 
 	return (
@@ -48,12 +43,7 @@ export const Play = (props) => {
 							<WalletDropdown />
 						</div>
 
-						<Scene
-							controls={controls}
-							setLoading={() => {
-								setLoading(true);
-							}}
-						/>
+						<Scene controls={controls} />
 					</Suspense>
 				</motion.div>
 			</AnimatePresence>
