@@ -7,10 +7,6 @@
     "relay": "relay-compiler --watch",
     "build": "relay-compiler --validate && tsc --noEmit && vite build"
   },
-  "engines": {
-    "yarn": ">=1.22.0 <2.0.0",
-    "node": ">=17.9.1"
-  },
   "relay": {
     "src": "./src",
     "schema": "./src/schema.graphql",
