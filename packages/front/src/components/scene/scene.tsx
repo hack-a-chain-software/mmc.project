@@ -3,10 +3,9 @@ import { Portal } from './portal';
 import { useState, useEffect } from 'react';
 import scenes from '@/utils/json/scenes.json';
 import { SuspenseImage } from '@/components';
-import { SceneInterface } from '@/utils/interfaces';
 import { graphql, useLazyLoadQuery } from 'react-relay';
 
-export const Scene = ({ controls }: SceneInterface & { controls: any }) => {
+export const Scene = ({ controls }: { controls: any }) => {
 	const [repo, setRepo] = useState({
 		owner: '1mateus',
 		name: 'single',

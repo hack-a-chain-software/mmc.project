@@ -1,6 +1,6 @@
-import { Scene, WalletDropdown, Fallback, Socials } from '@/components';
+import { Button, Scene, WalletDropdown, Fallback, Socials, GuessModal } from '@/components';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router';
 
@@ -11,10 +11,16 @@ const duration = 1.8;
 export const Play = () => {
 	const navigate = useNavigate();
 	const controls = useAnimationControls();
+  const [showGuessModal, setShowGuessModal] = useState(false);
 
 	return (
 		<>
 			<Fallback />
+
+      <GuessModal
+        isOpen={showGuessModal}
+        onClose={() => setShowGuessModal(false)}
+      />
 
 			<AnimatePresence>
 				<motion.div
@@ -38,7 +44,15 @@ export const Play = () => {
 								<span className="text-white">Back</span>
 							</button>
 
-							<Socials />
+              <Button
+                onClick={() => setShowGuessModal(true)}
+              >
+                <span>
+                  Guessing now open
+                </span>
+              </Button>
+
+              <Socials />
 
 							<WalletDropdown />
 						</div>
