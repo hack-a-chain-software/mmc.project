@@ -11,7 +11,7 @@ export function Footer() {
   } = useLocation();
 
   const isVisible = useMemo(() => {
-    return pathname !== '/play';
+    return pathname !== '/987654321';
   }, [pathname]);
 
   return (

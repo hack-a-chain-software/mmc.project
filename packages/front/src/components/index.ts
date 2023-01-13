@@ -10,3 +10,6 @@ export * from './fallback';
 export * from './fade-in-transition';
 export * from './socials';
 export * from './suspense-image';
+export * from './guess-modal';
+export * from './select';
+export * from './clues-modal';

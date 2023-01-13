@@ -14,14 +14,14 @@ import type { WalletSelector, AccountState } from '@near-wallet-selector/core';
 import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 
 interface WalletContextValue {
-  accountKeyPair: any;
+  // accountKeyPair: any;
   selector: WalletSelector;
   accounts: AccountState[];
   accountId: string | null;
   showModal: boolean;
   signOut: () => Promise<void>;
   toggleModal: () => void;
-  signMessage: () => any;
+  // signMessage: () => any;
 }
 
 export type Account = AccountView & {
@@ -34,7 +34,7 @@ const WalletContext =
 export const WalletSelectorContextProvider: React.FC<
   PropsWithChildren<Record<any, any>>
 > = ({ children }) => {
-  const [accountKeyPair, setKeypair] = useState<any>();
+  // const [accountKeyPair, setKeypair] = useState<any>();
   const [accountId, setAccountId] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
   const [accounts, setAccounts] = useState<AccountState[]>([]);
@@ -90,18 +90,18 @@ export const WalletSelectorContextProvider: React.FC<
     return () => subscription.unsubscribe();
   }, [selector]);
 
-  const signMessage = () => {
-    const {
-      signature,
-      publicKey,
-    } = accountKeyPair.sign(message);
+  // const signMessage = () => {
+  //   const {
+  //     signature,
+  //     publicKey,
+  //   } = accountKeyPair.sign(message);
 
-    return {
-      message,
-      signature,
-      publicKey: publicKey.toString(),
-    };
-  };
+  //   return {
+  //     message,
+  //     signature,
+  //     publicKey: publicKey.toString(),
+  //   };
+  // };
 
   useEffect(() => {
     const newAccount =
@@ -109,16 +109,16 @@ export const WalletSelectorContextProvider: React.FC<
 
     setAccountId(newAccount);
 
-    (async () => {
-      const keystore = new keyStores.BrowserLocalStorageKeyStore();
+    // (async () => {
+    //   const keystore = new keyStores.BrowserLocalStorageKeyStore();
 
-      const keyPair = await keystore.getKey(
-        import.meta.env.VITE_NEAR_NETWORK,
-        newAccount,
-      );
+    //   const keyPair = await keystore.getKey(
+    //     import.meta.env.VITE_NEAR_NETWORK,
+    //     newAccount,
+    //   );
 
-      setKeypair(keyPair);
-    })();
+    //   setKeypair(keyPair);
+    // })();
   }, [accounts]);
 
   if (!selector) {
@@ -134,8 +134,8 @@ export const WalletSelectorContextProvider: React.FC<
         accountId,
         showModal,
         toggleModal,
-        signMessage,
-        accountKeyPair,
+        // signMessage,
+        // accountKeyPair,
       }}
     >
       {children}

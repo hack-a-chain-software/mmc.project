@@ -13,7 +13,7 @@ export function Header() {
 	const { pathname } = useLocation();
 
 	const isVisible = useMemo(() => {
-		return pathname !== '/play';
+		return pathname !== '/987654321';
 	}, [pathname]);
 
 	return (
@@ -55,9 +55,10 @@ export function Header() {
 								onClick={() => {
 									navigate('/play');
 								}}
-								className="w-[130px] h-[30px] hidden lg:flex flex items-center justify-center bg-purple-0 text-white text-[12px] uppercase min-h-[40px] px-[13px] tracking-[0px] border border-white rounded-[50px] font-[400] hover:bg-white hover:text-purple-0"
+								disabled
+								className="w-[180px] h-[30px] hidden lg:flex flex items-center justify-center bg-purple-0 text-white text-[12px] uppercase min-h-[40px] px-[13px] tracking-[0px] border border-white rounded-[50px] font-[400] hover:bg-white hover:text-purple-0 cursor-not-allowed opacity-[0.5]"
 							>
-								Play Now
+								Coming soon
 							</button>
 						</div>
 					</div>
