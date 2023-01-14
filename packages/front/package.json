@@ -13,6 +13,10 @@
     "language": "typescript",
     "eagerEsModules": true
   },
+  "engines": {
+    "yarn": ">=1.22.0 <2.0.0",
+    "node": ">17.x"
+  },
   "dependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@headlessui/react": "^1.6.6",
