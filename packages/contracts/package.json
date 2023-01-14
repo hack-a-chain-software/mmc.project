@@ -10,7 +10,7 @@
   },
   "engines": {
     "yarn": ">=1.22.0 <2.0.0",
-    "node": "18.0.0"
+    "node": ">17.x"
   },
   "devDependencies": {
     "env-cmd": "~10.1.0",
