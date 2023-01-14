@@ -8,6 +8,10 @@
     "uncommit": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate uncommit",
     "seed": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate run src/seeds.sql"
   },
+  "engines": {
+    "yarn": ">=1.22.0 <2.0.0",
+    "node": "18.12.0"
+  },
   "devDependencies": {
     "graphile-migrate": "^1.4.0"
   }
