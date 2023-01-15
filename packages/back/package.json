@@ -25,14 +25,14 @@
     "node": ">=17.0.0"
   },
   "dependencies": {
-    "@nestjs/cli": "9.1.5",
+    "@nestjs/cli": "^9.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
-    "@nestjs/schematics": "9.0.1",
+    "@nestjs/schematics": "^9.0.0",
     "near-api-js": "^1.1.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
