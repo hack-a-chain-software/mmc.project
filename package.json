@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "postinstall": "yarn husky install",
-    "back": "yarn workspace @near/back",
+    "back": "yarn workspace back",
     "front": "yarn workspace @near/front",
     "contracts": "yarn workspace @near/contracts",
     "lint": "eslint --ext .js,.ts,.vue --ignore-path .prettierignore --fix .eslintrc.js packages/front --ignore-pattern '!.eslintrc.js'",
