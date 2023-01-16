@@ -30,7 +30,7 @@ export function Item({
   return (
     <div
       className={twMerge(
-        "flex flex-col items-center space-y-[42px] flex-grow overflow-hidden]",
+        "flex flex-col items-center space-y-[42px] flex-grow overflow-hidden] xl:w-[615px]",
         className
       )}
     >
