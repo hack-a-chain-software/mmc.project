@@ -73,7 +73,7 @@ export function Item({
                 >
                   <img
                     className="h-full w-full relative top-[30px] bg-transparent aspect-[45/49]"
-                    src={`./images/sneak-peeks/${image}.jpg`}
+                    src={`./images/sneak-peeks/${image}.png`}
                   />
                 </div>
               </motion.div>
