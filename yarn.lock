@@ -1171,7 +1171,7 @@
     "@near-wallet-selector/core" "7.5.0"
     "@near-wallet-selector/wallet-utils" "7.5.0"
 
-"@near-wallet-selector/my-near-wallet@7.5.0":
+"@near-wallet-selector/my-near-wallet@7.5.0", "@near-wallet-selector/my-near-wallet@^7.5.0":
   version "7.5.0"
   resolved "https://registry.yarnpkg.com/@near-wallet-selector/my-near-wallet/-/my-near-wallet-7.5.0.tgz#7c615fc47850b14fa1777547b206b79725276a38"
   integrity sha512-hkY12bc1U3rYYvkuWQrhTU4NLMTpbuIOJD8bhh/nYWbdCpV16GmnmR3AWnWqcwjDHwruq+1GLB04HN0oOxz9lg==
@@ -2589,6 +2589,11 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+big.js@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/big.js/-/big.js-6.2.1.tgz#7205ce763efb17c2e41f26f121c420c6a7c2744f"
+  integrity sha512-bCtHMwL9LeDIozFn+oNhhFoq+yQ3BNdnsLSASUxLciOb1vgvpHsIO1dsENiGMgbb4SkP5TrzWzRiLddn8ahVOQ==
+
 binary-extensions@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
@@ -3604,6 +3609,11 @@ dashdash@^1.12.0:
   integrity sha512-jRFi8UDGo6j+odZiEpjazZaWqEal3w/basFjQHQEwVtZJGDpxbH1MeYluwCS8Xq5wmLJooDlMgvVarmWfGM44g==
   dependencies:
     assert-plus "^1.0.0"
+
+date-fns@^2.29.3:
+  version "2.29.3"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
+  integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
 
 dayjs@^1.10.4:
   version "1.11.7"
