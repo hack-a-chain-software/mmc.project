@@ -13,3 +13,4 @@ export * from './suspense-image';
 export * from './guess-modal';
 export * from './select';
 export * from './clues-modal';
+export * from './progress-bar'

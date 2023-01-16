@@ -5,13 +5,11 @@ import React, {
   useState,
   PropsWithChildren,
 } from 'react';
-import { keyStores } from 'near-api-js';
-import { KeyPair } from 'near-api-js/lib/utils';
 import type { AccountView } from 'near-api-js/lib/providers/provider';
 import { map, distinctUntilChanged } from 'rxjs';
 import { setupWalletSelector } from '@near-wallet-selector/core';
 import type { WalletSelector, AccountState } from '@near-wallet-selector/core';
-import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
+import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
 
 interface WalletContextValue {
   // accountKeyPair: any;
@@ -49,7 +47,7 @@ export const WalletSelectorContextProvider: React.FC<
 
     const wallet = await selector.wallet();
 
-    wallet.signOut();
+    await wallet.signOut();
   };
 
   const init = useCallback(async () => {
