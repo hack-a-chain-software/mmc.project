@@ -34,12 +34,12 @@ export function Item({
         className
       )}
     >
-      <div className="relative aspect-[5/7] w-full flex max-h-[490px] max-w-[450px]">
+      <div className="relative aspect-[45/49] w-full">
         <div className="absolute top-0 w-full h-[40px] overflow-hidden">
           <img src="./svgs/blinds.svg" className="w-full" />
         </div>
 
-        <div className="absolute top-0 left-0 w-full overflow-hidden max-h-[470px]">
+        <div className="absolute top-0 inset-0 overflow-hidden">
           <AnimatePresence initial={false}>
             {hide && (
               <motion.section
@@ -52,14 +52,14 @@ export function Item({
                 }}
                 transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
               >
-                <img loading="lazy" src="./svgs/blinds.svg" />
+                <img loading="lazy" className="w-full" src="./svgs/blinds.svg" />
               </motion.section>
             )}
           </AnimatePresence>
         </div>
 
-        <div className="w-full flex-grow border border-[25px] border-purple-1">
-          <div className="w-full flex-grow border border-purple-0 border-[18px]">
+        <div className="aspect-[45/49] w-full h-full border border-[25px] border-purple-1">
+          <div className="w-full h-full border border-purple-0 border-[18px]">
             {!hide && (
               <motion.div
                 className="absolute top-0 left-0 z-[-1] w-full h-full"
@@ -69,10 +69,10 @@ export function Item({
               >
                 <div
                   key={`sneek-peek-image-${image}`}
-                  className="absolute h-full z-[-1] inset-0 overflow-hidden"
+                  className="absolute h-full z-[-1] inset-0 overflow-hidden aspect-[45/49]"
                 >
                   <img
-                    className="h-full w-full relative top-[30px] bg-transparent"
+                    className="h-full w-full relative top-[30px] bg-transparent aspect-[45/49]"
                     src={`./images/sneak-peeks/${image}.jpg`}
                   />
                 </div>
