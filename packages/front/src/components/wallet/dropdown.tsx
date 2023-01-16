@@ -1,13 +1,13 @@
 import { Fragment, useState } from 'react';
-import { Button } from '../button';
 import { CluesModal } from '../clues-modal';
 import { TokensModal } from '../tokens-modal';
 import { Menu, Transition } from '@headlessui/react';
 import { useWalletSelector } from '@/utils/context/wallet';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import toast from 'react-hot-toast';
+import { twMerge } from 'tailwind-merge';
 import { Square2StackIcon, PowerIcon, MagnifyingGlassIcon, BanknotesIcon } from '@heroicons/react/24/outline';
-import { UserCircleIcon } from '@heroicons/react/24/solid';
+import { UserCircleIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
 
 
 const shortenAddress = (address: string, chars = 8): string =>
@@ -17,18 +17,6 @@ export const WalletDropdown = () => {
   const { accountId, toggleModal, signOut } = useWalletSelector();
   const [showCluesModal, setShowCluesModal] = useState(false);
   const [showTokensModal, setShowTokensModal] = useState(false);
-
-  if (!!!accountId) {
-    return (
-      <Button
-        onClick={() => {
-          toggleModal();
-        }} className="hidden md:flex"
-      >
-        <span>Connect Wallet</span>
-      </Button>
-    );
-  }
 
   return (
     <>
@@ -48,7 +36,12 @@ export const WalletDropdown = () => {
           className="hover:opacity-80 cursor-pointer"
         >
           <UserCircleIcon
-            className="text-white w-8"
+            className={
+              twMerge(
+                'text-white w-8',
+                !!accountId && 'text-[#A500FB]',
+              )
+            }
           />
         </Menu.Button>
 
@@ -72,76 +65,101 @@ export const WalletDropdown = () => {
               bg-white
               shadow-[0px_4px_30px_rgba(0,0,0,0.25)]
               focus:outline-none
+              w-[304px]
+              overflow-hidden
             "
           >
-            <div className="py-[14px] px-[24px]">
-              <CopyToClipboard
-                text={accountId}
-                onCopy={() => toast.success('Copy to clipboard')}
-              >
-                <button className="inline-flex px-[16px] py-[10px] border border-[rgba(0,0,0,0.2)] rounded-[10px] space-x-[16px] hover:bg-[rgba(0,0,0,0.02)]">
-                  <span
-                    children={shortenAddress(accountId as string)}
-                    className="text-[#1A1A1A] text-[14px] font-[500]"
-                  />
+            {
+              !!accountId ? (
+                <>
+                  <div className="py-[14px] px-[24px]">
+                    <CopyToClipboard
+                      text={accountId}
+                      onCopy={() => toast.success('Copy to clipboard')}
+                    >
+                      <button className="inline-flex px-[16px] py-[10px] border border-[rgba(0,0,0,0.2)] rounded-[10px] space-x-[16px] hover:bg-[rgba(0,0,0,0.02)]">
+                        <span
+                          children={shortenAddress(accountId as string)}
+                          className="text-[#1A1A1A] text-[14px] font-[500]"
+                        />
 
-                  <Square2StackIcon className="w-[24px] text-[rgba(26,26,26,0.5)]" />
-                </button>
-              </CopyToClipboard>
-            </div>
+                        <Square2StackIcon className="w-[24px] text-[rgba(26,26,26,0.5)]" />
+                      </button>
+                    </CopyToClipboard>
+                  </div>
 
-            <Menu.Item>
-              {({ close }) => (
-                <div>
-                  <button
-                    onClick={() => {
-                      setShowTokensModal(true);
-                      close();
-                    }}
-                    className="pt-[19px] px-[24px] pb-[21px] w-full hover:bg-[#A500FB]/[0.10] flex items-center space-x-[8px] text-black "
-                  >
-                    <BanknotesIcon
-                      className="w-[18px]"
-                    />
+                  <Menu.Item>
+                    {({ close }) => (
+                      <div>
+                        <button
+                          onClick={() => {
+                            setShowTokensModal(true);
+                            close();
+                          }}
+                          className="pt-[19px] px-[24px] pb-[21px] w-full hover:bg-[#A500FB]/[0.10] flex items-center space-x-[8px] text-black "
+                        >
+                          <BanknotesIcon
+                            className="w-[18px]"
+                          />
 
-                    <span className="font-[400] text-[14px]">My Locked Tokens</span>
-                  </button>
-                </div>
-              )}
-            </Menu.Item>
+                          <span className="font-[400] text-[14px]">My Locked Tokens</span>
+                        </button>
+                      </div>
+                    )}
+                  </Menu.Item>
 
-            <Menu.Item>
-              {({ close }) => (
-                <div>
-                  <button
-                    onClick={() => {
-                      setShowCluesModal(true);
-                      close();
-                    }}
-                    className="pt-[19px] px-[24px] pb-[21px] w-full hover:bg-[#A500FB]/[0.10] flex items-center space-x-[8px] text-black "
-                  >
-                    <MagnifyingGlassIcon
-                      className="w-[18px]"
-                    />
+                  <Menu.Item>
+                    {({ close }) => (
+                      <div>
+                        <button
+                          onClick={() => {
+                            setShowCluesModal(true);
+                            close();
+                          }}
+                          className="pt-[19px] px-[24px] pb-[21px] w-full hover:bg-[#A500FB]/[0.10] flex items-center space-x-[8px] text-black "
+                        >
+                          <MagnifyingGlassIcon
+                            className="w-[18px]"
+                          />
 
-                    <span className="font-[400] text-[14px]">My Clues</span>
-                  </button>
-                </div>
-              )}
-            </Menu.Item>
+                          <span className="font-[400] text-[14px]">My Clues</span>
+                        </button>
+                      </div>
+                    )}
+                  </Menu.Item>
 
-            <div>
-              <button
-                onClick={() => signOut()}
-                className="pt-[19px] px-[24px] pb-[21px] w-full rounded-b-[16px] hover:bg-[#DB2B1F]/[0.65] flex items-center space-x-[8px] text-[#DB2B1F] hover:text-white"
-              >
-                <PowerIcon
-                  className="w-[18px]"
-                />
+                  <Menu.Item>
+                    <div>
+                      <button
+                        onClick={() => signOut()}
+                        className="pt-[19px] px-[24px] pb-[21px] w-full rounded-b-[16px] hover:bg-[#DB2B1F]/[0.65] flex items-center space-x-[8px] text-[#DB2B1F] hover:text-white"
+                      >
+                        <PowerIcon
+                          className="w-[18px]"
+                        />
 
-                <span className="font-[400] text-[14px]">Disconnect</span>
-              </button>
-            </div>
+                        <span className="font-[400] text-[14px]">Disconnect</span>
+                      </button>
+                    </div>
+                  </Menu.Item>
+                </>
+              ) : (
+                <Menu.Item>
+                  <div>
+                    <button
+                      onClick={() => toggleModal()}
+                      className="pt-[19px] px-[24px] pb-[21px] w-full rounded-b-[16px] hover:bg-[#A500FB]/[0.65] flex items-center space-x-[8px] text-[#A500FB] hover:text-white"
+                    >
+                      <ArrowLeftOnRectangleIcon
+                        className="w-[18px]"
+                      />
+
+                      <span className="font-[400] text-[14px]">Connect Wallet</span>
+                    </button>
+                  </div>
+                </Menu.Item>
+              )
+            }
           </Menu.Items>
         </Transition>
       </Menu>
