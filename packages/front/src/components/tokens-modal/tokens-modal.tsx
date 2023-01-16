@@ -4,7 +4,11 @@ import { Dialog, Transition } from '@headlessui/react';
 import LockedCard from './locked-card';
 
 const lockedTokens = [
-  null
+  null,
+  null,
+  null,
+  null,
+  null,
 ];
 
 export const TokensModal = ({
@@ -45,7 +49,7 @@ export const TokensModal = ({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-5xl h-[650px] overflow-auto transform bg-black shadow-xl transition-all py-[44px] px-[50px] text-white">
+                <Dialog.Panel className="w-full max-w-6xl h-[650px] overflow-auto transform bg-black shadow-xl transition-all py-[44px] px-[50px] text-white">
                   <div
                     className="flex items-center justify-between pb-[45px]"
                   >
@@ -71,7 +75,9 @@ export const TokensModal = ({
                     </button>
                   </div>
 
-                  <div>
+                  <div
+                    className="grid grid-cols-[repeat(auto-fill,minmax(315px,315px))] gap-7 justify-center"
+                  >
                     {lockedTokens.map((_, index) => (
                       <LockedCard
                         key={`locked-token-items-${index}`}
