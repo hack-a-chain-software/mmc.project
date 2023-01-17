@@ -42,6 +42,26 @@ impl Contract {
       UNAUTHORIZED_ERR
     );
   }
+
+  pub fn assert_fungible_token_is_listed(&self, ft_account: AccountId) -> bool {
+    self.fungible_tokens.contains(&ft_account)
+  }
+
+  pub fn assert_pups_transfer(&self) {
+    assert_eq!(
+      env::predecessor_account_id(),
+      self.pups_token_address,
+      "{}",
+      UNAUTHORIZED_ERR
+    );
+  }
+
+  pub fn assert_pups_or_det_transfer(&self) {
+    let is_pup = (env::predecessor_account_id() == self.pups_token_address);
+    let is_det = (env::predecessor_account_id() == self.detective_token_address);
+
+    assert!((is_pup || is_det), "{}", UNAUTHORIZED_ERR)
+  }
 }
 
 #[cfg(test)]

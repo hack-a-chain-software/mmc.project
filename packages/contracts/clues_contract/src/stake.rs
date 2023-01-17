@@ -1,7 +1,91 @@
-use near_sdk::AccountId;
+use near_sdk::{
+  AccountId, json_types::U128, env, near_bindgen, assert_one_yocto, ext_contract, Promise,
+};
 use near_contract_standards::non_fungible_token::TokenId;
 
-use crate::{Contract, errors::STAKED_TOKEN_ERR};
+use crate::{
+  Contract, ContractExt,
+  errors::{STAKED_TOKEN_ERR, NFT_OWNER_ERR, REWARD_CLAIMED_ERR},
+  ext_interface::{*, self},
+  BASE_GAS,
+};
+
+#[near_bindgen]
+impl Contract {
+  // Claiming the rewards transfers all the locked_tokens to the owner
+  #[payable]
+  pub fn claim_rewards(&mut self, token_id: TokenId) -> Promise {
+    //ensure the function call is signed by a full-access key holder.
+    assert_one_yocto();
+    self.is_token_staked(&token_id.clone());
+    assert!(
+      !self.used_tokens.contains(&token_id),
+      "{}",
+      REWARD_CLAIMED_ERR
+    );
+
+    //The user that is claiming the unstake function must be the owner of the NFT being unstaked
+    let user = env::predecessor_account_id();
+    let staked_token_owner = self.staked_tokens.get(&token_id.clone()).unwrap();
+    assert!(user == staked_token_owner, "{}", NFT_OWNER_ERR);
+
+    let rewards: U128 = calculate_reward(token_id.clone());
+
+    self.used_tokens.insert(&token_id.clone());
+    self.staked_tokens.remove(&token_id);
+
+    ext_interface::token_contract::ext(self.locked_tokens_address.clone())
+      .with_static_gas(BASE_GAS)
+      .with_attached_deposit(1)
+      .ft_transfer(
+        user.clone().to_string(),
+        rewards,
+        "Clues reward".to_string(),
+      )
+      .then(
+        ext_interface::ext_self::ext(env::current_account_id())
+          .with_static_gas(BASE_GAS)
+          .undo_transfer(token_id, user),
+      )
+  }
+
+  /// Unstake function allows users to unstake their NFTs even if they did not
+  /// claim their rewards - be careful
+  #[payable]
+  pub fn unstake(&mut self, token_id: TokenId) {
+    //ensure the function call is signed by a full-access key holder.
+    assert_one_yocto();
+
+    //The user that is claiming the unstake function must be the owner of the NFT being unstaked
+    let user = env::predecessor_account_id();
+    let staked_token_owner = self.staked_tokens.get(&token_id.clone()).unwrap();
+    assert!(user == staked_token_owner, "{}", NFT_OWNER_ERR);
+
+    //For reviewer: I am im doubt if its the best approach to insert the NFT on the removed tokens list
+    if !self.used_tokens.contains(&token_id) {
+      self.used_tokens.insert(&token_id.clone());
+    }
+    self.staked_tokens.remove(&token_id);
+
+    // Transfer the NFT back to the owner
+    self
+      .tokens
+      .internal_transfer(&env::current_account_id(), &user, &token_id, None, None);
+  }
+
+  /// Unstake function allows users to unstake their NFTs even if they did not
+  /// claim their rewards - be careful
+  #[payable]
+  #[private]
+  pub fn unstake_for_callback(&mut self, token_id: TokenId, user_id: AccountId) {
+    //ensure the function call is signed by a full-access key holder.
+    assert_one_yocto();
+
+    self
+      .tokens
+      .internal_transfer(&env::current_account_id(), &user_id, &token_id, None, None);
+  }
+}
 
 impl Contract {
   fn is_token_staked(&self, token_id: &TokenId) -> bool {
@@ -21,6 +105,10 @@ impl Contract {
 
     true // signals to return token back to owner
   }
+}
+//TO-DO: implement the reward formula here -> Client still hasn't passed the reward formula for Clues
+pub fn calculate_reward(token_id: TokenId) -> U128 {
+  U128(100)
 }
 
 #[cfg(test)]

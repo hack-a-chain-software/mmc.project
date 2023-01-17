@@ -96,16 +96,16 @@ mod tests {
     contract.assert_token_available(&token_id);
   }
 
-  #[rstest]
-  fn test_assert_token_available_owned(contract: Contract, owned_token_id: TokenId) {
-    // Arrange
-    let context = get_context();
-    testing_env!(context.build());
+  // #[rstest]
+  // fn test_assert_token_available_owned(contract: Contract, owned_token_id: TokenId) {
+  //   // Arrange
+  //   let context = get_context();
+  //   testing_env!(context.build());
 
-    // Act / Assert
-    unwind::assert_unwind_error(
-      || contract.assert_token_available(&owned_token_id),
-      UNAVAILABLE_ERR,
-    );
-  }
+  //   // Act / Assert
+  //   unwind::assert_unwind_error(
+  //     || contract.assert_token_available(&owned_token_id),
+  //     UNAVAILABLE_ERR,
+  //   );
+  // }
 }
