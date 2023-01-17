@@ -1,4 +1,4 @@
-import { Button, Select } from '.';
+import { Button, Select } from '..';
 import { Fragment } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
@@ -14,17 +14,13 @@ const items = [
   },
 ];
 
-export function GuessModal({
+export function GuessingForm({
 	isOpen,
 	onClose,
 }: {
 	isOpen: boolean;
 	onClose: () => void;
 }) {
-	const mint = () => {
-		//
-	};
-
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog
@@ -164,4 +160,4 @@ export function GuessModal({
 	);
 }
 
-export default GuessModal;
+export default GuessingForm;

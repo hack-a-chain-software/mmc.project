@@ -10,7 +10,8 @@ export * from './fallback';
 export * from './fade-in-transition';
 export * from './socials';
 export * from './suspense-image';
-export * from './guess-modal';
+export * from './guessing';
 export * from './select';
 export * from './clues-modal';
-export * from './progress-bar'
+export * from './progress-bar';
+export * from './stake';

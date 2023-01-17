@@ -1,4 +1,4 @@
-import { Button, Scene, WalletDropdown, Fallback, Socials, GuessModal } from '@/components';
+import { Button, Scene, WalletDropdown, Fallback, Socials, GuessingModal } from '@/components';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Suspense, useState } from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
@@ -17,7 +17,7 @@ export const Play = () => {
 		<>
 			<Fallback />
 
-      <GuessModal
+      <GuessingModal
         isOpen={showGuessModal}
         onClose={() => setShowGuessModal(false)}
       />
