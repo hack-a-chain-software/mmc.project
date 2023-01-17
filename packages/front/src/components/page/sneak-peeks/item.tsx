@@ -34,7 +34,7 @@ export function Item({
         className
       )}
     >
-      <div className="relative aspect-[45/49] w-full">
+      <div className="relative aspect-[45/49] w-full max-w-[500px]">
         <div className="absolute top-0 w-full h-[40px] overflow-hidden">
           <img src="./svgs/blinds.svg" className="w-full" />
         </div>
@@ -58,7 +58,7 @@ export function Item({
           </AnimatePresence>
         </div>
 
-        <div className="aspect-[45/49] w-full h-full border border-[25px] border-purple-1">
+        <div className="w-full h-full border border-[25px] border-purple-1">
           <div className="w-full h-full border border-purple-0 border-[18px]">
             {!hide && (
               <motion.div
@@ -69,10 +69,10 @@ export function Item({
               >
                 <div
                   key={`sneek-peek-image-${image}`}
-                  className="absolute h-full z-[-1] inset-0 overflow-hidden aspect-[45/49]"
+                  className="absolute h-full z-[-1] inset-0 overflow-hidden"
                 >
                   <img
-                    className="h-full w-full relative top-[30px] bg-transparent aspect-[45/49]"
+                    className="h-full w-full relative top-[30px] bg-transparent"
                     src={`./images/sneak-peeks/${image}.png`}
                   />
                 </div>
