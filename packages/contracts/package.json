@@ -8,7 +8,10 @@
     "deploy:contract": "near deploy",
     "build:contract": "node compile.js",
     "dev:deploy:contract": "near dev-deploy",
-    "deploy:testnet": "(cd testnet_settings/src && node index.js)"
+    "deploy:testnet": "(cd testnet_settings/src && node index.js)",
+    "build": "RUSTFLAGS='-C link-arg=-s' cargo build --target wasm32-unknown-unknown --release",
+    "test:integration": "yarn build && cd tests-rs && cargo test",
+    "test:unit": "cargo test"
   },
   "devDependencies": {
     "env-cmd": "~10.1.0",

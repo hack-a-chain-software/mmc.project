@@ -4,6 +4,7 @@ members = [
     "./fungible_token",
     "./locked_token",
     "./vesting_contract",
+    "./nft_contract",
 ]
 
 [profile.release]

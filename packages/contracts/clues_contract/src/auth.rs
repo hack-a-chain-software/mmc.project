@@ -1,9 +1,12 @@
 use near_contract_standards::non_fungible_token::TokenId;
-use near_sdk::{AccountId, env};
+use near_sdk::{AccountId, env, Timestamp};
 
 use crate::{
   Contract,
-  errors::{INEXISTENT_ERR, UNAUTHORIZED_ERR},
+  errors::{
+    INEXISTENT_ERR, UNAUTHORIZED_ERR, UNACC_TOKEN_ERR, NO_PROOF_ERR, EXPIRED_TIME_ERR,
+    SEASON_END_ERR, ERR_SEASON_NOT_OPEN, STAKED_TOKEN_ERR,
+  },
 };
 
 impl Contract {
@@ -17,6 +20,45 @@ impl Contract {
     account_id == &owner_id
   }
 
+  pub fn assert_season_is_going(&self) {
+    assert!(
+      env::block_timestamp() < self.season_end,
+      "{}",
+      SEASON_END_ERR
+    );
+
+    assert!(
+      env::block_timestamp() > self.season_begin,
+      "{}",
+      ERR_SEASON_NOT_OPEN
+    );
+  }
+
+  pub fn assert_season_is_over(&self) {
+    assert!(
+      env::block_timestamp() > self.season_end,
+      "{}",
+      SEASON_END_ERR
+    );
+  }
+
+  pub fn assert_ownership(&self, account_id: AccountId) {
+    let proof_time = self
+      .proof_of_ownership
+      .get(&account_id)
+      .expect(NO_PROOF_ERR);
+
+    assert!(env::block_timestamp() < proof_time, "{}", EXPIRED_TIME_ERR);
+  }
+
+  pub fn is_token_staked(&self, token_id: &TokenId) -> bool {
+    self.staked_tokens.contains(&token_id)
+  }
+
+  pub fn assert_token_unstaked(&self, token_id: &TokenId) {
+    assert!(!self.is_token_staked(&token_id), "{}", STAKED_TOKEN_ERR);
+  }
+
   pub fn assert_token_owner(&self, account_id: &AccountId, token_id: &TokenId) {
     assert!(
       self.is_token_owner(&account_id, &token_id),
@@ -28,7 +70,7 @@ impl Contract {
   pub fn assert_contract_owner(&self) {
     assert_eq!(
       env::predecessor_account_id(),
-      self.tokens.owner_id,
+      self.owner,
       "{}",
       UNAUTHORIZED_ERR
     );
@@ -42,73 +84,28 @@ impl Contract {
       UNAUTHORIZED_ERR
     );
   }
-}
 
-#[cfg(test)]
-mod tests {
-  use near_sdk::{AccountId, testing_env};
-  use rstest::rstest;
-
-  use super::*;
-  use crate::test_utils::{fixtures::*, unwind};
-
-  #[rstest]
-  fn test_is_token_owner(mut contract: Contract, account_id: AccountId, token_id: TokenId) {
-    // Arrange
-    let context = get_context();
-    testing_env!(context.build());
-
-    contract.tokens.internal_transfer(
-      &env::current_account_id(),
-      &account_id,
-      &token_id,
-      None,
-      None,
+  pub fn assert_fungible_token_is_listed(&self, ft_account: AccountId) {
+    assert!(
+      self.fungible_tokens.contains_key(&ft_account),
+      "{}",
+      UNACC_TOKEN_ERR
     );
-
-    // Act
-    let is_owner = contract.is_token_owner(&account_id, &token_id);
-
-    // Assert
-    assert!(is_owner);
   }
 
-  #[rstest]
-  fn test_is_token_owner_unauthorized(
-    contract: Contract,
-    account_id: AccountId,
-    token_id: TokenId,
-  ) {
-    // Arrange
-    let context = get_context();
-    testing_env!(context.build());
-
-    // Act
-    let is_owner = contract.is_token_owner(&account_id, &token_id);
-
-    // Assert
-    assert!(!is_owner);
+  pub fn assert_pups_transfer(&self) {
+    assert_eq!(
+      env::predecessor_account_id(),
+      self.pups_token_address,
+      "{}",
+      UNAUTHORIZED_ERR
+    );
   }
 
-  #[rstest]
-  fn test_assert_contract_owner(contract: Contract, owner: AccountId) {
-    // Arrange
-    let mut context = get_context();
-    context.predecessor_account_id(owner);
-    testing_env!(context.build());
+  pub fn assert_pups_or_det_transfer(&self) {
+    let is_pup = env::predecessor_account_id() == self.pups_token_address;
+    let is_det = env::predecessor_account_id() == self.detective_token_address;
 
-    // Act / Assert
-    contract.assert_contract_owner();
-  }
-
-  #[rstest]
-  fn test_assert_contract_owner_unauthorized(contract: Contract, account_id: AccountId) {
-    // Arrange
-    let mut context = get_context();
-    context.predecessor_account_id(account_id);
-    testing_env!(context.build());
-
-    // Act / Assert
-    unwind::assert_unwind_error(|| contract.assert_contract_owner(), UNAUTHORIZED_ERR);
+    assert!((is_pup || is_det), "{}", UNAUTHORIZED_ERR)
   }
 }
