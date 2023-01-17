@@ -101,12 +101,13 @@ export const StakeModal = ({
                 <div
                   className="grid grid-cols-[repeat(auto-fill,minmax(173px,173px))] gap-7 justify-center max-h-[300px] overflow-auto"
                 >
-                  {nfts.map((nft) => (
+                  {nfts.map(({ id, image }) => (
                     <StakeCard
-                      {...nft}
-                      key={`stake-modal-nft-${nft.id}`}
-                      isSelected={selected.includes(nft.id)}
-                      onSelect={() => handleSelected(nft.id)}
+                      id={id}
+                      image={image}
+                      key={`stake-modal-nft-${id}`}
+                      isSelected={selected.includes(id)}
+                      onSelect={() => handleSelected(id)}
                     />
                   ))}
                 </div>
