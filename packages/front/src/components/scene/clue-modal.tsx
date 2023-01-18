@@ -13,7 +13,7 @@ interface ClueModalInterface {
 
 export const ClueModal = ({
 	name,
-	about,
+	description,
 	image,
 	owner,
 	isOpen,
@@ -135,7 +135,7 @@ export const ClueModal = ({
                           font-[400]
                         "
 											>
-												{about}
+												{description}
 											</span>
 										</div>
 

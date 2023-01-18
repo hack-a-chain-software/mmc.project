@@ -1,18 +1,16 @@
 --! Previous: -
---! Hash: sha1:779179110cc4e7dbc4b657678396e14831463f86
+--! Hash: sha1:9d7d3a2d3ad9a4b127247cb03f5b6537e21208e6
 
 --! split: 0001-scenes.sql
 drop table if exists scenes cascade;
 
 create table scenes (
     id uuid primary key default gen_random_uuid(),
-    description text not null, 
-    media uuid not null,
+    description text not null,
     available_at timestamptz not null
 );
 
 comment on table scenes is 'The game''s screens. They are composed of a background image with clickable areas for interaction (clues and warps).';
-comment on column scenes.media is 'A reference to the static asset of the scene''s image.';
 comment on column scenes.available_at is 'A timestamp indicating when the scene will become available for users';
 
 --! split: 0002-clues.sql
@@ -27,10 +25,10 @@ create table clues (
     width integer not null,
     height integer not null,
 
-    media uuid not null,
+    media text not null,
+    placeholder text not null,
     nft_contract text not null,
-    nft_id text not null,
-    owner text
+    nft_id text not null
 );
 
 create index on clues (scene_id);
@@ -43,7 +41,6 @@ comment on column clues.height is 'The CSS height of the clue clickable area, in
 comment on column clues.media is 'A reference to the static asset of the clue''s image.';
 comment on column clues.nft_contract is 'The account ID of the contract the clue''s NFT belongs to.';
 comment on column clues.nft_contract is 'The ID of the clue''s NFT.';
-comment on column clues.owner is 'The account ID of the user who minted the clue''s NFT (null until that happens).';
 
 --! split: 0003-warps.sql
 drop table if exists warps cascade;
@@ -51,7 +48,7 @@ drop table if exists warps cascade;
 create table warps (
     id uuid primary key default gen_random_uuid(),
     scene_id uuid not null references scenes (id),
-    
+
     position_top numeric(4, 2) not null,
     position_left numeric(4, 2) not null,
     width integer not null,
@@ -68,3 +65,20 @@ comment on column warps.position_left is 'The CSS position_left value of the war
 comment on column warps.width is 'The CSS width of the warp clickable area, in px units.';
 comment on column warps.height is 'The CSS height of the warp clickable area, in px units.';
 comment on column warps.warps_to is 'The ID of the scene the user will navigate to when clicking the warp.';
+
+--! split: 0004-images.sql
+drop table if exists images cascade;
+
+create table images (
+    id uuid primary key default gen_random_uuid(),
+    scene_id uuid not null references scenes (id),
+
+    media text not null,
+    z_index integer not null
+);
+
+create index on images (scene_id);
+
+comment on table images is 'Composition of images of a scene';
+comment on column images.media is 'An image of a composition of images of a scene';
+comment on column images.z_index is 'The CSS z-index value of the image';
