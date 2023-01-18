@@ -7,7 +7,7 @@ export interface SceneInterface {
 
 export interface ClueInterface {
 	name?: string;
-	about?: string;
+	description?: string;
 	owner?: string | null;
 	position: Position;
 	image: string;

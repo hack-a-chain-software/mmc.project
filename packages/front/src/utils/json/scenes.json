@@ -33,8 +33,7 @@
     "clues": [
       {
         "name": "Ramen",
-        "owner": "mateuexample134",
-        "about": "The package of FSM Ramen noodles appears unopened and there is a sticky note attached to it that says 'CHECK'.",
+        "description": "The package of FSM Ramen noodles appears unopened and there is a sticky note attached to it that says 'CHECK'.",
         "position": {
           "top": "70%",
           "left": "64.5%"
