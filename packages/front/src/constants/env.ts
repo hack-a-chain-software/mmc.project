@@ -12,3 +12,6 @@ export const lockedContract = import.meta.env.VITE_LOCKED_CONTRACT;
 export const detectivesContract = import.meta.env.VITE_DIRECTIVES_CONTRACT;
 export const undercoverPupsContract =
   import.meta.env.VITE_UNDERCOVER_PUPS_CONTRACT;
+
+//api
+export const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8081';
