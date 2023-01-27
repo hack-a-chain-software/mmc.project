@@ -84,18 +84,18 @@ export class GameController {
     }
 
     // TODO: Discount ticket on clues contract
-    // try {
-    //   await this.nearService.discountTicket({
-    //     hash: body.hash,
-    //     accountId: req.user.accountId,
-    //   });
-    // } catch (e) {
-    //   console.warn(e);
+    try {
+      await this.nearService.discountTicket({
+        guessHash: body.hash,
+        accountId: req.user.accountId,
+      });
+    } catch (e) {
+      console.warn(e);
 
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, error: 'Invalid permission for key' });
-    // }
+      return res
+        .status(400)
+        .json({ success: false, error: 'Invalid permission for key' });
+    }
 
     const guess = new Guess({
       ...body,

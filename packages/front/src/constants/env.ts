@@ -9,6 +9,6 @@ export const tokenContract = import.meta.env.VITE_TOKEN_CONTRACT;
 export const cluesContract = import.meta.env.VITE_CLUES_CONTRACT;
 export const guessContract = import.meta.env.VITE_GUESS_CONTRACT;
 export const lockedContract = import.meta.env.VITE_LOCKED_CONTRACT;
-export const directivesContract = import.meta.env.VITE_DIRECTIVES_CONTRACT;
+export const detectivesContract = import.meta.env.VITE_DIRECTIVES_CONTRACT;
 export const undercoverPupsContract =
   import.meta.env.VITE_UNDERCOVER_PUPS_CONTRACT;

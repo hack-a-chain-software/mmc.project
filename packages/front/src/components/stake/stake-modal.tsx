@@ -9,7 +9,7 @@ import { viewFunction } from '@/helpers/near';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { stakeNft } from '@/helpers/near';
-import { directivesContract, undercoverPupsContract } from '@/constants/env';
+import { detectivesContract, undercoverPupsContract } from '@/constants/env';
 
 export interface Nft {
   token_id: string;
@@ -66,7 +66,7 @@ export const StakeModal = ({
     void (async () => {
       const directivesTokens = await viewFunction(
         selector,
-        directivesContract,
+        detectivesContract,
         'nft_tokens_for_owner',
         {
           account_id: accountId,

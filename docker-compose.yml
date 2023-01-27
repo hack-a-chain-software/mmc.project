@@ -17,6 +17,7 @@ services:
       - AUTH_MESSAGE_VALID_FOR_MS=60000
       - NEAR_NODE_URL=https://rpc.testnet.near.org
       - CLUES_CONTRACT=a00e01260552573ec3d9antisocialapecl.testnet
+      - GUESS_CONTRACT=
     networks:
       - mmc
     depends_on:

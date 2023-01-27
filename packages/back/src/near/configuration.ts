@@ -8,6 +8,7 @@ export interface NearConfiguration {
 
   // Smart contract account id, to be validated against access key
   cluesContract: string;
+  guessContract: string;
 
   // Account used by this service to make contract function calls
   account: {

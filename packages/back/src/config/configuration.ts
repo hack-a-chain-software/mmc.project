@@ -21,6 +21,7 @@ export function configuration(): Configuration {
 
     near: {
       cluesContract: process.env.CLUES_CONTRACT,
+      guessContract: process.env.GUESS_CONTRACT,
 
       account: {
         id: process.env.ACCOUNT_ID,

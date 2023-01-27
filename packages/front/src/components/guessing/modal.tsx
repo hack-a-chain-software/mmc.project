@@ -5,10 +5,11 @@ import { useState, Fragment, useMemo, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import { useWalletSelector } from '@/context/wallet';
-import { Transaction, getTransaction, executeMultipleTransactions, getTokenStorage, viewFunction } from '@/helpers/near';
+import { Transaction, getTransaction, executeMultipleTransactions, viewFunction } from '@/helpers/near';
 import { twMerge } from 'tailwind-merge';
-import { guessContract } from '@/constants/env';
+import { guessContract, detectivesContract } from '@/constants/env';
 import isEmpty from 'lodash/isEmpty';
+import { OneYOctoNear } from '@/constants';
 
 export function GuessingModal({
   isOpen,
@@ -70,10 +71,13 @@ export function GuessingModal({
       getTransaction(
         accountId,
         guessContract,
-        'nft_transfer_call',
+        'buy_guessing_ticket',
         {
-
+          token_id: '1',
+          account_id: accountId,
+          det_or_pup: detectivesContract,
         },
+        OneYOctoNear,
       ),
     );
 

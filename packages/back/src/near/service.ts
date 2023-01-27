@@ -14,6 +14,7 @@ import { CONNECTION_PROVIDER_KEY } from './constants';
 @Injectable()
 export class NearService {
   private cluesContract: string;
+  private guessContract: string;
   private account: Promise<Account>;
 
   constructor(
@@ -24,6 +25,7 @@ export class NearService {
     const nearConfig = configService.get('near', { infer: true });
 
     this.cluesContract = nearConfig.cluesContract;
+    this.guessContract = nearConfig.guessContract;
     this.account = this.connection.account(nearConfig.account.id);
   }
 
@@ -85,11 +87,11 @@ export class NearService {
     }
   }
 
-  async discountTicket(args: { hash: string; accountId: string }) {
+  async discountTicket(args: { guessHash: string; accountId: string }) {
     return this.callContractChangeFunction({
       args,
-      contractId: this.cluesContract,
-      methodName: 'discount_ticket',
+      methodName: 'save_guess',
+      contractId: this.guessContract,
     });
   }
 }

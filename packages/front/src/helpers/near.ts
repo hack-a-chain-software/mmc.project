@@ -145,7 +145,9 @@ export const stakeNft = async (
         approval_id: null,
         receiver_id: cluesContract,
         msg: JSON.stringify({
-          type: 'Stake',
+          token_id,
+          route: '?',
+          det_or_pup: contract,
         }),
       }),
     );
