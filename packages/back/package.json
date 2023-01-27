@@ -23,7 +23,7 @@
   },
   "engines": {
     "yarn": ">=1.22.0 <2.0.0",
-    "node": ">=17.0.0"
+    "node": ">=17.5.0"
   },
   "dependencies": {
     "@golevelup/ts-jest": "^0.3.4",

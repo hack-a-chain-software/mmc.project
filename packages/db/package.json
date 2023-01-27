@@ -10,10 +10,6 @@
     "seed": "yarn run gm run src/seeds.sql",
     "migrate": "yarn run gm migrate"
   },
-  "engines": {
-    "yarn": ">=1.22.0 <2.0.0",
-    "node": ">=17.0.0"
-  },
   "devDependencies": {
     "graphile-migrate": "^1.4.0"
   }

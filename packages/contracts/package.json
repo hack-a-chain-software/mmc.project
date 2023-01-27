@@ -8,10 +8,6 @@
     "dev:deploy:contract": "near dev-deploy",
     "deploy:contract": "near deploy"
   },
-  "engines": {
-    "yarn": ">=1.22.0 <2.0.0",
-    "node": ">=17.0.0"
-  },
   "devDependencies": {
     "env-cmd": "~10.1.0",
     "near-cli": "~2.1.1",
