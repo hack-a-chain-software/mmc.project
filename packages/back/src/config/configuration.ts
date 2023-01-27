@@ -1,11 +1,9 @@
 import { AuthConfiguration } from 'src/auth/configuration';
 import { NearConfiguration } from 'src/near/configuration';
-import { GameConfiguration } from 'src/game/configuration';
 
 export interface Configuration {
   auth: AuthConfiguration;
   near: NearConfiguration;
-  game: GameConfiguration;
 }
 
 export function configuration(): Configuration {
@@ -32,10 +30,6 @@ export function configuration(): Configuration {
         networkId: process.env.NEAR_NETWORK,
         nodeUrl: process.env.NEAR_NODE_URL,
       },
-    },
-
-    game: {
-      contractAccountId: process.env.NFT_CONTRACT_ID,
     },
   };
 }

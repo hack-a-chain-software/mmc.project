@@ -109,9 +109,6 @@ describe("Auth", () => {
           nodeUrl: worker.provider.connection.url,
         },
       },
-      game: {
-        contractAccountId: contracts.nft.accountId,
-      },
     };
   }
 
