@@ -5,17 +5,18 @@ services:
       context: .
       dockerfile: ./packages/back/Dockerfile
     ports:
-      - "443:3000"
+      - "8081:8081"
     environment:
-      - PORT=3000
-      - RECEIVER_ID=nft.test.near
+      - PORT=8081
+      - NODE_ENV=development
       - NFT_CONTRACT_ID=nft.test.near
       - ACCOUNT_KEYPAR=ed25519:3tU5BE8BnNQ9pX89DKepzMAZKQ7NPGCaY63cEtaueTS8iPyarB2rSXBuWLeZQ4LDL9m4oYRZXx936S3oS5MtjyoF
-      - NEAR_NETWORK=localnet
+      - NEAR_NETWORK=testnet
       - JWT_SECRET=abacaba
       - JWT_VALID_FOR_S=180
       - AUTH_MESSAGE_VALID_FOR_MS=60000
       - NEAR_NODE_URL=https://rpc.testnet.near.org
+      - CLUES_CONTRACT=a00e01260552573ec3d9antisocialapecl.testnet
     networks:
       - mmc
     depends_on:

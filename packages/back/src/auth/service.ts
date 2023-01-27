@@ -8,9 +8,9 @@ import { NearService } from 'src/near/service';
 
 // TODO: move it somewhere else
 export interface SignedMessage {
-  message: Uint8Array;
-  signature: Uint8Array;
-  publicKey: PublicKey;
+  message: Uint8Array | undefined;
+  signature: Uint8Array | undefined;
+  publicKey: PublicKey | undefined;
 }
 
 // TODO: move it somewhere else
@@ -35,32 +35,96 @@ export class AuthService {
 
   async authenticate(
     accountId: string,
+    seasonId: string,
     signedMessage: SignedMessage,
   ): Promise<
-    { success: true; jwt: string } | { success: false; error: string }
+    { success: true | false; jwt: string } | { success: false; error: string }
   > {
-    const isKeyValid = await this.nearService.validateAccessKey(
-      accountId,
-      signedMessage.publicKey,
+    let success = true;
+    const clues: string[] = [];
+
+    // const isKeyValid = await this.nearService.validateAccessKey(
+    //   accountId,
+    //   signedMessage.publicKey,
+    // );
+
+    // if (!isKeyValid) {
+    //   return { success: false, error: 'Invalid permission for key' };
+    // }
+
+    try {
+      const isKeyValid = await this.nearService.validateAccessKey(
+        accountId,
+        signedMessage.publicKey,
+      );
+
+      if (!isKeyValid) {
+        success = false;
+        console.log('Invalid permission for key');
+      }
+    } catch (e) {
+      success = false;
+      // console.warn(e);
+    }
+
+    // const decodedMessage = this.codecService.decode(signedMessage.message);
+
+    // const isMessageValid = this.validateMessage(decodedMessage);
+    // if (!isMessageValid) {
+    //   return { success: false, error: 'Malformed or expired message' };
+    // }
+
+    try {
+      const decodedMessage = this.codecService.decode(signedMessage.message);
+
+      const isMessageValid = this.validateMessage(decodedMessage);
+
+      if (!isMessageValid) {
+        success = false;
+        console.log('Malformed or expired message');
+      }
+    } catch (e) {
+      success = false;
+      // console.warn(e);
+    }
+
+    // const isSignatureValid = this.verifySignature(signedMessage);
+    // if (!isSignatureValid) {
+    //   return { success: false, error: 'Invalid signature' };
+    // }
+
+    try {
+      const isSignatureValid = this.verifySignature(signedMessage);
+
+      if (!isSignatureValid) {
+        success = false;
+        console.log('Invalid signature');
+      }
+    } catch (e) {
+      success = false;
+      // console.warn(e);
+    }
+
+    if (success) {
+      const res = await this.nearService.getNftTokensForOwner(accountId);
+
+      clues.push(...res);
+    }
+
+    console.log(
+      'validated account',
+      JSON.stringify({
+        accountId: success ? accountId : '',
+        seasonId,
+        clues,
+      }),
     );
-    if (!isKeyValid) {
-      return { success: false, error: 'Invalid permission for key' };
-    }
-
-    const decodedMessage = this.codecService.decode(signedMessage.message);
-    const isMessageValid = this.validateMessage(decodedMessage);
-    if (!isMessageValid) {
-      return { success: false, error: 'Malformed or expired message' };
-    }
-
-    const isSignatureValid = this.verifySignature(signedMessage);
-    if (!isSignatureValid) {
-      return { success: false, error: 'Invalid signature' };
-    }
 
     return {
       success: true,
-      jwt: await this.jwtService.signAsync({ sub: accountId }),
+      jwt: await this.jwtService.signAsync({
+        sub: { accountId: success ? accountId : '', seasonId, clues },
+      }),
     };
   }
 

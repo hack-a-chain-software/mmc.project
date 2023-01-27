@@ -5,7 +5,7 @@ import ConfirmPickModal from './scene/confirm-pick-modal';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition, Tab } from '@headlessui/react';
 
-const tabs = ["My Clues", "All Clues"];
+const tabs = ['My Clues', 'All Clues'];
 
 const myClues = [
   {

@@ -2,12 +2,13 @@ import { twMerge } from 'tailwind-merge';
 import { CheckIcon } from '@heroicons/react/24/solid';
 
 export const StakeCard = ({
-  id,
   image,
+  title,
   onSelect,
   isSelected,
 }: {
-  id: number,
+  id: string,
+  title: string,
   image: string,
   isSelected: boolean,
   onSelect: () => any,
@@ -18,8 +19,8 @@ export const StakeCard = ({
       className="w-[173px] h-[173px] rounded-md relative cursor-pointer hover:opacity-80"
     >
       <img
-        src={image}
-        className=""
+        src={`https://images.weserv.nl/?url=${image}&dpr=4`}
+        className="rounded-md"
       />
 
       <div
@@ -42,7 +43,7 @@ export const StakeCard = ({
         className="p-2.5 absolute left-2 right-2 bottom-2 rounded-md bg-[rgba(255,255,255,0.85)]"
       >
         <span
-          children={'Generic NFT 9577'}
+          children={title}
           className="text-black text-xs"
         />
       </div>

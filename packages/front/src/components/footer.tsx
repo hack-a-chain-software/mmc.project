@@ -1,5 +1,4 @@
-import routes from '@/utils/json/routes.json';
-import socials from '@/utils/json/socials.json';
+import routes from '@/json/routes.json';
 import { useLocation } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { useMemo } from 'react';
@@ -37,7 +36,7 @@ export function Footer() {
               {routes.map(({ label, path }) => (
                 <li
                   children={label}
-                  key={`mmc-navbar-route-${label}-to-${path}`}
+                  key={`mmc-navbar-route-${label as string}-to-${path as string}`}
                   className="text-white uppercase text-sm font-[200] cursor-pointer hover:opacity-[.8]"
                 />
               ))}

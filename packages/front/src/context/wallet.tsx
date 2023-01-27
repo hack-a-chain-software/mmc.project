@@ -5,21 +5,25 @@ import React, {
   useState,
   PropsWithChildren,
 } from 'react';
+import api from '@/services/api';
+import { keyStores } from 'near-api-js';
 import type { AccountView } from 'near-api-js/lib/providers/provider';
 import { map, distinctUntilChanged } from 'rxjs';
 import { setupWalletSelector } from '@near-wallet-selector/core';
 import type { WalletSelector, AccountState } from '@near-wallet-selector/core';
 import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
+import { setupNearWallet } from '@near-wallet-selector/near-wallet';
 
 interface WalletContextValue {
-  // accountKeyPair: any;
+  keyPair: any;
+  login: (a: any, b: string | null) => Promise<any>;
+  jwt: string | undefined;
   selector: WalletSelector;
   accounts: AccountState[];
   accountId: string | null;
   showModal: boolean;
   signOut: () => Promise<void>;
   toggleModal: () => void;
-  // signMessage: () => any;
 }
 
 export type Account = AccountView & {
@@ -32,7 +36,8 @@ const WalletContext =
 export const WalletSelectorContextProvider: React.FC<
   PropsWithChildren<Record<any, any>>
 > = ({ children }) => {
-  // const [accountKeyPair, setKeypair] = useState<any>();
+  const [keyPair, setKeypair] = useState<any>();
+  const [jwt, setJwt] = useState<string>();
   const [accountId, setAccountId] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
   const [accounts, setAccounts] = useState<AccountState[]>([]);
@@ -54,7 +59,7 @@ export const WalletSelectorContextProvider: React.FC<
     const newSelector = await setupWalletSelector({
       network: import.meta.env.VITE_NEAR_NETWORK || 'testnet',
       debug: true,
-      modules: [setupMyNearWallet()],
+      modules: [setupMyNearWallet(), setupNearWallet()],
     });
 
     const state = newSelector.store.getState();
@@ -88,35 +93,58 @@ export const WalletSelectorContextProvider: React.FC<
     return () => subscription.unsubscribe();
   }, [selector]);
 
-  // const signMessage = () => {
-  //   const {
-  //     signature,
-  //     publicKey,
-  //   } = accountKeyPair.sign(message);
+  const login = async (accKp, accId) => {
+    const textEncoder = new TextEncoder();
 
-  //   return {
-  //     message,
-  //     signature,
-  //     publicKey: publicKey.toString(),
-  //   };
-  // };
+    const message = textEncoder.encode(JSON.stringify(
+      { timestampMs: Date.now() },
+    ));
+
+    let signature, publicKey;
+
+    if (accKp && accId) {
+      const signed = accKp.sign(message);
+
+      // const {
+      //   signature,
+      //   publicKey,
+      // } = accKp.sign(message);
+
+      signature = signed.signature;
+      publicKey = signed.publicKey;
+    }
+
+    const { data } = await api.post('/auth/login', {
+      accountId: accId,
+      seasonId: import.meta.env.VITE_SEASON_ID as string,
+      signedMessage: {
+        message: message.toString(),
+        signature: signature?.toString(),
+        publicKey: publicKey?.toString(),
+      },
+    });
+
+    setJwt(data.jwt as string);
+
+    return data;
+  };
 
   useEffect(() => {
     const newAccount =
-      accounts.find((account) => account.active)?.accountId || "";
+      accounts.find((account) => account.active)?.accountId || '';
 
     setAccountId(newAccount);
 
-    // (async () => {
-    //   const keystore = new keyStores.BrowserLocalStorageKeyStore();
+    void (async () => {
+      const keystore = new keyStores.BrowserLocalStorageKeyStore();
 
-    //   const keyPair = await keystore.getKey(
-    //     import.meta.env.VITE_NEAR_NETWORK,
-    //     newAccount,
-    //   );
+      const accountKeyPair = await keystore.getKey(
+        import.meta.env.VITE_NEAR_NETWORK as string,
+        newAccount,
+      );
 
-    //   setKeypair(keyPair);
-    // })();
+      setKeypair(accountKeyPair);
+    })();
   }, [accounts]);
 
   if (!selector) {
@@ -127,13 +155,14 @@ export const WalletSelectorContextProvider: React.FC<
     <WalletContext.Provider
       value={{
         signOut,
+        jwt,
+        keyPair,
         selector,
         accounts,
         accountId,
         showModal,
         toggleModal,
-        // signMessage,
-        // accountKeyPair,
+        login,
       }}
     >
       {children}

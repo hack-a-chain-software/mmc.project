@@ -1,11 +1,17 @@
 export interface JwtPayload {
-  sub: string;
+  sub: {
+    seasonId: string;
+    accountId: string;
+    clues: string[] | [];
+  };
 }
 
 export interface JwtValidatedUser {
-  accountId: string
+  accountId: string;
+  seasonId: string;
+  clues: string[] | [];
 }
 
 export interface JwtValidatedRequest extends Request {
-  user: JwtValidatedUser
+  user: JwtValidatedUser;
 }

@@ -1,26 +1,76 @@
-import { Button, Select } from '..';
-import { Fragment } from 'react';
+import { Button, GameConfig, Select } from '..';
+import { Fragment, useCallback, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
+import { useWalletSelector } from '@/context/wallet';
+import api from '@/services/api';
+import { toast } from 'react-hot-toast';
+// import { viewFunction } from '@/helpers/near';
 
-const items = [
-  {
-    label: 'foo',
-    value: 'baa',
-  },
-  {
-    label: 'baa',
-    value: 'foo',
-  },
-];
+const defaultGuess = {
+  weapon: '',
+  motive: '',
+  who_murdered: '',
+};
+
+export interface GuessInterface {
+  weapon: string;
+  motive: string;
+  who_murdered: string;
+}
 
 export function GuessingForm({
 	isOpen,
+  config,
 	onClose,
 }: {
+  config: GameConfig;
 	isOpen: boolean;
 	onClose: () => void;
 }) {
+  const [guess, setGuess] = useState<GuessInterface>({ ...defaultGuess });
+
+  const { selector, jwt } = useWalletSelector();
+
+  const sendGuess = useCallback(async () => {
+    if ( !guess.weapon || !guess.motive || !guess.who_murdered) {
+      toast.error('You must fill in all the answers.');
+
+      return;
+    }
+    // TODO: Get guess hash
+
+    // const randomNumber = Date.now();
+    // const guessHas = viewFunction(
+    //   selector,
+    //   import.meta.env.VITE_CLUES_CONTRACT,
+    //   'create_hash',
+    //   {
+    //     random_number: randomNumber,
+    //   },
+    // );
+
+    const guessHas = 'arroizcomefeijaotalvezsejabom';
+
+    try {
+      await api.post('game/guess', {
+        hash: guessHas,
+        random_number: 1234,
+        ...guess,
+      }, {
+        headers: { Authorization: `Bearer ${jwt as string}` },
+      });
+
+      toast.success('Your guess has been successfully saved!');
+      setGuess({ ...defaultGuess });
+      onClose();
+
+    } catch (e) {
+      console.warn(e);
+      toast.error('Something happens when saving your guess, please refresh your browser.');
+    }
+  }, [jwt, guess]);
+
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog
@@ -77,56 +127,30 @@ export function GuessingForm({
                   </button>
                 </div>
 
-								<div className="pb-[20px] w-full">
-                  <div>
-                    <span
-                      className="text-base uppercase"
-                    >
-                      Who murdered john norris?
-                    </span>
+                {config && config.guess_questions.map((
+                  { question, guess_column, options },
+                ) => (
+                  <div
+                    className="pb-[20px] w-full"
+                    key={`guessing-question-${guess_column as string}`}
+                  >
+                    <div>
+                      <span
+                        className="text-base uppercase"
+                        children={question}
+                      />
+                    </div>
+
+                    <Select
+                      value={guess[guess_column]}
+                      items={options}
+                      onChange={(value) =>
+                        void setGuess({ ...guess, [guess_column]: value })
+                      }
+                      placeholder="SELECT"
+                    />
                   </div>
-
-                  <Select
-                    value={''}
-                    items={items}
-                    onChange={() => {}}
-                    placeholder="SELECT"
-                  />
-								</div>
-
-								<div className="pb-[20px]">
-                  <div>
-                    <span
-                      className="text-base uppercase"
-                    >
-                      What was the weapon?
-                    </span>
-                  </div>
-
-                  <Select
-                    value={''}
-                    items={items}
-                    onChange={() => {}}
-                    placeholder="SELECT"
-                  />
-								</div>
-
-								<div className="pb-[40px] w-full">
-                  <div>
-                    <span
-                      className="text-base uppercase"
-                    >
-                      What was the motive?
-                    </span>
-                  </div>
-
-                  <Select
-                    value={''}
-                    items={items}
-                    onChange={() => {}}
-                    placeholder="SELECT"
-                  />
-								</div>
+                ))}
 
 								<div className="pb-[24px] text-xs">
 									<span>
@@ -146,7 +170,8 @@ export function GuessingForm({
                 </div>
 
 								<Button
-									disabled={true}
+									// disabled={true}
+                  onClick={() => { void sendGuess(); }}
 									className="w-[125px] flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto"
 								>
 									Submit

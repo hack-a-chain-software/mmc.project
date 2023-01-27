@@ -1,22 +1,78 @@
-import { Button, StakeModal } from '..';
-import { GuessingForm } from './guessing-form';
+import Big from 'big.js';
+import { Button, GameConfig, StakeModal } from '..';
+import { GuessingForm } from './form';
 import { useState, Fragment } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
+import { useWalletSelector } from '@/context/wallet';
+import { Transaction, getTransaction, executeMultipleTransactions, getTokenStorage } from '@/helpers/near';
 
 export function GuessingModal({
   isOpen,
   onClose,
+  config,
 }: {
   isOpen: boolean;
+  config: GameConfig;
   onClose: () => void;
 }) {
   const [showGuessingForm, setShowGuessingForm] = useState(false);
   const [showStakeModal, setShowStakeModal] = useState(false);
+  const { accountId, selector } = useWalletSelector();
+
+  const buyTicketsWithTokens = async () => {
+    if (!accountId) {
+      return;
+    }
+
+    const wallet = await selector.wallet();
+
+    const transactions: Transaction[] = [];
+
+    const stakingStorage = await getTokenStorage(
+      selector,
+      accountId,
+      import.meta.env.VITE_NFT_STAKING,
+    );
+
+    if (
+      !stakingStorage ||
+      new Big(stakingStorage?.available).lte('100000000000000000000000')
+    ) {
+      transactions.push(
+        getTransaction(
+          accountId,
+          import.meta.env.VITE_CLUES_CONTRACT,
+          'storage_deposit',
+          {
+            account_id: accountId,
+            registration_only: false,
+          },
+          '0.25',
+        ),
+      );
+    }
+
+    // TODO: put the correct transaction
+    // transactions.push(
+    //   getTransaction(accountId, contract, 'nft_transfer_call', {
+    //     receiver_id: import.meta.env.VITE_CLUES_CONTRACT,
+    //     token_id: tokenId,
+    //     approval_id: null,
+    //     memo: null,
+    //     msg: JSON.stringify({
+    //       type: 'Stake',
+    //     }),
+    //   }),
+    // );
+
+    await executeMultipleTransactions(transactions, wallet);
+  };
 
   return (
     <>
       <GuessingForm
+        config={config}
         isOpen={showGuessingForm}
         onClose={() => setShowGuessingForm(false)}
       />
@@ -115,6 +171,7 @@ export function GuessingModal({
                   <div
                     className="flex items-center space-x-[10px]"
                   >
+                    {/* TODO: Validate tickets available */}
                     <Button
                       onClick={() => setShowStakeModal(true)}
                       className="w-full text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto bg-transparent"
@@ -122,9 +179,9 @@ export function GuessingModal({
                       With Stake
                     </Button>
 
-
+                    {/* TODO: Validate tickets available */}
                     <Button
-                      disabled={true}
+                      onClick={() => void buyTicketsWithTokens()}
                       className="w-full text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto bg-transparent"
                     >
                       With MMC Tokens
@@ -139,6 +196,7 @@ export function GuessingModal({
                   </div>
 
                   <div>
+                    {/* TODO: Validate tickets available */}
                     <Button
                       onClick={() => setShowGuessingForm(true)}
                       className="w-full text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto disabled:bg-transparent"
@@ -147,6 +205,7 @@ export function GuessingModal({
                     </Button>
                   </div>
 
+                  {/* TODO: Validate tickets available */}
                   <div
                     className="text-[#DB2B1F]"
                   >

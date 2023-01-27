@@ -1,9 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import { ClueInterface } from '@/utils/interfaces';
+import { ClueInterface } from '@/interfaces';
 import { Button, Socials } from '../';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import ConfirmPickModal from './confirm-pick-modal';
+import ConfirmStakeModal from './confirm-stake-modal';
 
 interface ClueModalInterface {
 	isOpen: boolean;
@@ -12,20 +13,31 @@ interface ClueModalInterface {
 }
 
 export const ClueModal = ({
-	name,
-	description,
-	image,
-	owner,
+  media,
+  name,
+  description,
 	isOpen,
+  isOwner,
+  isMinted,
+  isStaked,
+  nft_id,
 	onClose,
 	sceneName,
 }: ClueModalInterface & ClueInterface) => {
 	const [showConfirmPickModal, setShowConfirmPickModal] = useState(false);
+  const [showConfirmStakeModal, setShowConfirmStakeModal] = useState(false);
 
 	return (
 		<>
 			<ConfirmPickModal
+        nftId={nft_id}
 				isOpen={showConfirmPickModal}
+				onClose={() => setShowConfirmPickModal(false)}
+			/>
+
+			<ConfirmStakeModal
+        nftId={nft_id}
+				isOpen={showConfirmStakeModal}
 				onClose={() => setShowConfirmPickModal(false)}
 			/>
 
@@ -67,7 +79,7 @@ export const ClueModal = ({
                   "
 								>
 									<div className="w-[250px] h-[250px] border-white mt-1">
-										<img src={image} className="h-full w-full" />
+										<img src={media} className="h-full w-full" />
 									</div>
 
 									<button
@@ -94,7 +106,7 @@ export const ClueModal = ({
                           text-lg
                         "
 											>
-												{!!owner ? 'Founded' : 'Available'}
+												{isOwner ? 'Founded' : 'Available'}
 											</span>
 										</div>
 
@@ -142,15 +154,17 @@ export const ClueModal = ({
 										<div className="flex items-center justify-between">
 											<div className="mr-[32px] flex space-x-[20px]">
 												<Button
+                          disabled={!isMinted}
 													onClick={() => setShowConfirmPickModal(true)}
-													className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:bg-transparent disabled:opacity-75 disabled:pointer-events-none"
+													className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:bg-transparent disabled:opacity-75 disabled:cursor-not-allowed disabled:text-white"
 												>
 													Mint
 												</Button>
 
 												<Button
-													disabled={true}
-													className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:bg-transparent disabled:opacity-75 disabled:pointer-events-none"
+													disabled={isOwner && !isStaked}
+                          onClick={() => setShowConfirmStakeModal(true)}
+													className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:bg-transparent disabled:opacity-75 disabled:cursor-not-allowed disabled:text-white"
 												>
 													Stake
 												</Button>
