@@ -7,8 +7,6 @@ import api from '@/services/api';
 import { toast } from 'react-hot-toast';
 import { guessContract } from '@/constants/env';
 import { viewFunction } from '@/helpers/near';
-// import { cluesContract } from '@/constants/env';
-// import { viewFunction } from '@/helpers/near';
 
 const defaultGuess = {
   weapon: '',
@@ -43,24 +41,25 @@ export function GuessingForm({
     }
 
     const randomNumber = Date.now();
+    const guessHash = 'abcdef';
 
-    const guessHash = viewFunction(
-      selector,
-      guessContract,
-      'view_hash',
-      {
-        account_id: accountId,
-        random_number: randomNumber,
-        murderer: guess.who_murdered,
-        weapon: guess.weapon,
-        motive: guess.motive,
-      },
-    );
+    // const guessHash = viewFunction(
+    //   selector,
+    //   guessContract,
+    //   'view_hash',
+    //   {
+    //     account_id: accountId,
+    //     random_number: randomNumber,
+    //     murderer: guess.who_murdered,
+    //     weapon: guess.weapon,
+    //     motive: guess.motive,
+    //   },
+    // );
 
     try {
       await api.post('game/guess', {
         hash: guessHash,
-        random_number: 1234,
+        random_number: randomNumber,
         ...guess,
       }, {
         headers: { Authorization: `Bearer ${jwt as string}` },

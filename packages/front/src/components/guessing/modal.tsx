@@ -22,7 +22,7 @@ export function GuessingModal({
 }) {
   const { accountId, selector } = useWalletSelector();
 
-  const [ticketsAmount, setTicketsAmount] = useState(0);
+  const [ticketsAmount, setTicketsAmount] = useState(1);
 
   const [showStakeModal, setShowStakeModal] = useState(false);
   const [showGuessingForm, setShowGuessingForm] = useState(false);
@@ -33,29 +33,30 @@ export function GuessingModal({
       return;
     }
 
-    void (async () => {
-      const tickets = await viewFunction(
-        selector,
-        guessContract,
-        'tickets_available_per_user',
-        {
-          account_id: accountId,
-        },
-      );
+    // TODO:
+    // void (async () => {
+    //   const tickets = await viewFunction(
+    //     selector,
+    //     guessContract,
+    //     'tickets_available_per_user',
+    //     {
+    //       account_id: accountId,
+    //     },
+    //   );
 
-      setTicketsAmount(tickets as number);
+    //   setTicketsAmount(tickets as number);
 
-      const totalGuess = await viewFunction(
-        selector,
-        guessContract,
-        'view_staked_det_or_pup_per_user',
-        {
-          account_id: accountId,
-        },
-      );
+    //   const totalGuess = await viewFunction(
+    //     selector,
+    //     guessContract,
+    //     'view_staked_det_or_pup_per_user',
+    //     {
+    //       account_id: accountId,
+    //     },
+    //   );
 
-      sethasStakedGuessingNfts(!isEmpty(totalGuess));
-    })();
+    //   sethasStakedGuessingNfts(!isEmpty(totalGuess));
+    // })();
   }, [accountId]);
 
   const buyTicketsWithTokens = async () => {
