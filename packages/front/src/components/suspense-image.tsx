@@ -1,4 +1,4 @@
-import TSResource from '@/utils/ts-resource';
+import TSResource from '@/ts-resource';
 
 export function SuspenseImage(props) {
 	const { src } = props;

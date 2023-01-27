@@ -1,56 +1,18 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Button } from './button';
 import { twMerge } from 'tailwind-merge';
-import ConfirmPickModal from './scene/confirm-pick-modal';
+import ConfirmStakeModal from './scene/confirm-stake-modal';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition, Tab } from '@headlessui/react';
+import { ClueInterface } from '@/interfaces';
+import { useWalletSelector } from '@/context/wallet';
+import api from '@/services/api';
 
-const tabs = ["My Clues", "All Clues"];
+export interface Clue extends ClueInterface {
+  isMinted: boolean;
+}
 
-const myClues = [
-  {
-    minted: true,
-    staked: false,
-    image: '/images/mini-clues/footprint.png',
-  },
-  {
-    staked: true,
-    minted: false,
-    image: '/images/mini-clues/notepad.png',
-  },
-  {
-    staked: true,
-    minted: false,
-    image: '/images/mini-clues/file-folder.png',
-  },
-];
-
-const allClues = [
-  {
-    found: false,
-    notFound: true,
-    revealed: false,
-    image: '/images/mini-clues/ramen.png',
-  },
-  {
-    found: true,
-    notFound: false,
-    revealed: false,
-    image: '/images/mini-clues/pastry-wrapper.png',
-  },
-  {
-    found: false,
-    revealed: true,
-    notFound: false,
-    image: '/images/mini-clues/fsm-fresh-$2.99.png',
-  },
-  {
-    found: false,
-    notFound: true,
-    revealed: false,
-    image: '/images/mini-clues/file-folder.png',
-  },
-];
+const tabs = ['My Clues', 'All Clues'];
 
 export function CluesModal({
 	isOpen,
@@ -59,11 +21,33 @@ export function CluesModal({
 	isOpen: boolean;
 	onClose: () => void;
 }) {
+  const [clues, setClues] = useState<Clue[]>([]);
+  const {accountId, jwt, selector, login} = useWalletSelector();
+  const [stakeClue, setStakeClue] = useState('');
   const [showConfirmStakeModal, setShowConfirmStakeModal] = useState(false);
+
+  useEffect(() => {
+    if (!accountId || !jwt) {
+      return;
+    }
+
+    void (async () => {
+      const { data } = await api.get('/game/clues', {
+        headers: { Authorization: `Bearer ${jwt as string}` },
+      });
+
+      setClues(data as Clue[]);
+    })();
+  }, [accountId, jwt]);
+
+  const myClues = useMemo(() => {
+    return clues.filter(clue => clue.isOwner);
+  }, [clues]);
 
 	return (
     <>
-      <ConfirmPickModal
+      <ConfirmStakeModal
+        nftId={stakeClue}
         isOpen={showConfirmStakeModal}
         onClose={() => setShowConfirmStakeModal(false)}
       />
@@ -140,7 +124,12 @@ export function CluesModal({
                         <div
                           className="flex space-x-[60px] px-[12px]"
                         >
-                          {myClues.map(({ image, minted, staked}, index) => (
+                          {myClues.map(({
+                            media,
+                            isMinted,
+                            isStaked,
+                            nft_id,
+                          }, index) => (
                             <div
                               key={`myclue-${index}`}
                               className="space-y-[18px] flex flex-col items-center "
@@ -149,7 +138,7 @@ export function CluesModal({
                                 className="w-[150px] h-[150px] rounded-[15px] flex items-center justify-center"
                               >
                                 <img
-                                  src={image}
+                                  src={media}
                                   className="max-w-full max-h-full"
                                 />
                               </div>
@@ -159,7 +148,7 @@ export function CluesModal({
                                   className={
                                     twMerge(
                                       'text-base font-[300] text-white uppercase',
-                                      minted ? 'opacity-1' : 'opacity-[0.35]',
+                                      isMinted ? 'opacity-1' : 'opacity-[0.35]',
                                     )
                                   }
                                 >
@@ -172,7 +161,7 @@ export function CluesModal({
                                   className={
                                     twMerge(
                                       'text-base font-[300] text-white uppercase',
-                                      staked ? 'opacity-1' : 'opacity-[0.35]',
+                                      isStaked ? 'opacity-1' : 'opacity-[0.35]',
                                     )
                                   }
                                 >
@@ -181,10 +170,15 @@ export function CluesModal({
                               </div>
 
                               {
-                                !staked && (
+                                !isStaked && (
                                   <div>
                                     <Button
-                                      onClick={() => setShowConfirmStakeModal(true)}
+                                      onClick={
+                                        () => {
+                                          void setStakeClue(nft_id as string)
+                                          void setShowConfirmStakeModal(true);
+                                        }
+                                      }
                                       className="w-[100px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:bg-transparent disabled:opacity-75 disabled:pointer-events-none"
                                     >
                                       Stake
@@ -201,7 +195,11 @@ export function CluesModal({
                         <div
                           className="flex space-x-[60px] px-[12px]"
                         >
-                          {allClues.map(({ image, found, notFound, revealed}, index) => (
+                          {clues && clues.map(({
+                            media,
+                            isMinted,
+                            isStaked,
+                          }, index) => (
                             <div
                               key={`allclues-${index}`}
                               className="space-y-[18px] flex flex-col items-center "
@@ -210,7 +208,7 @@ export function CluesModal({
                                 className="w-[150px] h-[150px] rounded-[15px] flex items-center justify-center"
                               >
                                 <img
-                                  src={image}
+                                  src={media}
                                   className="max-w-full max-h-full"
                                 />
                               </div>
@@ -220,7 +218,7 @@ export function CluesModal({
                                   className={
                                     twMerge(
                                       'text-base font-[300] text-white uppercase',
-                                      notFound ? 'opacity-1' : 'opacity-[0.35]',
+                                      !isMinted ? 'opacity-1' : 'opacity-[0.35]',
                                     )
                                   }
                                 >
@@ -233,7 +231,7 @@ export function CluesModal({
                                   className={
                                     twMerge(
                                       'text-base font-[300] text-white uppercase',
-                                      found ? 'opacity-1' : 'opacity-[0.35]',
+                                      isMinted ? 'opacity-1' : 'opacity-[0.35]',
                                     )
                                   }
                                 >
@@ -246,30 +244,13 @@ export function CluesModal({
                                   className={
                                     twMerge(
                                       'text-base font-[300] text-white uppercase',
-                                      revealed ? 'opacity-1' : 'opacity-[0.35]',
+                                      isStaked ? 'opacity-1' : 'opacity-[0.35]',
                                     )
                                   }
                                 >
                                   Revealed
                                 </span>
                               </div>
-
-                              {
-                                revealed && (
-                                  <div>
-                                    <span
-                                      className={
-                                        twMerge(
-                                          'text-xs font-[300] text-white uppercase',
-                                          revealed ? 'opacity-1' : 'opacity-[0.35]',
-                                        )
-                                      }
-                                    >
-                                      mateu...tnet
-                                    </span>
-                                  </div>
-                                )
-                              }
                             </div>
                           ))}
                         </div>

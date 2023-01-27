@@ -1,8 +1,9 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
-import { useWalletSelector } from "@/utils/context/wallet";
+import { useWalletSelector } from "@/context/wallet";
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import type { ModuleState } from "@near-wallet-selector/core";
+import { cluesContract } from "@/constants/env";
 
 export function WalletSelectorModal(props: {}) {
   const { selector, showModal, toggleModal } = useWalletSelector();
@@ -40,7 +41,7 @@ export function WalletSelectorModal(props: {}) {
       }
 
       await wallet.signIn({
-        contractId: import.meta.env.VITE_CONTRACT,
+        contractId: cluesContract,
         methodNames: [],
       });
     } catch (e) {

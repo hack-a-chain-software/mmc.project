@@ -1,15 +1,24 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import LockedCard from './locked-card';
+import { useWalletSelector } from '@/context/wallet';
+import { viewFunction } from '@/helpers/near';
+import { getPages } from '@/helpers';
+import isEmpty from 'lodash/isEmpty';
+import { ContractData, Token } from './locked-card';
+import { lockedContract, tokenContract } from '@/constants/env';
 
-const lockedTokens = [
-  null,
-  null,
-  null,
-  null,
-  null,
-];
+export interface Vesting {
+  id?: string;
+  beneficiary: string;
+  locked_value: string;
+  start_timestamp: string;
+  vesting_duration: string;
+  fast_pass: boolean;
+  withdrawn_tokens: string;
+  available_to_withdraw: string;
+}
 
 export const TokensModal = ({
   isOpen,
@@ -18,6 +27,95 @@ export const TokensModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
+  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(0);
+  const [programs, setPrograms] = useState<Vesting[]>([]);
+  const { selector, accountId } = useWalletSelector();
+  const [contractData, setContractData] = useState<ContractData>([]);
+  const [baseTokenMetadata, setBaseTokenMetadata] = useState<Token>();
+  const [baseTokenBalance, setBaseTokenBalance] = useState('');
+
+  const getNextPage = () => {
+    const next = page + 1;
+
+    if (isEmpty(programs)) {
+      return 0;
+    }
+
+    if (next > totalPages) {
+      return page;
+    }
+
+    return next;
+  };
+
+  const loadMore = async (initalId: string) => {
+    const items: Vesting[] = await viewFunction(
+      selector,
+      lockedContract,
+      'view_vesting_paginated',
+      {
+        account_id: accountId,
+        // initial_id: `${initialId * 10}`,
+        initial_id: initalId,
+        size: '10',
+      },
+    );
+
+    setPrograms([...items.map((item, i) => ({ ...item, id: String(i) }))]);
+  };
+
+  useEffect(() => {
+    if (!accountId) {
+      return;
+    }
+
+    void (async () => {
+      const totalPrograms = await viewFunction(
+        selector,
+        lockedContract,
+        'view_vesting_vector_len',
+        {
+          account_id: accountId,
+        },
+      );
+
+      const res = getPages(totalPrograms, 10);
+
+      setTotalPages(res as number);
+
+
+      const lockedContractData = await viewFunction(
+        selector,
+        lockedContract,
+        'view_contract_data',
+      );
+
+      setContractData(lockedContractData as ContractData);
+
+      const token = await viewFunction(
+        selector,
+        tokenContract,
+        'ft_metadata',
+      );
+
+      setBaseTokenMetadata(token as Token);
+
+      const balance = await viewFunction(
+        selector,
+        tokenContract,
+        'ft_balance_of',
+        {
+          account_id: accountId,
+        },
+      );
+
+      setBaseTokenBalance(balance as string);
+
+      void await loadMore('0');
+    })();
+  }, [accountId]);
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -78,9 +176,13 @@ export const TokensModal = ({
                   <div
                     className="grid grid-cols-[repeat(auto-fill,minmax(315px,315px))] gap-7 justify-center"
                   >
-                    {lockedTokens.map((_, index) => (
+                    {programs && programs.map((program, index) => (
                       <LockedCard
                         key={`locked-token-items-${index}`}
+                        contractData={contractData}
+                        token={baseTokenMetadata as Token}
+                        baseTokenBalance={baseTokenBalance}
+                        {...program}
                       />
                     ))}
                   </div>

@@ -1,0 +1,44 @@
+[
+  {
+    "question": "Who murdered john norris?",
+    "guess_column": "who_murdered",
+    "options": [
+      {
+        "label": "foo",
+        "value": "foo"
+      },
+      {
+        "label": "baa",
+        "value": "baa"
+      }
+    ]
+  },
+  {
+    "question": "What was the weapon?",
+    "guess_column": "weapon",
+    "options": [
+      {
+        "label": "foo",
+        "value": "foo"
+      },
+      {
+        "label": "baa",
+        "value": "baa"
+      }
+    ]
+  },
+  {
+    "question": "What was the motive?",
+    "guess_column": "motive",
+    "options": [
+      {
+        "label": "foo",
+        "value": "foo"
+      },
+      {
+        "label": "baa",
+        "value": "baa"
+      }
+    ]
+  }
+]

@@ -35,7 +35,7 @@ describe("Auth", () => {
     "Content-Type": "application/json",
   });
 
-  async function nestSetup(config: Pick<Configuration, "near" | "nft">) {
+  async function nestSetup(config: Pick<Configuration, "near" | "game">) {
     const authConfig: AuthConfiguration = {
       jwt: {
         secret: "abacaba",
@@ -52,7 +52,7 @@ describe("Auth", () => {
         configServiceMock({
           auth: authConfig,
           near: config.near,
-          nft: config.nft,
+          game: config.game,
         })
       )
       .compile();
@@ -66,7 +66,7 @@ describe("Auth", () => {
     baseUrl = "http://localhost:65432"; // app.getUrl() would return IPv6 remote address, so it wouldn't work on container
   }
 
-  async function nearSetup(): Promise<Pick<Configuration, "near" | "nft">> {
+  async function nearSetup(): Promise<Pick<Configuration, "near" | "game">> {
     worker = await Worker.init();
 
     contracts = {
@@ -98,17 +98,18 @@ describe("Auth", () => {
 
     return {
       near: {
-        receiverId: contracts.nft.accountId,
+        cluesContract: contracts.nft.accountId,
+        guessContract: 'abcde',
         account: {
           id: contracts.nft.accountId,
           keyPair,
         },
         connection: {
-          networkId: "sandbox",
+          networkId: 'sandbox',
           nodeUrl: worker.provider.connection.url,
         },
       },
-      nft: {
+      game: {
         contractAccountId: contracts.nft.accountId,
       },
     };

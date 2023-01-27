@@ -6,12 +6,6 @@
     "dev": "vite",
     "build": "vite build"
   },
-  "relay": {
-    "src": "./src",
-    "schema": "./src/schema.graphql",
-    "language": "typescript",
-    "eagerEsModules": true
-  },
   "dependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@headlessui/react": "^1.6.6",
@@ -19,11 +13,12 @@
     "@near-wallet-selector/core": "^7.0.3",
     "@near-wallet-selector/meteor-wallet": "^7.0.3",
     "@near-wallet-selector/my-near-wallet": "^7.5.0",
-    "@near-wallet-selector/near-wallet": "^7.0.3",
+    "@near-wallet-selector/near-wallet": "^7.6.0",
     "@rollup/plugin-inject": "^4.0.4",
     "@vitejs/plugin-react": "^1.3.0",
     "@vitejs/plugin-react-refresh": "^1.3.6",
     "autoprefixer": "^10.4.7",
+    "axios": "^1.2.3",
     "big.js": "^6.2.1",
     "buffer": "^6.0.3",
     "clsx": "^1.2.1",
@@ -40,11 +35,9 @@
     "react-lazy-load-image-component": "^1.5.5",
     "react-near": "^3.4.8",
     "react-ready-state-effect": "^1.0.3",
-    "react-relay": "^14.1.0",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
     "react-router-hash-link": "^2.4.3",
-    "relay-runtime": "^14.1.0",
     "rollup": "^2.79.1",
     "rxjs": "^7.5.7",
     "tailwind-merge": "^1.6.0",
@@ -56,13 +49,8 @@
   "devDependencies": {
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "@types/react-relay": "^14.1.2",
-    "@types/relay-runtime": "^14.1.3",
-    "babel-plugin-relay": "^14.1.0",
     "buffer": "^6.0.3",
-    "relay-compiler": "^14.1.0",
     "typescript": "^4.6.3",
-    "vite-compatible-readable-stream": "^3.6.1",
-    "vite-plugin-relay": "^2.0.0"
+    "vite-compatible-readable-stream": "^3.6.1"
   }
 }

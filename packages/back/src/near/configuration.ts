@@ -4,14 +4,15 @@ export interface NearConnectionConfiguration {
 }
 
 export interface NearConfiguration {
+  connection: NearConnectionConfiguration;
+
   // Smart contract account id, to be validated against access key
-  receiverId: string;
+  cluesContract: string;
+  guessContract: string;
 
   // Account used by this service to make contract function calls
   account: {
     id: string;
     keyPair: string;
-  }
-
-  connection: NearConnectionConfiguration;
+  };
 }

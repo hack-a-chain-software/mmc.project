@@ -22,6 +22,7 @@ module.exports = {
   },
   rules: {
     'react/jsx-filename-extension': [0],
+    '@typescript-eslint/indent': [0],
     '@typescript-eslint/no-unsafe-member-access': [0],
     '@typescript-eslint/no-unsafe-assignment': [0],
     '@typescript-eslint/no-var-requires': [0],

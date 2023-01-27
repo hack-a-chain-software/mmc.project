@@ -1,11 +1,11 @@
 import { AuthConfiguration } from 'src/auth/configuration';
 import { NearConfiguration } from 'src/near/configuration';
-import { NftConfiguration } from 'src/nft/configuration';
+import { GameConfiguration } from 'src/game/configuration';
 
 export interface Configuration {
   auth: AuthConfiguration;
   near: NearConfiguration;
-  nft: NftConfiguration;
+  game: GameConfiguration;
 }
 
 export function configuration(): Configuration {
@@ -20,11 +20,12 @@ export function configuration(): Configuration {
     },
 
     near: {
-      receiverId: process.env.RECEIVER_ID,
+      cluesContract: process.env.CLUES_CONTRACT,
+      guessContract: process.env.GUESS_CONTRACT,
 
       account: {
         id: process.env.ACCOUNT_ID,
-        keyPair: process.env.ACCOUNT_KEYPAR
+        keyPair: process.env.ACCOUNT_KEYPAR,
       },
 
       connection: {
@@ -33,8 +34,8 @@ export function configuration(): Configuration {
       },
     },
 
-    nft: {
+    game: {
       contractAccountId: process.env.NFT_CONTRACT_ID,
-    }
+    },
   };
 }

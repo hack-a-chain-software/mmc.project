@@ -6,7 +6,9 @@ import { Dialog, Transition } from '@headlessui/react';
 export default function ConfirmPickModal({
 	isOpen,
 	onClose,
+  nftId,
 }: {
+  nftId: string;
 	isOpen: boolean;
 	onClose: () => void;
 }) {

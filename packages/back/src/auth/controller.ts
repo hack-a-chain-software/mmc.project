@@ -5,28 +5,30 @@ import { AUTH_URI } from './constants';
 import { AuthService, SignedMessage } from './service';
 
 interface SignedMessageDto {
-  message: number[];
-  signature: number[];
+  signature: string;
   publicKey: string;
+  message: string;
 }
 
 interface LoginDto {
+  seasonId: string;
   accountId: string;
   signedMessage: SignedMessageDto;
 }
 
 @Controller(AUTH_URI)
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {}
 
   @Post('login')
   async login(@Body() body: LoginDto, @Response() res: express.Response) {
     let signedMessage: SignedMessage;
+
     try {
       signedMessage = {
-        message: Uint8Array.from(body.signedMessage.message),
-        signature: Uint8Array.from(body.signedMessage.signature),
-        publicKey: PublicKey.fromString(body.signedMessage.publicKey),
+        message: this.getUint8Array(body.signedMessage.message),
+        signature: this.getUint8Array(body.signedMessage.signature),
+        publicKey: this.getPublicKey(body.signedMessage.publicKey),
       };
     } catch (error) {
       return res.status(400).json({ success: false, error: error.toString() });
@@ -34,9 +36,28 @@ export class AuthController {
 
     const authResult = await this.authService.authenticate(
       body.accountId,
+      body.seasonId,
       signedMessage,
     );
 
     return res.status(authResult.success ? 200 : 401).json(authResult);
+  }
+
+  getUint8Array(value?: string) {
+    if (!value) {
+      return;
+    }
+
+    const valuesOfUint8Array = value.split(',').map((value) => Number(value));
+
+    return Uint8Array.from(valuesOfUint8Array);
+  }
+
+  getPublicKey(value?: string) {
+    if (!value) {
+      return;
+    }
+
+    return PublicKey.fromString(value);
   }
 }

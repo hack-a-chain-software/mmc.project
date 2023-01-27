@@ -7,32 +7,25 @@ import { JwtAuthGuard } from './auth.guard';
 import { JwtStrategy } from './strategy';
 
 @Module({
-    imports: [
-        ConfigModule,
-        PassportModule,
-        JwtBaseModule.registerAsync({
-            useFactory(configService: ConfigService<Configuration>) {
-                const jwtConfig = configService.get('auth.jwt', { infer: true });
+  imports: [
+    ConfigModule,
+    PassportModule,
+    JwtBaseModule.registerAsync({
+      useFactory(configService: ConfigService<Configuration>) {
+        const jwtConfig = configService.get('auth.jwt', { infer: true });
 
-                return {
-                    secret: jwtConfig.secret,
-                    signOptions: {
-                        expiresIn: `${jwtConfig.validForS}s`,
-                    },
-                };
-            },
-            imports: [ConfigModule],
-            inject: [ConfigService]
-        }),
-    ],
-    providers: [
-        JwtStrategy,
-        JwtAuthGuard,
-    ],
-    exports: [
-        JwtBaseModule,
-        JwtStrategy,
-        JwtAuthGuard,
-    ],
+        return {
+          secret: jwtConfig.secret,
+          signOptions: {
+            expiresIn: `${jwtConfig.validForS}s`,
+          },
+        };
+      },
+      imports: [ConfigModule],
+      inject: [ConfigService],
+    }),
+  ],
+  providers: [JwtStrategy, JwtAuthGuard],
+  exports: [JwtBaseModule, JwtStrategy, JwtAuthGuard],
 })
-export class JwtModule { }
+export class JwtModule {}

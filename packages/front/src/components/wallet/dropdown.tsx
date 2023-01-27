@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import { CluesModal } from '../clues-modal';
 import { TokensModal } from '../tokens-modal';
 import { Menu, Transition } from '@headlessui/react';
-import { useWalletSelector } from '@/utils/context/wallet';
+import { useWalletSelector } from '@/context/wallet';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import toast from 'react-hot-toast';
 import { twMerge } from 'tailwind-merge';
@@ -30,7 +30,7 @@ export const WalletDropdown = () => {
         onClose={() => setShowTokensModal(false)}
       />
 
-      <Menu as="div" className="relative text-left hidden md:inline-block">
+      <Menu as="div" className="relative text-left hidden md:inline-block ml-8">
         <Menu.Button
           as="div"
           className="hover:opacity-80 cursor-pointer"

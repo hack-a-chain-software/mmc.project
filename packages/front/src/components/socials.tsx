@@ -1,4 +1,4 @@
-import socials from '@/utils/json/socials.json';
+import socials from '@/json/socials.json';
 
 export const Socials = () => {
   return (
