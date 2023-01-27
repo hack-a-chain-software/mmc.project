@@ -4,7 +4,7 @@
   "description": "Near Contract and React Monorepo",
   "private": true,
   "scripts": {
-    "postinstall": "yarn husky install",
+    "prepare": "yarn husky install",
     "back": "yarn workspace back",
     "front": "yarn workspace @near/front",
     "db": "yarn workspace db",
