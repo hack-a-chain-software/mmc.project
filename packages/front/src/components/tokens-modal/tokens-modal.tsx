@@ -7,6 +7,7 @@ import { viewFunction } from '@/helpers/near';
 import { getPages } from '@/helpers';
 import isEmpty from 'lodash/isEmpty';
 import { ContractData, Token } from './locked-card';
+import { lockedContract, tokenContract } from '@/constants/env';
 
 export interface Vesting {
   id?: string;
@@ -51,7 +52,7 @@ export const TokensModal = ({
   const loadMore = async (initalId: string) => {
     const items: Vesting[] = await viewFunction(
       selector,
-      import.meta.env.VITE_LOCKED_CONTRACT,
+      lockedContract,
       'view_vesting_paginated',
       {
         account_id: accountId,
@@ -72,7 +73,7 @@ export const TokensModal = ({
     void (async () => {
       const totalPrograms = await viewFunction(
         selector,
-        import.meta.env.VITE_LOCKED_CONTRACT,
+        lockedContract,
         'view_vesting_vector_len',
         {
           account_id: accountId,
@@ -86,7 +87,7 @@ export const TokensModal = ({
 
       const lockedContractData = await viewFunction(
         selector,
-        import.meta.env.VITE_LOCKED_CONTRACT,
+        lockedContract,
         'view_contract_data',
       );
 
@@ -94,7 +95,7 @@ export const TokensModal = ({
 
       const token = await viewFunction(
         selector,
-        import.meta.env.VITE_BASE_TOKEN,
+        tokenContract,
         'ft_metadata',
       );
 
@@ -102,7 +103,7 @@ export const TokensModal = ({
 
       const balance = await viewFunction(
         selector,
-        import.meta.env.VITE_BASE_TOKEN,
+        tokenContract,
         'ft_balance_of',
         {
           account_id: accountId,

@@ -40,7 +40,13 @@ export class Clues {
   media: string;
 
   @Column()
+  media_small: string;
+
+  @Column()
   placeholder: string;
+
+  @Column()
+  placeholder_small: string;
 
   @Column()
   nft_id: string;

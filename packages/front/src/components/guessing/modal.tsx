@@ -1,11 +1,14 @@
 import Big from 'big.js';
 import { Button, GameConfig, StakeModal } from '..';
 import { GuessingForm } from './form';
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useMemo, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import { useWalletSelector } from '@/context/wallet';
-import { Transaction, getTransaction, executeMultipleTransactions, getTokenStorage } from '@/helpers/near';
+import { Transaction, getTransaction, executeMultipleTransactions, getTokenStorage, viewFunction } from '@/helpers/near';
+import { twMerge } from 'tailwind-merge';
+import { guessContract } from '@/constants/env';
+import isEmpty from 'lodash/isEmpty';
 
 export function GuessingModal({
   isOpen,
@@ -16,9 +19,43 @@ export function GuessingModal({
   config: GameConfig;
   onClose: () => void;
 }) {
-  const [showGuessingForm, setShowGuessingForm] = useState(false);
-  const [showStakeModal, setShowStakeModal] = useState(false);
   const { accountId, selector } = useWalletSelector();
+
+  const [ticketsAmount, setTicketsAmount] = useState(0);
+
+  const [showStakeModal, setShowStakeModal] = useState(false);
+  const [showGuessingForm, setShowGuessingForm] = useState(false);
+  const [hasStakedGuessingNfts, sethasStakedGuessingNfts] = useState(false);
+
+  useEffect(() => {
+    if (!accountId) {
+      return;
+    }
+
+    void (async () => {
+      const tickets = await viewFunction(
+        selector,
+        guessContract,
+        'tickets_available_per_user',
+        {
+          account_id: accountId,
+        },
+      );
+
+      setTicketsAmount(tickets as number);
+
+      const totalGuess = await viewFunction(
+        selector,
+        guessContract,
+        'view_staked_det_or_pup_per_user',
+        {
+          account_id: accountId,
+        },
+      );
+
+      sethasStakedGuessingNfts(!isEmpty(totalGuess));
+    })();
+  }, [accountId]);
 
   const buyTicketsWithTokens = async () => {
     if (!accountId) {
@@ -29,45 +66,23 @@ export function GuessingModal({
 
     const transactions: Transaction[] = [];
 
-    const stakingStorage = await getTokenStorage(
-      selector,
-      accountId,
-      import.meta.env.VITE_NFT_STAKING,
+    transactions.push(
+      getTransaction(
+        accountId,
+        guessContract,
+        'nft_transfer_call',
+        {
+
+        },
+      ),
     );
-
-    if (
-      !stakingStorage ||
-      new Big(stakingStorage?.available).lte('100000000000000000000000')
-    ) {
-      transactions.push(
-        getTransaction(
-          accountId,
-          import.meta.env.VITE_CLUES_CONTRACT,
-          'storage_deposit',
-          {
-            account_id: accountId,
-            registration_only: false,
-          },
-          '0.25',
-        ),
-      );
-    }
-
-    // TODO: put the correct transaction
-    // transactions.push(
-    //   getTransaction(accountId, contract, 'nft_transfer_call', {
-    //     receiver_id: import.meta.env.VITE_CLUES_CONTRACT,
-    //     token_id: tokenId,
-    //     approval_id: null,
-    //     memo: null,
-    //     msg: JSON.stringify({
-    //       type: 'Stake',
-    //     }),
-    //   }),
-    // );
 
     await executeMultipleTransactions(transactions, wallet);
   };
+
+  const hasTickets = useMemo(() => {
+    return ticketsAmount > 0;
+  }, [ticketsAmount]);
 
   return (
     <>
@@ -171,7 +186,6 @@ export function GuessingModal({
                   <div
                     className="flex items-center space-x-[10px]"
                   >
-                    {/* TODO: Validate tickets available */}
                     <Button
                       onClick={() => setShowStakeModal(true)}
                       className="w-full text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto bg-transparent"
@@ -179,8 +193,8 @@ export function GuessingModal({
                       With Stake
                     </Button>
 
-                    {/* TODO: Validate tickets available */}
                     <Button
+                      disabled={!hasStakedGuessingNfts}
                       onClick={() => void buyTicketsWithTokens()}
                       className="w-full text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto bg-transparent"
                     >
@@ -196,8 +210,8 @@ export function GuessingModal({
                   </div>
 
                   <div>
-                    {/* TODO: Validate tickets available */}
                     <Button
+                      disabled={!hasTickets}
                       onClick={() => setShowGuessingForm(true)}
                       className="w-full text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto disabled:bg-transparent"
                     >
@@ -205,12 +219,16 @@ export function GuessingModal({
                     </Button>
                   </div>
 
-                  {/* TODO: Validate tickets available */}
                   <div
-                    className="text-[#DB2B1F]"
+                    className={
+                      twMerge(
+                        '',
+                        hasTickets ? 'text-white' : 'text-[#DB2B1F]',
+                      )
+                    }
                   >
                     <span
-                      children={'Tickets to guess: 0'}
+                      children={`Tickets Available: ${ticketsAmount}`}
                     />
                   </div>
                 </Dialog.Panel>

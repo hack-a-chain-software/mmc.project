@@ -5,6 +5,9 @@ import { Dialog, Transition } from '@headlessui/react';
 import { useWalletSelector } from '@/context/wallet';
 import api from '@/services/api';
 import { toast } from 'react-hot-toast';
+import { guessContract } from '@/constants/env';
+import { viewFunction } from '@/helpers/near';
+// import { cluesContract } from '@/constants/env';
 // import { viewFunction } from '@/helpers/near';
 
 const defaultGuess = {
@@ -30,7 +33,7 @@ export function GuessingForm({
 }) {
   const [guess, setGuess] = useState<GuessInterface>({ ...defaultGuess });
 
-  const { selector, jwt } = useWalletSelector();
+  const { accountId, selector, jwt } = useWalletSelector();
 
   const sendGuess = useCallback(async () => {
     if ( !guess.weapon || !guess.motive || !guess.who_murdered) {
@@ -38,23 +41,25 @@ export function GuessingForm({
 
       return;
     }
-    // TODO: Get guess hash
 
-    // const randomNumber = Date.now();
-    // const guessHas = viewFunction(
-    //   selector,
-    //   import.meta.env.VITE_CLUES_CONTRACT,
-    //   'create_hash',
-    //   {
-    //     random_number: randomNumber,
-    //   },
-    // );
+    const randomNumber = Date.now();
 
-    const guessHas = 'arroizcomefeijaotalvezsejabom';
+    const guessHash = viewFunction(
+      selector,
+      guessContract,
+      'view_hash',
+      {
+        account_id: accountId,
+        random_number: randomNumber,
+        murderer: guess.who_murdered,
+        weapon: guess.weapon,
+        motive: guess.motive,
+      },
+    );
 
     try {
       await api.post('game/guess', {
-        hash: guessHas,
+        hash: guessHash,
         random_number: 1234,
         ...guess,
       }, {

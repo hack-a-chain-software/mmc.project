@@ -61,8 +61,8 @@ export class GameController {
         return {
           ...clues,
           isOwner,
-          isStaked,
           placeholder: null,
+          isStaked: !isStaked,
           description: isOwner || isStaked ? clues.description : null,
           media: isOwner || isStaked ? clues.media : clues.placeholder,
         };
@@ -79,7 +79,6 @@ export class GameController {
     @Request() req: JwtValidatedRequest,
     @Response() res: express.Response,
   ) {
-    console.log(req.user);
     if (!req.user.accountId) {
       return res.status(400).json({ success: false, error: 'not validated' });
     }
@@ -143,10 +142,12 @@ export class GameController {
         return {
           ...clues,
           isOwner,
-          isStaked,
           placeholder: null,
+          isStaked: !isStaked,
+          isMinted: true,
           description: isOwner || isStaked ? clues.description : null,
-          media: isOwner || isStaked ? clues.small_media : clues.small_placeholder,
+          media:
+            isOwner || isStaked ? clues.media_small : clues.placeholder_small,
         };
       }),
     )) as any;

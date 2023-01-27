@@ -9,7 +9,6 @@ export const api = axios.create({
 });
 
 api.interceptors.response.use((response) => response, error => {
-  console.warn(error.response.status);
   if (error.response.status !== 401) {
     return error;
   }

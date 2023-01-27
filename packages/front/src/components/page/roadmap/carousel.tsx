@@ -4,43 +4,42 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 const roadmap = [
   {
-    title: "Q3 2022",
+    title: 'Q1 2023',
     items: [
-      <span>
-        Detective <br /> collection mint
-      </span>,
-      <span>
-        Undercover pup <br /> collection mint
-      </span>,
+      <>
+        <span className="block pb-[24px]">
+          Detective <br /> collection mint
+        </span>
+        <span className="block pb-[24px]">
+          Undercover pup <br /> collection mint
+        </span>
+      </>,
     ],
   },
   {
-    title: "Q4 2022",
+    title: 'Q2 2023',
     items: [
-      <span>
-        $ Solve token <br /> presale {"&"} <br className="block sm:hidden" />{" "}
-        public sale
-      </span>,
-      <span>
-        Season one <br /> game launch
-      </span>,
-      <span>
-        Clue minting {"&"} <br /> staking
-      </span>,
+      <>
+        <span className="block pb-[24px]">
+          $ Solve token <br /> presale {'&'} public sale
+        </span>
+        <span className="block pb-[24px]">
+          Season one <br /> game launch
+        </span>
+        <span>
+          Clue minting {'&'} <br /> staking
+        </span>
+      </>,
     ],
   },
   {
-    title: "Q1 2023",
+    title: 'Q3 2023',
     items: [
-      <span>
-        Season one <br className="block sm:hidden" /> concludes
-      </span>,
-      <span>
-        Staking {"&"} <br className="block sm:hidden" /> Solving rewards
-      </span>,
-      <span>
-        Season 2 <br className="block sm:hidden" /> announcements
-      </span>,
+      <>
+        <span className="block pb-[24px]">Season one concludes</span>
+        <span className="block pb-[24px]">Staking {'&'} Solving rewards</span>
+        <span>Season 2 announcements</span>
+      </>,
     ],
   },
 ];

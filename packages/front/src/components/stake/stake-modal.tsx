@@ -9,9 +9,7 @@ import { viewFunction } from '@/helpers/near';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { stakeNft } from '@/helpers/near';
-
-const directivesContract = import.meta.env.VITE_DIRECTIVES_CONTRACT;
-const undercoverPupsContract = import.meta.env.VITE_UNDERCOVER_PUPS_CONTRACT;
+import { directivesContract, undercoverPupsContract } from '@/constants/env';
 
 export interface Nft {
   token_id: string;

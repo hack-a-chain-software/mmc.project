@@ -4,6 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import { useWalletSelector } from '@/context/wallet';
 import { stakeNft } from '@/helpers/near';
+import { cluesContract } from '@/constants/env';
 
 export default function ConfirmStakeModal({
 	isOpen,
@@ -24,7 +25,7 @@ export default function ConfirmStakeModal({
     void await stakeNft(selector, accountId, [
       {
         token_id: nftId,
-        contract: import.meta.env.VITE_CLUES_CONTRACT as string,
+        contract: cluesContract as string,
       } as Nft,
     ]);
   };

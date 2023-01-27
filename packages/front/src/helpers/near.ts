@@ -4,7 +4,7 @@ import { AttachedGas } from '@/constants';
 import { utils, providers } from 'near-api-js';
 import type { CodeResult } from 'near-api-js/lib/providers/provider';
 import { Vesting } from '@/components/tokens-modal/locked-card';
-
+import { cluesContract, lockedContract, tokenContract } from '@/constants/env';
 
 export interface Transaction {
   signerId: string;
@@ -116,7 +116,7 @@ export const stakeNft = async (
   const stakingStorage = await getTokenStorage(
     selector,
     accountId,
-    import.meta.env.VITE_NFT_STAKING,
+    cluesContract,
   );
 
   if (
@@ -126,7 +126,7 @@ export const stakeNft = async (
     transactions.push(
       getTransaction(
         accountId,
-        import.meta.env.VITE_CLUES_CONTRACT as string,
+        cluesContract as string,
         'storage_deposit',
         {
           account_id: accountId,
@@ -143,7 +143,7 @@ export const stakeNft = async (
         token_id,
         memo: null,
         approval_id: null,
-        receiver_id: import.meta.env.VITE_CLUES_CONTRACT,
+        receiver_id: cluesContract,
         msg: JSON.stringify({
           type: 'Stake',
         }),
@@ -164,14 +164,14 @@ export const withdraw = async (
   const storage = await getTokenStorage(
     selector,
     accountId,
-    import.meta.env.VITE_BASE_TOKEN,
+    tokenContract,
   );
 
   if (!storage || storage.total < '0.10') {
     transactions.push(
       getTransaction(
         accountId,
-        import.meta.env.VITE_BASE_TOKEN as string,
+        tokenContract as string,
         'storage_deposit',
         {
           account_id: accountId,
@@ -186,7 +186,7 @@ export const withdraw = async (
     transactions.push(
       getTransaction(
         accountId,
-        import.meta.env.VITE_LOCKED_CONTRACT as string,
+        lockedContract as string,
         'withdraw_locked_tokens',
         {
           vesting_id: vesting,
@@ -212,14 +212,14 @@ export const buyFastPass = async (
   const storage = await getTokenStorage(
     selector,
     accountId,
-    import.meta.env.VITE_BASE_TOKEN,
+    tokenContract,
   );
 
   if (!storage || storage.total < '0.10') {
     transactions.push(
       getTransaction(
         accountId,
-        import.meta.env.VITE_BASE_TOKEN as string,
+        tokenContract as string,
         'storage_deposit',
         {
           account_id: accountId,
@@ -233,11 +233,11 @@ export const buyFastPass = async (
   transactions.push(
     getTransaction(
       accountId,
-      import.meta.env.VITE_BASE_TOKEN as string,
+      tokenContract as string,
       'ft_transfer_call',
       {
         amount: new Big(amount).times(passCost).div('10000').toFixed(0),
-        receiver_id: import.meta.env.VITE_LOCKED_CONTRACT,
+        receiver_id: lockedContract,
         memo: null,
         msg: JSON.stringify({
           type: 'BuyFastPass',

@@ -13,6 +13,7 @@ import { setupWalletSelector } from '@near-wallet-selector/core';
 import type { WalletSelector, AccountState } from '@near-wallet-selector/core';
 import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
 import { setupNearWallet } from '@near-wallet-selector/near-wallet';
+import { gameSeason, network } from '@/constants/env';
 
 interface WalletContextValue {
   keyPair: any;
@@ -57,7 +58,7 @@ export const WalletSelectorContextProvider: React.FC<
 
   const init = useCallback(async () => {
     const newSelector = await setupWalletSelector({
-      network: import.meta.env.VITE_NEAR_NETWORK || 'testnet',
+      network: network,
       debug: true,
       modules: [setupMyNearWallet(), setupNearWallet()],
     });
@@ -116,7 +117,7 @@ export const WalletSelectorContextProvider: React.FC<
 
     const { data } = await api.post('/auth/login', {
       accountId: accId,
-      seasonId: import.meta.env.VITE_SEASON_ID as string,
+      seasonId: gameSeason as string,
       signedMessage: {
         message: message.toString(),
         signature: signature?.toString(),
@@ -139,7 +140,7 @@ export const WalletSelectorContextProvider: React.FC<
       const keystore = new keyStores.BrowserLocalStorageKeyStore();
 
       const accountKeyPair = await keystore.getKey(
-        import.meta.env.VITE_NEAR_NETWORK as string,
+        network as string,
         newAccount,
       );
 
