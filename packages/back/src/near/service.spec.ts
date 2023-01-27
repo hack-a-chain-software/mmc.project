@@ -13,11 +13,11 @@ describe('NearService', () => {
 
   const keyPair = KeyPairEd25519.fromRandom();
   const nearConfig: Partial<NearConfiguration> = {
-    receiverId: 'abacaba.near',
+    cluesContract: 'abacaba.near',
     account: {
       id: 'hackadu.near',
-      keyPair: ''
-    }
+      keyPair: '',
+    },
   };
 
   beforeEach(async () => {
@@ -77,7 +77,7 @@ describe('NearService', () => {
       const keyStub = {
         public_key: keyPair.getPublicKey().toString(),
         access_key: {
-          permission: { FunctionCall: { receiver_id: nearConfig.receiverId } },
+          permission: { FunctionCall: { receiver_id: nearConfig.cluesContract } },
         },
       };
       accountMock.getAccessKeys.mockResolvedValueOnce([keyStub as any]);

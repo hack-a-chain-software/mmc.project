@@ -12,16 +12,16 @@ describe('AuthService', () => {
   let authService: DeepMocked<AuthService>;
 
   const keyPair = KeyPair.fromRandom('ed25519');
-  const authConfig: Partial<AuthConfiguration> = { jwt: { secret: 'abc', validForS: 2 }, messageValidForMs: 60000 };
+  const authConfig: Partial<AuthConfiguration> = {
+    jwt: { secret: 'abc', validForS: 2 },
+    messageValidForMs: 60000,
+  };
 
   beforeEach(async () => {
     jest.restoreAllMocks();
 
     module = await Test.createTestingModule({
-      providers: [
-        AuthService,
-        configServicePartialMock('auth', authConfig),
-      ],
+      providers: [AuthService, configServicePartialMock('auth', authConfig)],
     })
       .useMocker(createMock)
       .compile();
@@ -33,6 +33,7 @@ describe('AuthService', () => {
     it('returned JWT subject should be the signer account id', async () => {
       // Arrange
       const accountId = 'signer.near';
+      const seasonId = 'abcdef';
 
       const nearServiceMock: DeepMocked<NearService> = module.get(NearService);
       nearServiceMock.validateAccessKey.mockResolvedValueOnce(true);
@@ -41,7 +42,7 @@ describe('AuthService', () => {
       jest.spyOn(authService, 'verifySignature').mockReturnValueOnce(true);
 
       // Act
-      const authResult = await authService.authenticate(accountId, {
+      const authResult = await authService.authenticate(accountId, seasonId, {
         message: new Uint8Array(),
         signature: new Uint8Array(),
         publicKey: keyPair.getPublicKey(),
@@ -52,7 +53,9 @@ describe('AuthService', () => {
 
       const jwtServiceMock: DeepMocked<JwtService> = module.get(JwtService);
       expect(jwtServiceMock.signAsync).toHaveBeenCalledWith(
-        expect.objectContaining({ sub: accountId }),
+        expect.objectContaining({
+          sub: { accountId: 'signer.near', clues: [], seasonId: 'abcdef' },
+        }),
       );
     });
   });
@@ -85,7 +88,9 @@ describe('AuthService', () => {
     });
 
     it('should return false for messages with future timestamps', () => {
-      const message = JSON.stringify({ timestampMs: new Date().valueOf() + 180000 });
+      const message = JSON.stringify({
+        timestampMs: new Date().valueOf() + 180000,
+      });
 
       const isMessageValid = authService.validateMessage(message);
 

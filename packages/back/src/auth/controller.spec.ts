@@ -12,14 +12,17 @@ describe('AuthControler', () => {
   let authController: AuthController;
 
   const { res: resMock, clearMockRes } = getMockRes();
-  const authConfig: Partial<AuthConfiguration> = { jwt: { secret: 'abc', validForS: 2 }, messageValidForMs: 60000 }
+  const authConfig: Partial<AuthConfiguration> = {
+    jwt: { secret: 'abc', validForS: 2 },
+    messageValidForMs: 60000,
+  };
 
   beforeEach(async () => {
     jest.restoreAllMocks();
 
     module = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [configServicePartialMock('auth', authConfig)]
+      providers: [configServicePartialMock('auth', authConfig)],
     })
       .useMocker(createMock)
       .compile();
@@ -38,11 +41,18 @@ describe('AuthControler', () => {
         jwt: 'whatever',
       });
 
+      const textEncoder = new TextEncoder();
+
+      const message = textEncoder.encode(
+        JSON.stringify({ timestampMs: Date.now() }),
+      );
+
       const loginDto = {
         accountId: 'account.near',
+        seasonId: 'abcdef',
         signedMessage: {
-          message: [],
-          signature: [],
+          message: message.toString(),
+          signature: '',
           publicKey: KeyPair.fromRandom('ed25519').getPublicKey().toString(),
         },
       };
@@ -53,10 +63,7 @@ describe('AuthControler', () => {
       // Assert
       expect(resMock.status).toHaveBeenCalledWith(200);
       expect(resMock.json).toHaveBeenCalledWith(
-        expect.objectContaining({
-          success: true,
-          jwt: expect.stringContaining(''),
-        }),
+        expect.objectContaining({ jwt: 'whatever', success: true }),
       );
     });
 
@@ -68,11 +75,18 @@ describe('AuthControler', () => {
         error: 'you suck',
       });
 
+      const textEncoder = new TextEncoder();
+
+      const message = textEncoder.encode(
+        JSON.stringify({ timestampMs: Date.now() }),
+      );
+
       const loginDto = {
         accountId: 'account.near',
+        seasonId: 'abcdef',
         signedMessage: {
-          message: [],
-          signature: [],
+          message: message.toString(),
+          signature: '',
           publicKey: KeyPair.fromRandom('ed25519').getPublicKey().toString(),
         },
       };
@@ -92,11 +106,18 @@ describe('AuthControler', () => {
 
     it('should return 400 with error when public key is malformed', async () => {
       // Arrange
+      const textEncoder = new TextEncoder();
+
+      const message = textEncoder.encode(
+        JSON.stringify({ timestampMs: Date.now() }),
+      );
+
       const loginDto = {
         accountId: 'account.near',
+        seasonId: 'abcdef',
         signedMessage: {
-          message: [],
-          signature: [],
+          message: message.toString(),
+          signature: '',
           publicKey: 'not a correctly encoded public key',
         },
       };
