@@ -3,34 +3,26 @@ import { RoadmapCarousel } from './carousel';
 
 const roadmap = [
   {
-    title: 'Q3 2022',
+    title: 'Q1 2023',
     items: [
       <>
-        <span
-      		className="block pb-[24px]"
-      	>
+        <span className="block pb-[24px]">
           Detective <br /> collection mint
         </span>
-        <span
-      		className="block pb-[24px]"
-      	>
+        <span className="block pb-[24px]">
           Undercover pup <br /> collection mint
         </span>
       </>,
     ],
   },
   {
-    title: 'Q4 2022',
+    title: 'Q2 2023',
     items: [
       <>
-        <span
-        	className="block pb-[24px]"
-        >
+        <span className="block pb-[24px]">
           $ Solve token <br /> presale {'&'} public sale
         </span>
-        <span
-      		className="block pb-[24px]"
-      	>
+        <span className="block pb-[24px]">
           Season one <br /> game launch
         </span>
         <span>
@@ -40,15 +32,11 @@ const roadmap = [
     ],
   },
   {
-    title: 'Q1 2023',
+    title: 'Q3 2023',
     items: [
       <>
-        <span
-      		className="block pb-[24px]"
-      	>Season one concludes</span>
-        <span
-      		className="block pb-[24px]"
-      	>Staking {'&'} Solving rewards</span>
+        <span className="block pb-[24px]">Season one concludes</span>
+        <span className="block pb-[24px]">Staking {'&'} Solving rewards</span>
         <span>Season 2 announcements</span>
       </>,
     ],

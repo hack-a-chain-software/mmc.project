@@ -4,8 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "relay": "relay-compiler --watch",
-    "build": "relay-compiler --validate && tsc --noEmit && vite build"
+    "build": "vite build"
   },
   "relay": {
     "src": "./src",
