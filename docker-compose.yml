@@ -8,16 +8,16 @@ services:
       - "8081:8081"
     environment:
       - PORT=8081
-      - NODE_ENV=development
-      - NFT_CONTRACT_ID=nft.test.near
-      - ACCOUNT_KEYPAR=ed25519:3tU5BE8BnNQ9pX89DKepzMAZKQ7NPGCaY63cEtaueTS8iPyarB2rSXBuWLeZQ4LDL9m4oYRZXx936S3oS5MtjyoF
-      - NEAR_NETWORK=testnet
-      - JWT_SECRET=abacaba
+      - NODE_ENV=${NODE_ENV}
+      - NFT_CONTRACT_ID=${NFT_CONTRACT_ID}
+      - ACCOUNT_KEYPAR=${ACCOUNT_KEYPAR}
+      - NEAR_NETWORK=${NEAR_NETWORK}
+      - JWT_SECRET=${JWT_SECRET}
       - JWT_VALID_FOR_S=180
       - AUTH_MESSAGE_VALID_FOR_MS=60000
-      - NEAR_NODE_URL=https://rpc.testnet.near.org
-      - CLUES_CONTRACT=a00e01260552573ec3d9antisocialapecl.testnet
-      - GUESS_CONTRACT=
+      - NEAR_NODE_URL=${NEAR_NODE_URL}
+      - CLUES_CONTRACT=${CLUES_CONTRACT}
+      - GUESS_CONTRACT=${GUESS_CONTRACT}
     networks:
       - mmc
     depends_on:
@@ -37,8 +37,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=abacaba
-      - MMC_PASSWORD=abacaba
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - MMC_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./packages/db/src/init.sh:/docker-entrypoint-initdb.d/init.sh
