@@ -26,7 +26,7 @@
     "node": ">=17.5.0"
   },
   "dependencies": {
-    "@golevelup/ts-jest": "^0.3.4",
+    "@golevelup/ts-jest": "^0.3.3",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.2.0",
