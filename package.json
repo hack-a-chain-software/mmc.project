@@ -4,7 +4,7 @@
   "description": "Near Contract and React Monorepo",
   "private": true,
   "scripts": {
-    "postinstall": "is-ci || husky install",
+    "postinstall": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
     "back": "yarn workspace back",
     "front": "yarn workspace @near/front",
     "db": "yarn workspace db",
