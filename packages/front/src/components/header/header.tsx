@@ -26,8 +26,6 @@ export function Header({ config }: { config: GameConfig }) {
 		return pathname === '/987654321';
 	}, [pathname]);
 
-	console.log(routes);
-
 	return (
 		<>
 			<GuessingModal

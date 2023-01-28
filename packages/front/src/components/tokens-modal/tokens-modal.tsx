@@ -50,6 +50,7 @@ export const TokensModal = ({
 	};
 
 	const loadMore = async (initalId: string) => {
+		console.log('accountid', accountId);
 		const items: Vesting[] = await viewFunction(
 			selector,
 			lockedContract,
@@ -70,49 +71,48 @@ export const TokensModal = ({
 			return;
 		}
 
-		// void (async () => {
-		//   const totalPrograms = await viewFunction(
-		//     selector,
-		//     lockedContract,
-		//     'view_vesting_vector_len',
-		//     {
-		//       account_id: accountId,
-		//     },
-		//   );
+		void (async () => {
+			const totalPrograms = await viewFunction(
+				selector,
+				lockedContract,
+				'view_vesting_vector_len',
+				{
+					account_id: accountId,
+				}
+			);
 
-		//   const res = getPages(totalPrograms, 10);
+			const res = getPages(totalPrograms, 10);
 
-		//   setTotalPages(res as number);
+			setTotalPages(res as number);
 
-		//   const lockedContractData = await viewFunction(
-		//     selector,
-		//     lockedContract,
-		//     'view_contract_data',
-		//   );
+			const lockedContractData = await viewFunction(
+				selector,
+				lockedContract,
+				'view_contract_data',
+				{
+					account_id: accountId,
+				}
+			);
 
-		//   setContractData(lockedContractData as ContractData);
+			setContractData(lockedContractData as ContractData);
 
-		//   const token = await viewFunction(
-		//     selector,
-		//     tokenContract,
-		//     'ft_metadata',
-		//   );
+			const token = await viewFunction(selector, tokenContract, 'ft_metadata');
 
-		//   setBaseTokenMetadata(token as Token);
+			setBaseTokenMetadata(token as Token);
 
-		//   const balance = await viewFunction(
-		//     selector,
-		//     tokenContract,
-		//     'ft_balance_of',
-		//     {
-		//       account_id: accountId,
-		//     },
-		//   );
+			const balance = await viewFunction(
+				selector,
+				tokenContract,
+				'ft_balance_of',
+				{
+					account_id: accountId,
+				}
+			);
 
-		//   setBaseTokenBalance(balance as string);
+			setBaseTokenBalance(balance as string);
 
-		//   void await loadMore('0');
-		// })();
+			void (await loadMore('0'));
+		})();
 	}, [accountId]);
 
 	return (
