@@ -10,6 +10,7 @@ import { Images } from './game/entities/images.entity';
 import { Scenes } from './game/entities/scenes.entity';
 import { Guess } from './game/entities/guess.entity';
 import { Seasons } from './game/entities/seasons.entity';
+import fs from 'fs';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { Seasons } from './game/entities/seasons.entity';
       ssl:
         process.env.NODE_ENV === 'production'
           ? {
-              ca: process.env.SSL_CERT,
+              ca: fs.readFileSync(process.env.SSL_CERT).toString(),
             }
           : false,
       entities: [Seasons, Guess, Scenes, Clues, Warps, Images],
