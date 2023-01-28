@@ -10,7 +10,7 @@ import { Images } from './game/entities/images.entity';
 import { Scenes } from './game/entities/scenes.entity';
 import { Guess } from './game/entities/guess.entity';
 import { Seasons } from './game/entities/seasons.entity';
-import fs from 'fs';
+import * as fs from 'fs';
 
 @Module({
   imports: [
@@ -23,6 +23,7 @@ import fs from 'fs';
       type: 'postgres',
       host: process.env.DB_HOST,
       port: 5432,
+      logging: true,
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
