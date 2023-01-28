@@ -19,6 +19,12 @@ services:
       - CLUES_CONTRACT=${CLUES_CONTRACT}
       - GUESS_CONTRACT=${GUESS_CONTRACT}
 
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_HOST}
+      - DB_PASSWORD={DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - SSL_CERT=${SSL_CERT}
+
       - JWT_VALID_FOR_S=180
       - JWT_SECRET=${JWT_SECRET}
 
