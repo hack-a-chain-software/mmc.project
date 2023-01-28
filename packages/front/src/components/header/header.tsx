@@ -6,13 +6,19 @@ import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useWalletSelector } from '@/context/wallet';
-import { Button, GameConfig, Socials, WalletDropdown, GuessingModal } from '@/components';
+import {
+	Button,
+	GameConfig,
+	Socials,
+	WalletDropdown,
+	GuessingModal,
+} from '@/components';
 
 export function Header({ config }: { config: GameConfig }) {
 	const navigate = useNavigate();
-  const { accountId } = useWalletSelector();
+	const { accountId } = useWalletSelector();
 
-  const [showGuessModal, setShowGuessModal] = useState(false);
+	const [showGuessModal, setShowGuessModal] = useState(false);
 
 	const { pathname } = useLocation();
 
@@ -20,87 +26,95 @@ export function Header({ config }: { config: GameConfig }) {
 		return pathname === '/987654321';
 	}, [pathname]);
 
-	return (<>
-    <GuessingModal
-      config={config}
-      isOpen={showGuessModal}
-      onClose={() => setShowGuessModal(false)}
-    />
+	console.log(routes);
 
-    <header className="absolute w-full mx-auto pt-[32px] z-[9]">
-      <nav className="flex justify-between items-center w-[calc(100%-96px)] max-w-[1280px] h-[56px] mx-auto">
-        {!inGame && (
-          <div>
-            <ul className="hidden lg:flex space-x-[38px]">
-              {routes.map(({ label, path }) => (
-                <li
-                  key={`mmc-navbar-route-${label as string}-to-${
-                    path as string
-                  }`}
-                  className="text-white uppercase text-sm font-[400] cursor-pointer tracking-[0px] hover:opacity-[.8]"
-                >
-                  <HashLink
-                    to={`/${path as string}`}
-                    _hover={{
-                      textDecoration: 'unset',
-                    }}
-                    scroll={(el) =>
-                      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                    }
-                  >
-                    {label}
-                  </HashLink>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+	return (
+		<>
+			<GuessingModal
+				config={config}
+				isOpen={showGuessModal}
+				onClose={() => setShowGuessModal(false)}
+			/>
 
-        {!inGame && <NavbarModal />}
+			<header className="absolute w-full mx-auto pt-[32px] z-[9]">
+				<nav className="flex justify-between items-center w-[calc(100%-96px)] max-w-[1280px] h-[56px] mx-auto">
+					{!inGame && (
+						<div>
+							<ul className="hidden lg:flex space-x-[38px]">
+								{routes &&
+									routes.map(({ label, path }) => (
+										<li
+											key={`mmc-navbar-route-${label as string}-to-${
+												path as string
+											}`}
+											className="text-white uppercase text-sm font-[400] cursor-pointer tracking-[0px] hover:opacity-[.8]"
+										>
+											<HashLink
+												to={`${path as string}`}
+												_hover={{
+													textDecoration: 'unset',
+												}}
+												scroll={(el) =>
+													el.scrollIntoView({
+														behavior: 'smooth',
+														block: 'start',
+													})
+												}
+											>
+												{label}
+											</HashLink>
+										</li>
+									))}
+							</ul>
+						</div>
+					)}
 
-        {!inGame && (
-          <div className="flex items-center md:pr-[54px] space-x-[32px] relative">
-            <Socials />
+					{!inGame && <NavbarModal />}
 
-            <div>
-              <button
-                onClick={() => {
-                  navigate('/play');
-                }}
-                disabled
-                className="w-[180px] h-[30px] hidden lg:flex flex items-center justify-center bg-purple-0 text-white text-[12px] uppercase min-h-[40px] px-[13px] tracking-[0px] border border-white rounded-[50px] font-[400] hover:bg-white hover:text-purple-0 cursor-not-allowed opacity-[0.5]"
-              >
-                Coming soon
-              </button>
-            </div>
-          </div>
-        )}
+					{!inGame && (
+						<div className="flex items-center md:pr-[54px] space-x-[32px] relative">
+							<Socials />
 
-        {inGame && <>
-          <button
-            onClick={() => navigate('/')}
-            className="mr-auto flex space-x-[8px] items-center"
-          >
-            <ArrowLeftIcon className="text-white w-[18px]" />
+							<div>
+								<button
+									onClick={() => {
+										navigate('/play');
+									}}
+									disabled
+									className="w-[180px] h-[30px] hidden lg:flex flex items-center justify-center bg-purple-0 text-white text-[12px] uppercase min-h-[40px] px-[13px] tracking-[0px] border border-white rounded-[50px] font-[400] hover:bg-white hover:text-purple-0 cursor-not-allowed opacity-[0.5]"
+								>
+									Coming soon
+								</button>
+							</div>
+						</div>
+					)}
 
-            <span className="text-white">Back</span>
-          </button>
+					{inGame && (
+						<>
+							<button
+								onClick={() => navigate('/')}
+								className="mr-auto flex space-x-[8px] items-center"
+							>
+								<ArrowLeftIcon className="text-white w-[18px]" />
 
-          <Button
-            onClick={() => setShowGuessModal(true)}
-            disabled={!!!accountId}
-            className="mr-8"
-          >
-            <span>
-              Guessing now open
-            </span>
-          </Button>
+								<span className="text-white">Back</span>
+							</button>
 
-          <Socials />
+							<Button
+								onClick={() => setShowGuessModal(true)}
+								disabled={!!!accountId}
+								className="mr-8"
+							>
+								<span>Guessing now open</span>
+							</Button>
 
-          <WalletDropdown />
-        </>}
-      </nav>
-    </header>
-  </>);
+							<Socials />
+
+							<WalletDropdown />
+						</>
+					)}
+				</nav>
+			</header>
+		</>
+	);
 }
