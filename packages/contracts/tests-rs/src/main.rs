@@ -7,9 +7,8 @@ use serde_json::json;
 use near_units::parse_near;
 use futures::future::{try_join_all};
 
-mod lib;
 mod methods;
-mod tests_locked_jump;
+mod tests_clues;
 
 pub use methods::*;
 
@@ -26,7 +25,7 @@ pub const AVERAGE_BLOCK_TIME: u64 = 1_200_000_000;
 pub const GAS_LIMIT: u64 = 300_000_000_000_000;
 pub const DEFAULT_GAS: u64 = 3_000_000_000_000;
 
-pub const FT_DECIMALS: u8 = 24;
+pub const FT_DECIMALS: u8 = 6;
 
 pub const USER_ACCOUNT_BALANCE: u128 = 500_000_000_000_000_000_000_000_000;
 pub const CONTRACT_ACCOUNT_BALANCE: u128 = 200_000_000_000_000_000_000_000_000;

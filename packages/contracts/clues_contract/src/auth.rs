@@ -1,11 +1,11 @@
 use near_contract_standards::non_fungible_token::TokenId;
-use near_sdk::{AccountId, env, Timestamp};
+use near_sdk::{AccountId, env};
 
 use crate::{
   Contract,
   errors::{
     INEXISTENT_ERR, UNAUTHORIZED_ERR, UNACC_TOKEN_ERR, NO_PROOF_ERR, EXPIRED_TIME_ERR,
-    SEASON_END_ERR, ERR_SEASON_NOT_OPEN, STAKED_TOKEN_ERR,
+    SEASON_END_ERR, ERR_SEASON_NOT_OPEN, STAKED_TOKEN_ERR, GUESSING_NOT_OPEN, NOT_A_DET_ERROR,
   },
 };
 
@@ -22,15 +22,15 @@ impl Contract {
 
   pub fn assert_season_is_going(&self) {
     assert!(
-      env::block_timestamp() < self.season_end,
+      env::block_timestamp() >= self.season_begin,
       "{}",
-      SEASON_END_ERR
+      ERR_SEASON_NOT_OPEN
     );
 
     assert!(
-      env::block_timestamp() > self.season_begin,
+      env::block_timestamp() <= self.season_end,
       "{}",
-      ERR_SEASON_NOT_OPEN
+      SEASON_END_ERR
     );
   }
 
@@ -39,6 +39,23 @@ impl Contract {
       env::block_timestamp() > self.season_end,
       "{}",
       SEASON_END_ERR
+    );
+  }
+
+  pub fn assert_guessing_is_open(&self) {
+    assert!(
+      env::block_timestamp() >= self.guessing_start,
+      "{}",
+      GUESSING_NOT_OPEN
+    );
+  }
+
+  pub fn only_owner(&self) {
+    assert_eq!(
+      env::predecessor_account_id(),
+      self.owner,
+      "{}",
+      UNAUTHORIZED_ERR
     );
   }
 
@@ -81,7 +98,7 @@ impl Contract {
       env::predecessor_account_id(),
       self.detective_token_address,
       "{}",
-      UNAUTHORIZED_ERR
+      NOT_A_DET_ERROR
     );
   }
 
@@ -103,9 +120,16 @@ impl Contract {
   }
 
   pub fn assert_pups_or_det_transfer(&self) {
+    println!("{}{}", "predecessor: ", env::predecessor_account_id());
     let is_pup = env::predecessor_account_id() == self.pups_token_address;
+    println!("{}{}", "is_pup: ", is_pup);
     let is_det = env::predecessor_account_id() == self.detective_token_address;
+    println!("{}{}", "is_det: ", is_det);
 
-    assert!((is_pup || is_det), "{}", UNAUTHORIZED_ERR)
+    assert!(
+      (is_pup || is_det),
+      "{}",
+      "This transfered NFT should be a pup or detective "
+    )
   }
 }

@@ -2,11 +2,11 @@ use workspaces::{operations::CallTransaction, result::ExecutionResult};
 
 use crate::*;
 
+pub mod clues;
 mod locked_token;
 pub mod nft;
 mod storage;
 pub mod token;
-pub mod clues;
 
 pub use token::*;
 pub use storage::*;
@@ -17,12 +17,14 @@ pub use clues::*;
 pub async fn transact_call<'a, 'b>(
   call_transaction: CallTransaction<'a, 'b>,
 ) -> ExecutionResult<String> {
-  call_transaction
-    .transact()
-    .await
-    .unwrap()
-    .into_result()
-    .unwrap()
+  let result_value = call_transaction
+  .transact()
+  .await
+  .unwrap();
+
+  println!("{:#?}", result_value.outcomes());
+
+  result_value.into_result().unwrap()
 }
 
 pub fn get_wasm(file_name: &str) -> Result<Vec<u8>, Error> {

@@ -44,6 +44,7 @@ impl Contract {
   #[payable]
   pub fn save_guess(&mut self, account_id: AccountId, guess_hash: U256) {
     assert_one_yocto();
+    self.assert_guessing_is_open();
 
     let mut tickets = self.guess_ticket.get(&account_id).expect(ERR_NO_TICKETS);
 
@@ -103,13 +104,13 @@ impl Contract {
   }
 
   pub fn claim_guess_rewards(&mut self, guess: Guess) {
+    self.assert_season_is_over();
     let account_id = guess.account_id.clone();
     let hash = guess.to_hash();
     let timestamp = self.guesses.get(&hash).expect(ERR_NO_GUESS);
 
     let reward = self.calculate_guess_reward(guess, timestamp);
 
-    //TO-DO: locked token msg
     ext_interface::token_contract::ext(self.locked_tokens_address.clone())
       .with_static_gas(BASE_GAS)
       .with_attached_deposit(1)
@@ -127,10 +128,6 @@ impl Contract {
 }
 
 impl Contract {
-  pub fn calculate_guess_reward(&self, guess: Guess, timestamp: Timestamp) -> U128 {
-    U128(100)
-  }
-
   pub fn stake_for_guessing(
     &mut self,
     account_id: AccountId,
@@ -139,12 +136,10 @@ impl Contract {
   ) -> bool {
     self.assert_pups_or_det_transfer();
     self.insert_nft_on_stake_list(account_id.clone(), token_id, det_or_pup);
-    self.increment_ticket(account_id);
 
     false
   }
 
-  //TO-DO: validate currency
   pub fn buy_guessing_ticket(
     &mut self,
     account_id: AccountId,
@@ -154,7 +149,6 @@ impl Contract {
   ) -> U128 {
     self.assert_season_is_going();
 
-    //making sure that the token transfered is mmc token
     assert_eq!(
       self.mmc_token_account,
       env::predecessor_account_id(),
@@ -174,17 +168,25 @@ impl Contract {
 
     let ticket_price = self.calculate_ticket_cost(token_id, det_or_pup);
     assert!((ticket_price <= amount), "{}", ERR_UNSUFICIENT_FUNDS_GUESS);
-    self.increment_ticket(account_id);
+    self.increment_ticket(account_id.clone());
+
+    let tickets = self.guess_ticket.get(&account_id).expect(ERR_NO_TICKETS);
+    println!("{}{}", "tickets:", tickets);
+
     let change = U128(amount.0 - ticket_price.0);
 
     change
   }
 
   //TO-DO: validate with client correct logic
-  pub fn calculate_ticket_cost(&self, token_id: TokenId, det_or_pup: AccountId) -> U128 {
+  pub fn calculate_ticket_cost(&self, _token_id: TokenId, _det_or_pup: AccountId) -> U128 {
     //let used_tickets: u128 = self.payed_guesses.get(&(det_or_pup, token_id)).unwrap() as u128;
 
     //U128(self.ticket_price.0 + used_tickets * self.ticket_price.0)
+    U128(100)
+  }
+
+  pub fn calculate_guess_reward(&self, guess: Guess, timestamp: Timestamp) -> U128 {
     U128(100)
   }
 
@@ -209,6 +211,8 @@ impl Contract {
       set.insert(&(det_or_pup, token_id));
       self.staked_guesses_owner.insert(&account_id, &set);
     }
+
+    self.increment_ticket(account_id);
   }
 
   pub fn increment_ticket(&mut self, account_id: AccountId) {

@@ -15,8 +15,15 @@ impl Contract {
     guess.to_hash()
   }
 
-  pub fn view_price(&self, currency: AccountId) -> U128{
-    self.fungible_tokens.get(&currency).expect("Currency unavailable")
+  pub fn view_guess_was_inserted(&self, hash: U256) -> bool{
+    self.guesses.contains_key(&hash)
+  }
+
+  pub fn view_price(&self, currency: AccountId) -> U128 {
+    self
+      .fungible_tokens
+      .get(&currency)
+      .expect("Currency unavailable")
   }
 
   pub fn view_staked_clues_per_user(&self, account_id: AccountId) -> Option<Vec<TokenId>> {
@@ -27,6 +34,11 @@ impl Contract {
     } else {
       return None;
     }
+  }
+
+  pub fn view_if_clue_is_staked(&self, token_id: TokenId) -> bool {
+    println!("{}", self.staked_tokens.contains(&token_id));
+    self.staked_tokens.contains(&token_id)
   }
 
   pub fn view_staked_det_or_pup_per_user(
@@ -49,4 +61,19 @@ impl Contract {
   pub fn view_staked_clues(&self) -> Vec<TokenId> {
     self.staked_tokens.to_vec()
   }
+
+  pub fn view_staked_guesses_contain(&self, tuple: (AccountId, TokenId)) -> bool{
+    self.staked_guesses.contains(&tuple)
+  }
+
+
+  pub fn view_user_tickets(&self, account_id: AccountId) -> Option<u32> {
+    self.guess_ticket.get(&account_id)
+  }
+
+  pub fn view_ticket_price(&self, token_id: TokenId, account_id: AccountId) {
+    //self.calculate_ticket_cost(, det_or_pup)
+  }
+
+  //pub view_available_nfts_for_mint{}
 }

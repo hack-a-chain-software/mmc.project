@@ -67,7 +67,7 @@ pub async fn initialize_ft_contract(
 ) -> ExecutionResult<String> {
   transact_call(contract.call("new").args_json(json!({
     "owner_id": owner.id(),
-    "total_supply": "1000000000000000000000",
+    "total_supply": "1000000000000000000000",//"1000000000000000000000",
     "metadata": {
       "spec": "ft-1.0.0",
       "name": "name",

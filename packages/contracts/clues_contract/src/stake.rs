@@ -44,7 +44,6 @@ impl Contract {
 
     let rewards: U128 = calculate_reward(token_id.clone());
 
-    //TO-DO: locked token msg
     ext_interface::token_contract::ext(self.locked_tokens_address.clone())
       .with_static_gas(BASE_GAS)
       .with_attached_deposit(1)
@@ -83,7 +82,7 @@ impl Contract {
       self.staked_tokens_owners.insert(&staker_id, &set);
     }
 
-    false // signals to return token back to owner
+    true // signals to return token back to owner
   }
 }
 //TO-DO: implement the reward formula here -> Client still hasn't passed the reward formula for Clues
@@ -183,7 +182,7 @@ mod tests {
   }
 
   #[test]
-  #[should_panic(expected = "Unauthorized")]
+  #[should_panic(expected = "This function only works if the transfered NFT is a Detective NFT")]
   fn test_stake_wrong_predecessor() {
     let context = get_context_predecessor(
       vec![],
@@ -312,7 +311,7 @@ mod tests {
   }
 
   #[test]
-  #[should_panic(expected = "It is not possible to Guess after season end")]
+  #[should_panic(expected = "The season is over - it is not possible to claim clues or guess")]
   fn test_stake_after_end() {
     let context = get_context_predecessor(
       vec![],
@@ -369,7 +368,7 @@ mod tests {
   }
 
   #[test]
-  #[should_panic(expected = "It is not possible to Guess after season end")]
+  #[should_panic(expected = "The season is over - it is not possible to claim clues or guess")]
   fn test_claim_rewards_before_end() {
     let context = get_context_predecessor(
       vec![],
