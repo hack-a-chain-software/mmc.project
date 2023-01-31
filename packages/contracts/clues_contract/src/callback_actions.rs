@@ -22,6 +22,7 @@ impl Contract {
 
         set.remove(&token_id);
 
+        // we are inserting a new set of NFTs WITHOUT the one that was unstaked
         self.staked_tokens_owners.insert(&user_id, &set);
       }
       PromiseResult::Failed => {

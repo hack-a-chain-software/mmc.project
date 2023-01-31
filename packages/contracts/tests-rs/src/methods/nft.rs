@@ -69,6 +69,24 @@ pub async fn nft_mint(
   .await
 }
 
+pub async fn nft_approve(
+  contract: &Contract,
+  caller: &Account,
+  token_id: &str,
+  account_id: &Account,
+) -> ExecutionResult<String> {
+  transact_call(
+    caller
+      .call(&contract.as_account().id(), "nft_mint")
+      .args_json(json!({ "token_id": token_id,  "account_id": account_id.id() }))
+      .deposit(MINT_DEPOSIT)
+      .gas(GAS_LIMIT),
+  )
+  .await
+}
+
+
+
 pub async fn view_nft_token(contract: &Contract, token_id: &str) -> anyhow::Result<Option<Token>> {
   anyhow::Ok(
     contract

@@ -28,7 +28,7 @@ pub struct Contract {
 #[near_bindgen]
 impl Contract {
   #[init]
-  pub fn new(owner_id: AccountId, metadata: FungibleTokenMetadata) -> Self {
+  pub fn new(owner_id: AccountId, total_supply: U128, metadata: FungibleTokenMetadata) -> Self {
     assert!(!env::state_exists(), "Already initialized");
     metadata.assert_valid();
     let mut this = Self {
@@ -37,6 +37,13 @@ impl Contract {
       metadata: LazyOption::new(b"m".to_vec(), Some(&metadata)),
     };
     this.token.internal_register_account(&owner_id);
+    this.token.internal_deposit(&owner_id, total_supply.into());
+    near_contract_standards::fungible_token::events::FtMint {
+      owner_id: &owner_id,
+      amount: &total_supply,
+      memo: Some("Initial tokens supply is minted"),
+    }
+    .emit();
     this
   }
 

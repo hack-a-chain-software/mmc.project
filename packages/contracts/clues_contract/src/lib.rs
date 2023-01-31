@@ -1,11 +1,9 @@
-use std::ptr::null;
-
 use near_bigint::U256;
 use near_contract_standards::non_fungible_token::core::{
   NonFungibleTokenResolver, NonFungibleTokenCore,
 };
 use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
-use near_sdk::collections::{LazyOption, LookupMap, LookupSet, UnorderedMap, Vector};
+use near_sdk::collections::{LazyOption, LookupMap};
 use near_sdk::json_types::U128;
 use near_sdk::{
   env, near_bindgen, AccountId, PanicOnDefault, PromiseOrValue, BorshStorageKey, Timestamp, Gas,
@@ -14,7 +12,7 @@ use near_contract_standards::non_fungible_token::{NonFungibleToken, Token, Token
 use near_contract_standards::non_fungible_token::metadata::{
   NonFungibleTokenMetadataProvider, NFTContractMetadata,
 };
-use near_contract_standards::{impl_non_fungible_token_enumeration, fungible_token};
+use near_contract_standards::{impl_non_fungible_token_enumeration};
 use near_sdk::collections::UnorderedSet;
 
 mod auth;
@@ -22,12 +20,12 @@ mod callback_actions;
 mod claim;
 mod errors;
 mod ext_interface;
+mod game_mgmt;
 mod guess;
 mod mint;
 mod router;
 mod stake;
 mod view;
-mod treasury;
 
 pub const BASE_GAS: Gas = Gas(50_000_000_000_000);
 
@@ -224,14 +222,12 @@ mod tests {
 
   use near_contract_standards::non_fungible_token::metadata::TokenMetadata;
   use near_sdk::{VMConfig, RuntimeFeesConfig};
-  use near_sdk::test_utils::{accounts, VMContextBuilder};
   pub use near_sdk::{testing_env, Balance, MockedBlockchain, VMContext, Gas};
   use std::collections::HashMap;
   use std::convert::TryInto;
 
   use super::*;
 
-  const MINT_STORAGE_COST: u128 = 5870000000000000000000;
   pub const CONTRACT_ACCOUNT: &str = "contract.testnet";
   pub const OWNER_ACCOUNT: &str = "owner.testnet";
   pub const TOKEN_ACCOUNT: &str = "token.testnet";

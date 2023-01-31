@@ -1,15 +1,19 @@
 pub const DUPLICATE_TOKEN_ERR: &'static str = "A token with the specified ID already exists";
 pub const INEXISTENT_ERR: &'static str = "Token does not exist";
 pub const STAKED_TOKEN_ERR: &'static str = "Token is staked";
-pub const UNAUTHORIZED_ERR: &'static str = "Unauthorized";
+pub const UNAUTHORIZED_ERR: &'static str = "Unauthorized user";
 pub const UNAVAILABLE_ERR: &'static str = "Token was already claimed";
 pub const NFT_OWNER_ERR: &'static str = "Only the owner of this NFT can unstake it";
 pub const REWARD_CLAIMED_ERR: &'static str = "The reward was already claimed";
-pub const SEASON_END_ERR: &'static str = "It is not possible to Guess after season end";
+pub const SEASON_END_ERR: &'static str =
+  "The season is over - it is not possible to claim clues or guess";
+pub const GUESSING_NOT_OPEN: &'static str = "The Guessing is not open yet";
 pub const UNACC_TOKEN_ERR: &'static str = "This token is unaccepted";
 pub const NO_PROOF_ERR: &'static str = "This user does not hold any detective NFTs - please use the prove_ownership function before claiming ";
 pub const EXPIRED_TIME_ERR: &'static str =
   "The verification time for this NFT has expired, please call prove_ownership again";
+pub const NOT_A_DET_ERROR: &'static str =
+  "This function only works if the transfered NFT is a Detective NFT";
 pub const ERR_NFT_USED: &'static str =
   "This NFT was already used for the free guess - please purchase a ticket";
 pub const ERR_NFT_NOT_STAKED: &'static str =

@@ -10,7 +10,7 @@ use crate::{
 // Ft transfer call, com valor e é isso - ft on transfer return is the value returned
 //
 
-pub const INTERVAL: u64 = 30_000_000_000; // 30 seconds (9 zeroes )
+pub const INTERVAL: u64 = 120_000_000_000; // 120 seconds (9 zeroes )
 
 impl Contract {
   fn assert_token_available(&self, token_id: &TokenId) {
@@ -28,6 +28,7 @@ impl Contract {
   ) -> U128 {
     self.assert_token_available(&token_id);
     self.assert_fungible_token_is_listed(currency.clone());
+    self.assert_season_is_going();
 
     //assert that the user has a detective
     self.assert_ownership(account_id.clone());
@@ -73,7 +74,7 @@ impl Contract {
 
 #[cfg(test)]
 mod tests {
-  use std::{collections::HashMap, convert::TryInto};
+  use std::{collections::HashMap};
 
   use near_sdk::{testing_env, VMConfig, RuntimeFeesConfig, test_utils::accounts};
 
@@ -82,8 +83,6 @@ mod tests {
 
   pub const CLAIM_PRICE: U128 = U128(10);
 
-  
-
   #[test]
   fn test_claim_normal_flow_with_change() {
     let context = get_context(
@@ -91,7 +90,7 @@ mod tests {
       7090000000000000000000,
       1_000_000_000_000_000_000_000_000,
       OWNER_ACCOUNT.parse().unwrap(),
-      0,
+      (BEGIN + 1),
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -110,7 +109,7 @@ mod tests {
       .insert(&(TOKEN_ACCOUNT.parse().unwrap()), &CLAIM_PRICE);
 
     //insert proof of ownership
-    contract.proof_of_ownership.insert(&accounts(0), &10);
+    contract.proof_of_ownership.insert(&accounts(0), &12);
 
     let token_id = "1";
     //generating an NFT to be claimed
@@ -158,7 +157,7 @@ mod tests {
       7090000000000000000000,
       1_000_000_000_000_000_000_000_000,
       OWNER_ACCOUNT.parse().unwrap(),
-      0,
+      BEGIN + 1,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -172,13 +171,13 @@ mod tests {
     let mut contract = init_contract();
     let initial_balance = U128(10);
 
-    //insert the price of the claim
+    //manually insert the price of the claim
     contract
       .fungible_tokens
       .insert(&(TOKEN_ACCOUNT.parse().unwrap()), &CLAIM_PRICE);
 
-    //insert proof of ownership
-    contract.proof_of_ownership.insert(&accounts(0), &10);
+    //manually insert proof of ownership
+    contract.proof_of_ownership.insert(&accounts(0), &12);
 
     let token_id = "1";
     //generating an NFT to be claimed
@@ -277,7 +276,7 @@ mod tests {
       7090000000000000000000,
       1_000_000_000_000_000_000_000_000,
       OWNER_ACCOUNT.parse().unwrap(),
-      0,
+      BEGIN + 1,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -296,7 +295,7 @@ mod tests {
       .insert(&(TOKEN_ACCOUNT.parse().unwrap()), &CLAIM_PRICE);
 
     //insert proof of ownership - with timestamp = 10 -> should be impossible to withdral
-    contract.proof_of_ownership.insert(&accounts(0), &10);
+    contract.proof_of_ownership.insert(&accounts(0), &12);
 
     let token_id = "1";
     //generating an NFT to be claimed
@@ -323,7 +322,7 @@ mod tests {
       7090000000000000000000,
       1_000_000_000_000_000_000_000_000,
       OWNER_ACCOUNT.parse().unwrap(),
-      0,
+      BEGIN + 1,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -341,8 +340,7 @@ mod tests {
       .fungible_tokens
       .insert(&(TOKEN_ACCOUNT.parse().unwrap()), &CLAIM_PRICE);
 
-    //insert proof of ownership - with timestamp = 10 -> should be impossible to withdral
-    contract.proof_of_ownership.insert(&accounts(0), &10);
+    contract.proof_of_ownership.insert(&accounts(0), &12);
 
     let token_id = "1";
     //generating an NFT to be claimed
@@ -376,7 +374,7 @@ mod tests {
       1_000_000_000_000_000_000_000_000,
       OWNER_ACCOUNT.parse().unwrap(),
       DET_ACCOUNT.parse().unwrap(),
-      0,
+      BEGIN + 1,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -442,7 +440,7 @@ mod tests {
       1_000_000_000_000_000_000_000_000,
       OWNER_ACCOUNT.parse().unwrap(),
       DET_ACCOUNT.parse().unwrap(),
-      0,
+      BEGIN + 1,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -468,7 +466,7 @@ mod tests {
   }
 
   #[test]
-  #[should_panic(expected = "Unauthorized")]
+  #[should_panic(expected = "This function only works if the transfered NFT is a Detective NFT")]
   fn test_proof_of_ownership_wrong_contract_transfering_nft() {
     let context = get_context_predecessor(
       vec![],
