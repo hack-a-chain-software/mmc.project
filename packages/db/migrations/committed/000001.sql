@@ -1,15 +1,15 @@
 --! Previous: -
---! Hash: sha1:8c11a657c9612b47105cbc27b4ddfcf4fc9d9cae
+--! Hash: sha1:9eb909842918d63a99a406f26f7fbd0f9ba2b779
 
+--! split: 1-current.sql
 --! split: 1-current.sql
 drop table if exists seasons cascade;
 
 create table seasons (
     id uuid primary key default gen_random_uuid(),
 
-    guess_questions json not null,
+    config json not null,
 
-    guess_available_at timestamptz not null,
     season_ends_at timestamptz not null,
     created_at timestamptz not null
 );
@@ -17,8 +17,7 @@ create table seasons (
 create index on seasons (id);
 
 comment on table seasons is 'Table with seasons.';
-comment on column seasons.guess_questions is 'Is the guess questions of guessing modal.';
-comment on column seasons.guess_available_at is 'when guess is available.';
+comment on column seasons.config is 'Is the guess questions of guessing modal.';
 comment on column seasons.season_ends_at is 'When season ends.';
 comment on column seasons.created_at is 'When season created.';
 
@@ -120,7 +119,7 @@ create table guess (
     id uuid primary key default gen_random_uuid(),
     wallet_id text not null,
 
-    who_murdered text not null,
+    murdered text not null,
     weapon text not null,
     motive text not null,
     random_number text not null,
@@ -133,7 +132,7 @@ create index on guess (id);
 
 comment on table guess is 'Table with users guess';
 comment on column guess.wallet_id is 'Is the user wallet of the guess.';
-comment on column guess.who_murdered is 'Is the guess who murdered.';
+comment on column guess.murdered is 'Is the guess who murdered.';
 comment on column guess.weapon is 'Is the murder weapon.';
 comment on column guess.motive is 'Is the motive for crime.';
 comment on column guess.random_number is 'the random number of guess.';
