@@ -6,8 +6,8 @@ import { useWalletSelector } from '@/context/wallet';
 import { Button } from '../button';
 import { twMerge } from 'tailwind-merge';
 import { ProgressBar } from '../progress-bar';
-import { withdraw } from '@/helpers/near';
 import { BuyFastPassModal } from './buy-fast-pass-modal';
+import { useGame } from '@/stores/game';
 
 export interface Vesting {
   id?: string;
@@ -48,6 +48,8 @@ export const LockedCard = (
 ) => {
   const { accountId, selector } = useWalletSelector();
   const [showFastPass, setShowFastPass] = useState(false);
+
+  const { withdrawLockedTokens } = useGame();
 
   const createdAt = useMemo((): Date => {
     return getUTCDate(Number(props.start_timestamp) / 1000000);
@@ -99,7 +101,7 @@ export const LockedCard = (
       return;
     }
 
-    await withdraw(selector, accountId, [props]);
+    await withdrawLockedTokens([props], accountId, selector);
   };
 
   return (

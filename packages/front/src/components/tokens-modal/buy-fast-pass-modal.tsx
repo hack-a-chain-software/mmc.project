@@ -1,10 +1,10 @@
 import Big from 'big.js';
 import { useMemo, Fragment } from 'react';
-import { buyFastPass } from '@/helpers/near';
 import { useWalletSelector } from '@/context/wallet';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import { Button } from '../button';
+import { useGame } from '@/stores/game';
 
 export function BuyFastPassModal({
   token,
@@ -24,6 +24,8 @@ export function BuyFastPassModal({
   onClose: () => void;
 }) {
   const { accountId, selector } = useWalletSelector();
+
+  const { buyFastPass } = useGame();
 
   const decimals = useMemo(() => {
     return new Big(10).pow(token?.decimals ?? 0);

@@ -5,8 +5,7 @@ import ConfirmStakeModal from './scene/confirm-stake-modal';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition, Tab } from '@headlessui/react';
 import { ClueInterface } from '@/interfaces';
-import { useWalletSelector } from '@/context/wallet';
-import api from '@/services/api';
+import { useGame } from '@/stores/game';
 
 export interface Clue extends ClueInterface {
   isMinted: boolean;
@@ -22,32 +21,35 @@ export function CluesModal({
 	onClose: () => void;
 }) {
   const [clues, setClues] = useState<Clue[]>([]);
-  const {accountId, jwt, selector, login} = useWalletSelector();
   const [stakeClue, setStakeClue] = useState('');
   const [showConfirmStakeModal, setShowConfirmStakeModal] = useState(false);
 
+  const { accountId, jwt, connected, getClues } = useGame();
+
   useEffect(() => {
-    if (!accountId || !jwt) {
+    if (!connected || !isOpen || !jwt || !accountId) {
       return;
     }
 
     void (async () => {
-      const { data } = await api.get('/game/clues', {
-        headers: { Authorization: `Bearer ${jwt as string}` },
-      });
+      const allClues = await getClues();
 
-      setClues(data as Clue[]);
+      setClues(allClues as Clue[]);
     })();
-  }, [accountId, jwt]);
+  }, [connected, isOpen, jwt, accountId]);
 
   const myClues = useMemo(() => {
+    if (!clues) {
+      return [];
+    }
+
     return clues.filter(clue => clue.isOwner);
-  }, [clues]);
+  }, [clues, isOpen]);
 
 	return (
     <>
       <ConfirmStakeModal
-        nftId={stakeClue}
+        nft_id={stakeClue}
         isOpen={showConfirmStakeModal}
         onClose={() => setShowConfirmStakeModal(false)}
       />

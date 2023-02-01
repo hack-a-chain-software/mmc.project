@@ -8,13 +8,12 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useWalletSelector } from '@/context/wallet';
 import {
 	Button,
-	GameConfig,
 	Socials,
 	WalletDropdown,
 	GuessingModal,
 } from '@/components';
 
-export function Header({ config }: { config: GameConfig }) {
+export function Header() {
 	const navigate = useNavigate();
 	const { accountId } = useWalletSelector();
 
@@ -29,7 +28,6 @@ export function Header({ config }: { config: GameConfig }) {
 	return (
 		<>
 			<GuessingModal
-				config={config}
 				isOpen={showGuessModal}
 				onClose={() => setShowGuessModal(false)}
 			/>

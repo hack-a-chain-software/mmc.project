@@ -5,7 +5,6 @@ import React, {
   useState,
   PropsWithChildren,
 } from 'react';
-import api from '@/services/api';
 import { keyStores } from 'near-api-js';
 import type { AccountView } from 'near-api-js/lib/providers/provider';
 import { map, distinctUntilChanged } from 'rxjs';
@@ -14,17 +13,16 @@ import type { WalletSelector, AccountState } from '@near-wallet-selector/core';
 import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
 import { setupNearWallet } from '@near-wallet-selector/near-wallet';
 import { gameSeason, network } from '@/constants/env';
+import { KeyPair } from 'near-api-js';
+import { LoginData } from '@/stores/game';
 
 interface WalletContextValue {
-  keyPair: any;
-  login: (a: any, b: string | null) => Promise<any>;
-  jwt: string | undefined;
-  selector: WalletSelector;
-  accounts: AccountState[];
-  accountId: string | null;
   showModal: boolean;
-  signOut: () => Promise<void>;
+  accountId: string | null;
   toggleModal: () => void;
+  selector: WalletSelector;
+  signOut: () => Promise<void>;
+  getLoginPayload: () => LoginData;
 }
 
 export type Account = AccountView & {
@@ -37,10 +35,9 @@ const WalletContext =
 export const WalletSelectorContextProvider: React.FC<
   PropsWithChildren<Record<any, any>>
 > = ({ children }) => {
-  const [keyPair, setKeypair] = useState<any>();
-  const [jwt, setJwt] = useState<string>();
-  const [accountId, setAccountId] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
+  const [keyPair, setKeypair] = useState<KeyPair>();
+  const [accountId, setAccountId] = useState<string>('');
   const [accounts, setAccounts] = useState<AccountState[]>([]);
   const [selector, setSelector] = useState<WalletSelector | null>(null);
 
@@ -94,7 +91,7 @@ export const WalletSelectorContextProvider: React.FC<
     return () => subscription.unsubscribe();
   }, [selector]);
 
-  const login = async (accKp, accId) => {
+  const getLoginPayload = () => {
     const textEncoder = new TextEncoder();
 
     const message = textEncoder.encode(JSON.stringify(
@@ -103,31 +100,22 @@ export const WalletSelectorContextProvider: React.FC<
 
     let signature, publicKey;
 
-    if (accKp && accId) {
-      const signed = accKp.sign(message);
-
-      // const {
-      //   signature,
-      //   publicKey,
-      // } = accKp.sign(message);
+    if (keyPair && accountId) {
+      const signed = keyPair.sign(message);
 
       signature = signed.signature;
       publicKey = signed.publicKey;
     }
 
-    const { data } = await api.post('/auth/login', {
-      accountId: accId,
+    return {
+      accountId: accountId,
       seasonId: gameSeason as string,
       signedMessage: {
         message: message.toString(),
         signature: signature?.toString(),
         publicKey: publicKey?.toString(),
       },
-    });
-
-    setJwt(data.jwt as string);
-
-    return data;
+    };
   };
 
   useEffect(() => {
@@ -155,15 +143,13 @@ export const WalletSelectorContextProvider: React.FC<
   return (
     <WalletContext.Provider
       value={{
-        signOut,
-        jwt,
-        keyPair,
         selector,
-        accounts,
-        accountId,
         showModal,
+        accountId,
+
+        signOut,
         toggleModal,
-        login,
+        getLoginPayload,
       }}
     >
       {children}

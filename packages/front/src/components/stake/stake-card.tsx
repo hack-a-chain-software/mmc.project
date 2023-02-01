@@ -11,7 +11,7 @@ export const StakeCard = ({
   title: string,
   image: string,
   isSelected: boolean,
-  onSelect: () => any,
+  onSelect: () => void,
 }) => {
   return (
     <div

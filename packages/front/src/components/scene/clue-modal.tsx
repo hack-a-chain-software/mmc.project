@@ -9,7 +9,7 @@ import ConfirmStakeModal from './confirm-stake-modal';
 interface ClueModalInterface {
 	isOpen: boolean;
 	sceneName: string;
-	onClose: () => any;
+	onClose: () => void;
 }
 
 export const ClueModal = ({
@@ -30,13 +30,13 @@ export const ClueModal = ({
 	return (
 		<>
 			<ConfirmPickModal
-        nftId={nft_id}
+        nft_id={nft_id}
 				isOpen={showConfirmPickModal}
 				onClose={() => setShowConfirmPickModal(false)}
 			/>
 
 			<ConfirmStakeModal
-        nftId={nft_id}
+        nft_id={nft_id}
 				isOpen={showConfirmStakeModal}
 				onClose={() => setShowConfirmPickModal(false)}
 			/>

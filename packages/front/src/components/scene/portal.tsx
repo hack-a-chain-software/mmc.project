@@ -6,7 +6,7 @@ interface Position {
 }
 
 interface PortalInterface {
-	onClick: () => any;
+	onClick: () => void;
 	position: Position;
 }
 

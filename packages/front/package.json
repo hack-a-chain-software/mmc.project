@@ -44,7 +44,8 @@
     "tailwindcss": "^3.0.24",
     "use-mediaquery": "^1.0.1",
     "vite": "^2.9.7",
-    "vite-plugin-pages": "^0.25.0"
+    "vite-plugin-pages": "^0.25.0",
+    "zustand": "^4.3.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

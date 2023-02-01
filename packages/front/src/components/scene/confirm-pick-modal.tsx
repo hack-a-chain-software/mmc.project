@@ -1,20 +1,25 @@
 import { Fragment } from 'react';
+import { useGame } from '@/stores/game';
 import { Button } from '../';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
+import { useWalletSelector } from '@/context/wallet';
+import { ClueInterface } from '@/interfaces';
 
 export default function ConfirmPickModal({
 	isOpen,
 	onClose,
-  nftId,
-}: {
-  nftId: string;
+  nft_id,
+}: Partial<ClueInterface> & {
 	isOpen: boolean;
 	onClose: () => void;
 }) {
-	const mint = () => {
-		//
-	};
+  const {
+    selector,
+    accountId,
+  } = useWalletSelector();
+
+  const { pickClue } = useGame();
 
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
@@ -81,7 +86,17 @@ export default function ConfirmPickModal({
 								</div>
 
 								<Button
-									disabled={true}
+                  onClick={() => {
+                    if (!accountId) {
+                      return;
+                    }
+
+                    void pickClue(
+                      nft_id,
+                      accountId,
+                      selector,
+                    );
+                  }}
 									className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto"
 								>
 									Ok

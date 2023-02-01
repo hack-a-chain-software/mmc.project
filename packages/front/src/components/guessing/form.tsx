@@ -1,12 +1,10 @@
-import { Button, GameConfig, Select } from '..';
+import { Button, Select } from '..';
 import { Fragment, useCallback, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import { useWalletSelector } from '@/context/wallet';
-import api from '@/services/api';
-import { toast } from 'react-hot-toast';
-import { guessContract } from '@/constants/env';
-import { viewFunction } from '@/helpers/near';
+import { useGame } from '@/stores/game';
+import { GameConfigInterface } from '@/interfaces';
 
 const defaultGuess = {
   weapon: '',
@@ -25,54 +23,19 @@ export function GuessingForm({
   config,
 	onClose,
 }: {
-  config: GameConfig;
+  config: GameConfigInterface;
 	isOpen: boolean;
 	onClose: () => void;
 }) {
   const [guess, setGuess] = useState<GuessInterface>({ ...defaultGuess });
 
-  const { accountId, selector, jwt } = useWalletSelector();
+  const { selector } = useWalletSelector();
+  const { jwt, sendGuess, accountId } = useGame();
 
-  const sendGuess = useCallback(async () => {
-    if ( !guess.weapon || !guess.motive || !guess.who_murdered) {
-      toast.error('You must fill in all the answers.');
-
-      return;
-    }
-
-    const randomNumber = Date.now();
-    const guessHash = 'abcdef';
-
-    // const guessHash = viewFunction(
-    //   selector,
-    //   guessContract,
-    //   'view_hash',
-    //   {
-    //     account_id: accountId,
-    //     random_number: randomNumber,
-    //     murderer: guess.who_murdered,
-    //     weapon: guess.weapon,
-    //     motive: guess.motive,
-    //   },
-    // );
-
-    try {
-      await api.post('game/guess', {
-        hash: guessHash,
-        random_number: randomNumber,
-        ...guess,
-      }, {
-        headers: { Authorization: `Bearer ${jwt as string}` },
-      });
-
-      toast.success('Your guess has been successfully saved!');
-      setGuess({ ...defaultGuess });
-      onClose();
-
-    } catch (e) {
-      console.warn(e);
-      toast.error('Something happens when saving your guess, please refresh your browser.');
-    }
+  const send = useCallback(async () => {
+    await sendGuess(guess, accountId, selector);
+    setGuess({ ...defaultGuess });
+    onClose();
   }, [jwt, guess]);
 
 	return (
@@ -175,7 +138,7 @@ export function GuessingForm({
 
 								<Button
 									// disabled={true}
-                  onClick={() => { void sendGuess(); }}
+                  onClick={() => { void send(); }}
 									className="w-[125px] flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto"
 								>
 									Submit

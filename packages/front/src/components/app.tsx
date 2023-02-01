@@ -2,17 +2,11 @@ import routes from '~react-pages';
 import { Header } from './header';
 import { Footer } from './footer';
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useWalletSelector } from '@/context/wallet';
 import { Toaster } from 'react-hot-toast';
-import api from '@/services/api';
-
-export interface GameConfig {
-  guess_questions: any[];
-  guess_available_at: string;
-  season_ends_at: string;
-  created_at: string;
-}
+import { useGame } from '@/stores/game';
+import { useAnimationControls } from 'framer-motion';
 
 const Pages = () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -20,31 +14,27 @@ const Pages = () => {
 };
 
 export const App = () => {
-  const { accountId, keyPair, login, jwt } = useWalletSelector();
-  const [gameConfig, setGameConfig] = useState<GameConfig>();
+  const controls = useAnimationControls();
+
+  const { init, login } = useGame();
+
+  const { accountId, getLoginPayload } = useWalletSelector();
 
   useEffect(() => {
     void (async () => {
-      await login(keyPair, accountId);
+      const loginPayload = getLoginPayload();
 
-      if (!jwt) {
-        return;
-      }
+      const {
+        jwt,
+      } = await login(loginPayload);
 
-
-      const { data } = await api.get('/game/config', {
-        headers: { Authorization: `Bearer ${jwt as string}` },
-      });
-
-      setGameConfig(data as GameConfig);
+      await init(jwt, accountId || '', controls);
     })();
-  }, [accountId, keyPair, jwt]);
+  }, [accountId]);
 
   return (
     <Router>
-      <Header
-        config={gameConfig as GameConfig}
-      />
+      <Header/>
 
       <Pages />
 

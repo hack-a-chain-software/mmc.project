@@ -55,7 +55,7 @@ export const Index = (props) => {
                   text-white text-sm sm:text-lg
                 "
 							>
-								Minting soon
+                Minting now
 							</span>
 						</div>
 

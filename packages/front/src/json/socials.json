@@ -6,5 +6,9 @@
   {
     "icon": "/svgs/twitter.svg",
     "path": "https://twitter.com/playmmc"
+  },
+  {
+    "icon": "/svgs/medium.svg",
+    "path": "https://playmmc.medium.com/building-the-next-wave-of-web3-gaming-df7e11a2f77e"
   }
 ]
