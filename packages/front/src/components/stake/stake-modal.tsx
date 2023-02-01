@@ -46,7 +46,7 @@ export const StakeModal = ({
   const { accountId } = useGame();
 
   useEffect(() => {
-    if (!accountId) {
+    if (!accountId || !isOpen) {
       return;
     }
 
@@ -58,7 +58,7 @@ export const StakeModal = ({
 
       setNfts(tokens);
     })();
-  }, [accountId]);
+  }, [accountId, isOpen]);
 
   const onSelect = (newValue: { token_id: string, contract: string } & Nft) => {
     if (!isMulti) {
