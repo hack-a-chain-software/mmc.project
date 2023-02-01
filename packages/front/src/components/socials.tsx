@@ -10,7 +10,7 @@ export const Socials = () => {
           href={path}
           target="_blank"
           key={`mmc-navbar-social-${i}`}
-          className="cursor-pointer hover:opacity-[.8]"
+          className="cursor-pointer hover:opacity-[.8] shrink-0"
         >
           <img loading="lazy" src={icon} className="h-6" />
         </a>
