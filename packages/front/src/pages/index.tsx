@@ -63,7 +63,7 @@ export const Index = (props) => {
 							<Button
 								onClick={() => {
 									window.open(
-										'https://fewfar.com/launchpad/murder-mystery-collective-near/'
+										'https://fewfar.com/launchpad/murder-mystery-collective-detectives-near/',
 									);
 								}}
 								className="
@@ -75,7 +75,7 @@ export const Index = (props) => {
                   whitespace-nowrap
                 "
 							>
-								Join the Collective
+                Mint a detective
 							</Button>
 						</div>
 
