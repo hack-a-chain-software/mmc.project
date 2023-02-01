@@ -1,37 +1,23 @@
-import Big from 'big.js';
 import { Button } from '..';
 import { useState, Fragment, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import StakeCard from './stake-card';
-import { useWalletSelector } from '@/context/wallet';
-import { viewFunction } from '@/helpers/near';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import { stakeNft } from '@/helpers/near';
-import { detectivesContract, undercoverPupsContract } from '@/constants/env';
+import { useGame } from '@/stores/game';
 
 export interface Nft {
   token_id: string;
   owner_id: string;
-  metadata: Metadata;
+  metadata: Partial<Metadata>;
   contract: string;
-  approved_account_ids: any;
 }
 
 export interface Metadata {
   title: string;
   description: string;
   media: string;
-  media_hash: any;
-  copies: number;
-  issued_at: any;
-  expires_at: any;
-  starts_at: any;
-  updated_at: any;
-  extra: any;
-  reference: any;
-  reference_hash: any;
 }
 
 export interface Selected extends Nft {
@@ -41,22 +27,23 @@ export interface Selected extends Nft {
 export const StakeModal = ({
   isOpen,
   onClose,
+  onStake,
+  fetchTokens,
+  isMulti = true,
+  buttonText = 'Stake',
 }: {
   isOpen: boolean;
+  isMulti?: boolean;
+  buttonText?: string;
   onClose: () => void;
+  onStake: (selected: Nft[]) => Promise<void>,
+  fetchTokens: () => Promise<Nft[]>
 }) => {
   const [nfts, setNfts] = useState<Nft[]>([]);
   const [selected, setSelected] = useState<Selected[]>([]);
-  const {selector, accountId} = useWalletSelector();
   const [isLoading, setIsLoading] = useState(true);
 
-  const stake = async () => {
-    if (!accountId) {
-      return;
-    }
-
-    void await stakeNft(selector, accountId, selected);
-  };
+  const { accountId } = useGame();
 
   useEffect(() => {
     if (!accountId) {
@@ -64,37 +51,22 @@ export const StakeModal = ({
     }
 
     void (async () => {
-      const directivesTokens = await viewFunction(
-        selector,
-        detectivesContract,
-        'nft_tokens_for_owner',
-        {
-          account_id: accountId,
-        },
-      );
 
-      setNfts(directivesTokens.map(nft => ({
-        ...nft, contract: directivesTokens,
-      })) as Nft[]);
-
-      const undercoverPupsTokens = await viewFunction(
-        selector,
-        undercoverPupsContract,
-        'nft_tokens_for_owner',
-        {
-          account_id: accountId,
-        },
-      );
-
-      setNfts(undercoverPupsTokens.map(nft => ({
-        ...nft, contract: undercoverPupsContract,
-      })) as Nft[]);
+      const tokens = await fetchTokens();
 
       setIsLoading(false);
+
+      setNfts(tokens);
     })();
   }, [accountId]);
 
-  const onSelect = (newValue: { token_id: string, contract: string }) => {
+  const onSelect = (newValue: { token_id: string, contract: string } & Nft) => {
+    if (!isMulti) {
+      setSelected([newValue]);
+
+      return;
+    }
+
     const hasEqualValue = selected.findIndex(
       item => isEqual(item, newValue),
     ) !== -1;
@@ -219,10 +191,10 @@ export const StakeModal = ({
 
                     <Button
                       disabled={isEmpty(selected)}
-                      onClick={() => void stake()}
-                      className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:cursor-not-allowed hover:opacity-80 hover:bg-purple-0 hover:text-white"
+                      onClick={() => void onStake(selected)}
+                      className="min-w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:cursor-not-allowed hover:opacity-80 hover:bg-purple-0 hover:text-white"
                     >
-                      Stake
+                      {buttonText}
                     </Button>
                   </div>
                 )}

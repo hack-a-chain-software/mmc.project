@@ -5,9 +5,12 @@ import LockedCard from './locked-card';
 import { useWalletSelector } from '@/context/wallet';
 import { viewFunction } from '@/helpers/near';
 import { getPages } from '@/helpers';
+import { Button } from '../button';
 import isEmpty from 'lodash/isEmpty';
 import { ContractData, Token } from './locked-card';
 import { lockedContract, tokenContract } from '@/constants/env';
+
+const ITEMS_PER_PAGE = '10';
 
 export interface Vesting {
 	id?: string;
@@ -29,6 +32,7 @@ export const TokensModal = ({
 }) => {
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(0);
+  const [isSlastPage, setIsLastPage] = useState(false);
 	const [programs, setPrograms] = useState<Vesting[]>([]);
 	const { selector, accountId } = useWalletSelector();
 	const [contractData, setContractData] = useState<ContractData>([]);
@@ -42,28 +46,29 @@ export const TokensModal = ({
 			return 0;
 		}
 
-		if (next > totalPages) {
-			return page;
-		}
-
 		return next;
 	};
 
-	const loadMore = async (initalId: string) => {
-		console.log('accountid', accountId);
+	const loadMore = async (indexOf: number) => {
 		const items: Vesting[] = await viewFunction(
 			selector,
 			lockedContract,
 			'view_vesting_paginated',
 			{
 				account_id: accountId,
-				// initial_id: `${initialId * 10}`,
-				initial_id: initalId,
-				size: '10',
-			}
+				initial_id: `${indexOf * 10}`,
+				// initial_id: initalId,
+				size: ITEMS_PER_PAGE,
+			},
 		);
 
 		setPrograms([...items.map((item, i) => ({ ...item, id: String(i) }))]);
+
+    const nextPage = getNextPage();
+
+    if (nextPage > totalPages) {
+      setIsLastPage(true);
+    }
 	};
 
 	useEffect(() => {
@@ -78,7 +83,7 @@ export const TokensModal = ({
 				'view_vesting_vector_len',
 				{
 					account_id: accountId,
-				}
+				},
 			);
 
 			const res = getPages(totalPrograms, 10);
@@ -91,7 +96,7 @@ export const TokensModal = ({
 				'view_contract_data',
 				{
 					account_id: accountId,
-				}
+				},
 			);
 
 			setContractData(lockedContractData as ContractData);
@@ -106,12 +111,12 @@ export const TokensModal = ({
 				'ft_balance_of',
 				{
 					account_id: accountId,
-				}
+				},
 			);
 
 			setBaseTokenBalance(balance as string);
 
-			void (await loadMore('0'));
+			void (await loadMore(0));
 		})();
 	}, [accountId]);
 
@@ -169,18 +174,46 @@ export const TokensModal = ({
 										</button>
 									</div>
 
-									<div className="grid grid-cols-[repeat(auto-fill,minmax(315px,315px))] gap-7 justify-center">
-										{programs &&
-											programs.map((program, index) => (
-												<LockedCard
-													key={`locked-token-items-${index}`}
-													contractData={contractData}
-													token={baseTokenMetadata as Token}
-													baseTokenBalance={baseTokenBalance}
-													{...program}
-												/>
-											))}
-									</div>
+
+                  {(!isEmpty(programs)) &&
+                      <div className="grid grid-cols-[repeat(auto-fill,minmax(315px,315px))] gap-7 justify-center flex-grow h-[calc(100%-85px)]">
+                        {programs.map((program, index) => (
+                          <LockedCard
+                            key={`locked-token-items-${index}`}
+                            contractData={contractData}
+                            token={baseTokenMetadata as Token}
+                            baseTokenBalance={baseTokenBalance}
+                            {...program}
+                          />
+                        ))}
+                    </div>
+                  }
+
+                  {/* {!isSlastPage && (
+                    <div
+                      className=""
+                    >
+                      <Button
+                        onClick={async () => {
+                          const nextPage = getNextPage();
+
+                          void await loadMore(nextPage as number)
+                        }}
+                      >
+                        Load More
+                      </Button>
+                    </div>
+                  )} */}
+
+                  {isEmpty(programs) && (
+                    <div
+                      className="w-full h-[calc(100%-85px)] flex items-center justify-center"
+                    >
+                      <span>
+                        You have no Locked Tokens
+                      </span>
+                    </div>
+                  )}
 								</Dialog.Panel>
 							</Transition.Child>
 						</div>

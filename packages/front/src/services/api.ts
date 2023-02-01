@@ -16,8 +16,10 @@ api.interceptors.response.use(
 			return error;
 		}
 
+    console.warn(error.message);
+
 		window.location.reload();
-	}
+	},
 );
 
 export default api;

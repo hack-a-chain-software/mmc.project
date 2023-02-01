@@ -10,7 +10,6 @@ import { Images } from './game/entities/images.entity';
 import { Scenes } from './game/entities/scenes.entity';
 import { Guess } from './game/entities/guess.entity';
 import { Seasons } from './game/entities/seasons.entity';
-import * as fs from 'fs';
 
 @Module({
   imports: [

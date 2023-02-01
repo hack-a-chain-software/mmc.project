@@ -1,34 +1,22 @@
 import { Fragment } from 'react';
-import { Button, Nft } from '../';
+import { Button } from '../';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition } from '@headlessui/react';
 import { useWalletSelector } from '@/context/wallet';
-import { stakeNft } from '@/helpers/near';
-import { cluesContract } from '@/constants/env';
+import { useGame } from '@/stores/game';
+import { ClueInterface } from '@/interfaces';
 
 export default function ConfirmStakeModal({
 	isOpen,
 	onClose,
-  nftId,
-}: {
+  nft_id,
+}: Partial<ClueInterface> & {
 	isOpen: boolean;
 	onClose: () => void;
-  nftId: string;
 }) {
-  const {selector, accountId} = useWalletSelector();
+  const { selector } = useWalletSelector();
 
-  const stake = async () => {
-    if (!accountId) {
-      return;
-    }
-
-    void await stakeNft(selector, accountId, [
-      {
-        token_id: nftId,
-        contract: cluesContract as string,
-      } as Nft,
-    ]);
-  };
+  const { accountId, stakeClue } = useGame();
 
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
@@ -95,7 +83,7 @@ export default function ConfirmStakeModal({
 								</div>
 
 								<Button
-                  onClick={() => void stake()}
+                  onClick={() => void stakeClue(nft_id, accountId, selector)}
 									className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto"
 								>
 									Ok

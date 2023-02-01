@@ -78,8 +78,7 @@ export class NearService {
         },
       });
 
-      // return res;
-      return ['1'];
+      return res;
     } catch (e) {
       console.warn(e);
 
@@ -87,7 +86,7 @@ export class NearService {
     }
   }
 
-  async discountTicket(args: { guessHash: string; accountId: string }) {
+  async discountTicket(args: { guess_hash: string; account_id: string }) {
     return this.callContractChangeFunction({
       args,
       methodName: 'save_guess',

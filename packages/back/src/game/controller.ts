@@ -10,12 +10,11 @@ import {
 } from '@nestjs/common';
 import * as express from 'express';
 import { JwtAuthGuard } from 'src/jwt/auth.guard';
-import { JwtValidatedRequest } from 'src/jwt/types';
+import { JwtValidatedRequest, JwtValidatedUser } from 'src/jwt/types';
 import { GAME_URI } from './constants';
 import { GameService } from './service';
-import { ConfigService } from '@nestjs/config';
 import { Guess } from './entities/guess.entity';
-import { Configuration } from 'src/config/configuration';
+import { Clues } from './entities/clues.entity';
 import { NearService } from 'src/near/service';
 
 interface GuessDto {
@@ -28,17 +27,10 @@ interface GuessDto {
 
 @Controller(GAME_URI)
 export class GameController {
-  private cluesContract: string;
-
   constructor(
     private gameService: GameService,
     private nearService: NearService,
-    configService: ConfigService<Configuration>,
-  ) {
-    const nearConfig = configService.get('near', { infer: true });
-
-    this.cluesContract = nearConfig.cluesContract;
-  }
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('scene/:sceneId')
@@ -49,25 +41,12 @@ export class GameController {
   ) {
     const viewResult = await this.gameService.findSceneById(sceneId);
 
-    const stakedClues = await this.nearService.getNftTokensForOwner(
-      this.cluesContract as string,
-    );
-
-    viewResult.clues = (await Promise.all(
-      viewResult.clues.map(async (clues) => {
-        const isOwner = req.user.clues.includes(clues.nft_id as never);
-        const isStaked = stakedClues.includes(clues.nft_id as never);
-
-        return {
-          ...clues,
-          isOwner,
-          placeholder: null,
-          isStaked: !isStaked,
-          description: isOwner || isStaked ? clues.description : null,
-          media: isOwner || isStaked ? clues.media : clues.placeholder,
-        };
-      }),
-    )) as any;
+    viewResult.clues = (await this.mapCluesForGame(
+      viewResult.clues,
+      req.user,
+      (clue, isOwner, isStaked) =>
+        isOwner || isStaked ? clue.media : clue.placeholder,
+    )) as unknown as Clues[];
 
     return res.status(viewResult ? 200 : 403).json(viewResult);
   }
@@ -83,19 +62,18 @@ export class GameController {
       return res.status(400).json({ success: false, error: 'not validated' });
     }
 
-    // TODO: Discount ticket on clues contract
-    // try {
-    //   await this.nearService.discountTicket({
-    //     guessHash: body.hash,
-    //     accountId: req.user.accountId,
-    //   });
-    // } catch (e) {
-    //   console.warn(e);
+    try {
+      await this.nearService.discountTicket({
+        guess_hash: body.hash,
+        account_id: req.user.accountId,
+      });
+    } catch (e) {
+      console.warn(e);
 
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, error: 'Invalid permission for key' });
-    // }
+      return res
+        .status(400)
+        .json({ success: false, error: 'Invalid permission for key' });
+    }
 
     const guess = new Guess({
       ...body,
@@ -128,30 +106,62 @@ export class GameController {
     @Request() req: JwtValidatedRequest,
     @Response() res: express.Response,
   ) {
-    let viewResult = await this.gameService.findAllClues();
+    const viewResult = await this.gameService.findAllClues();
 
-    const stakedClues = await this.nearService.getNftTokensForOwner(
-      this.cluesContract as string,
+    const clues = await this.mapCluesForGame(
+      viewResult,
+      req.user,
+      (clue, isOwner, isStaked) =>
+        isOwner || isStaked ? clue.media_small : clue.placeholder_small,
     );
 
-    viewResult = (await Promise.all(
-      viewResult.map(async (clues) => {
-        const isOwner = req.user.clues.includes(clues.nft_id as never);
-        const isStaked = stakedClues.includes(clues.nft_id as never);
+    return res.status(viewResult ? 200 : 403).json(clues);
+  }
+
+  async mapCluesForGame(
+    clues: Clues[],
+    user: JwtValidatedUser,
+    callbackMedia: (clue: Clues, isOwner, isStaked) => string,
+  ) {
+    // TODO: use view call to get all staked clues: view_staked_clues;
+    // TODO: use view call to get all minted clues: view_minted_clues;
+    const stakedClues = [];
+
+    // [] = todas as nfts -> filtro esse array por todas as nfts que o contrato é dono
+    // [] = todas as staked nfts -> pego todas as nfts stakads
+    // isMinted <- filtro de nfts que não estão em staked nfts
+
+    return await Promise.all(
+      clues.map(async (clue) => {
+        const isOwner = !!user.accountId;
+        // const isOwner = user.clues.includes(clue.nft_id as never);
+        const isStaked = stakedClues.includes(clue.nft_id as never);
 
         return {
-          ...clues,
+          id: clue.id,
+          nft_id: clue.nft_id,
+
+          name: clue.name,
+
           isOwner,
-          placeholder: null,
-          isStaked: !isStaked,
           isMinted: true,
-          description: isOwner || isStaked ? clues.description : null,
-          media:
-            isOwner || isStaked ? clues.media_small : clues.placeholder_small,
+          isStaked: isStaked,
+
+          width: clue.width,
+          height: clue.height,
+
+          position_left: clue.position_left,
+          position_top: clue.position_top,
+
+          media: callbackMedia(clue, isOwner, isStaked),
+          media_small: null,
+
+          placeholder: null,
+          placeholder_small: null,
+
+          description: isOwner || isStaked ? clue.description : null,
         };
       }),
-    )) as any;
-
-    return res.status(viewResult ? 200 : 403).json(viewResult);
+    );
   }
 }

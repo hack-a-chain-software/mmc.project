@@ -1,4 +1,5 @@
 export interface SceneInterface {
+  id: string;
 	name: string;
 	clues: ClueInterface[];
 	warps: WarpsInterface[];
@@ -25,6 +26,6 @@ export interface WarpsInterface {
 }
 
 interface AssetInterface {
-	order: string | number;
-	image: string;
+	z_index: string | number;
+	media: string;
 }
