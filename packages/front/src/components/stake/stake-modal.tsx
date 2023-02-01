@@ -166,7 +166,7 @@ export const StakeModal = ({
                   </div>
                 )}
 
-                {isEmpty(nfts) && (
+                {!isLoading && isEmpty(nfts) && (
                   <div
                     className="flex items-center justify-center bg-blue h-[300px]"
                   >
@@ -178,7 +178,7 @@ export const StakeModal = ({
                   </div>
                 )}
 
-                {!isEmpty(nfts) && (
+                {!isLoading && !isEmpty(nfts) && (
                   <div
                     className="flex justify-between items-center w-full pt-2.5"
                   >
