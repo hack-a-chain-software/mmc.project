@@ -9,7 +9,7 @@ export class Guess {
   wallet_id: string;
 
   @Column()
-  who_murdered: string;
+  murdered: string;
 
   @Column()
   weapon: string;

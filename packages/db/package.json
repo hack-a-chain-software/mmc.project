@@ -4,8 +4,8 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "commit": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate commit",
-    "migrate": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate migrate",
+    "commit": "DATABASE_URL=postgres://mmc:abacaba@localhost/mmc SHADOW_DATABASE_URL=postgres://mmc:abacaba@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate commit",
+    "migrate": "DATABASE_URL=postgres://mmc:abacaba@localhost/mmc SHADOW_DATABASE_URL=postgres://mmc:abacaba@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://mmc:abacaba@localhost/postgres graphile-migrate migrate",
     "uncommit": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate uncommit",
     "seed": "DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc SHADOW_DATABASE_URL=postgres://postgres:$(echo $POSTGRES_PASSWORD)@localhost/mmc_shadow ROOT_DATABASE_URL=postgres://postgres:abacaba@localhost/postgres graphile-migrate run src/seeds.sql"
   },

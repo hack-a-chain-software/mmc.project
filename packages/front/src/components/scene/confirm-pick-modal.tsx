@@ -92,7 +92,7 @@ export default function ConfirmPickModal({
                     }
 
                     void pickClue(
-                      nft_id,
+                      nft_id as string,
                       accountId,
                       selector,
                     );

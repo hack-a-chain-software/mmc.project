@@ -139,20 +139,20 @@ export const StakeModal = ({
                   <div
                     className="grid grid-cols-[repeat(auto-fill,minmax(173px,173px))] gap-7 justify-center max-h-[300px] overflow-auto min-h-[300px]"
                   >
-                    {nfts.map(({ token_id, metadata, contract }) => (
+                    {nfts.map((nft) => (
                       <StakeCard
-                        id={`${token_id}`}
-                        image={metadata.media}
-                        title={metadata.title}
+                        id={`${nft.token_id}`}
+                        image={nft.metadata.media as string}
+                        title={nft.metadata.title as string}
                         isSelected={selected.findIndex(item => (
-                          item.contract === contract
-                          && item.token_id === token_id
+                          item.contract === nft.contract
+                          && item.token_id === nft.token_id
                         )) !== -1}
                         onSelect={() => onSelect({
-                          contract,
-                          token_id: token_id,
+                          ...nft,
+                          token_id: nft.token_id,
                         })}
-                        key={`stake-modal-nft-${token_id}`}
+                        key={`stake-modal-nft-${nft.token_id}`}
                       />
                     ))}
                   </div>

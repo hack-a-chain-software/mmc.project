@@ -62,18 +62,18 @@ export class GameController {
       return res.status(400).json({ success: false, error: 'not validated' });
     }
 
-    try {
-      await this.nearService.discountTicket({
-        guess_hash: body.hash,
-        account_id: req.user.accountId,
-      });
-    } catch (e) {
-      console.warn(e);
+    // try {
+    //   await this.nearService.discountTicket({
+    //     guess_hash: body.hash,
+    //     account_id: req.user.accountId,
+    //   });
+    // } catch (e) {
+    //   console.warn(e);
 
-      return res
-        .status(400)
-        .json({ success: false, error: 'Invalid permission for key' });
-    }
+    //   return res
+    //     .status(400)
+    //     .json({ success: false, error: 'Invalid permission for key' });
+    // }
 
     const guess = new Guess({
       ...body,
@@ -116,6 +116,36 @@ export class GameController {
     );
 
     return res.status(viewResult ? 200 : 403).json(clues);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('guess')
+  async guess(
+    @Request() req: JwtValidatedRequest,
+    @Response() res: express.Response,
+  ) {
+    if (!req.user.accountId) {
+      return res.status(400).json({ success: false, error: 'not validated' });
+    }
+
+    const viewResult = await this.gameService.findGuessByWalletId(
+      req.user.accountId,
+    );
+
+    return res.status(viewResult ? 200 : 403).json(viewResult);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('rewards')
+  async rewards(
+    @Request() req: JwtValidatedRequest,
+    @Response() res: express.Response,
+  ) {
+    if (!req.user.accountId) {
+      return res.status(400).json({ success: false, error: 'not validated' });
+    }
+
+    return res.status(200);
   }
 
   async mapCluesForGame(
