@@ -3,11 +3,10 @@ import { useState, useMemo } from 'react';
 import { format, differenceInMilliseconds, addMilliseconds, isBefore } from 'date-fns';
 import { getUTCDate, formatBigNumberWithDecimals } from '@/helpers';
 import { useWalletSelector } from '@/context/wallet';
-import { Button } from '../button';
+import { Button, ProgressBar } from '@/components';
 import { twMerge } from 'tailwind-merge';
-import { ProgressBar } from '../progress-bar';
-import { BuyFastPassModal } from './buy-fast-pass-modal';
 import { useGame } from '@/stores/game';
+import { FastPassModal } from '@/modals';
 
 export interface Vesting {
   id?: string;
@@ -41,7 +40,7 @@ export interface ContractData {
   fast_pass_beneficiary: string;
 }
 
-export const LockedCard = (
+export const LockedTokensCard = (
   props: Vesting & {
     token: Token; contractData: ContractData, baseTokenBalance: string,
   },
@@ -241,7 +240,7 @@ export const LockedCard = (
         </div>
       </div>
 
-      <BuyFastPassModal
+      <FastPassModal
         onClose={() => setShowFastPass(false)}
         isOpen={showFastPass}
         token={props.token}
@@ -254,4 +253,4 @@ export const LockedCard = (
   );
 };
 
-export default LockedCard;
+export default LockedTokensCard;

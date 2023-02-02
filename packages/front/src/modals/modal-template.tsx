@@ -2,10 +2,12 @@ import { Fragment, PropsWithChildren } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { BaseModalPropsInterface } from '@/interfaces';
+import { twMerge } from 'tailwind-merge';
 
 export const ModalTemplate = ({
   children,
   isOpen = false,
+  className = '',
   onClose = () => {},
 }: BaseModalPropsInterface & PropsWithChildren) => (
   <Transition appear show={isOpen} as={Fragment}>
@@ -38,7 +40,12 @@ export const ModalTemplate = ({
             leaveTo="opacity-0 scale-95"
           >
             <Dialog.Panel
-              className="w-full max-w-4xl transform overflow-hidden bg-black shadow-xl transition-all pt-[32px] p-[25px] text-white"
+              className={
+                twMerge(
+                  'w-full max-w-4xl transform overflow-hidden bg-black shadow-xl transition-all pt-[32px] p-[25px] text-white',
+                  className as string,
+                )
+              }
             >
               <button
                 onClick={() => onClose()}

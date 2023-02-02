@@ -6,9 +6,8 @@ export interface NearConnectionConfiguration {
 export interface NearConfiguration {
   connection: NearConnectionConfiguration;
 
-  // Smart contract account id, to be validated against access key
-  cluesContract: string;
-  guessContract: string;
+  // the contract game
+  gameContract: string;
 
   // Account used by this service to make contract function calls
   account: {

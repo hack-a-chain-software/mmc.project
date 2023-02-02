@@ -52,8 +52,7 @@ describe("Auth", () => {
         configServiceMock({
           auth: authConfig,
           near: config.near,
-          game: config.game,
-        })
+        }),
       )
       .compile();
 
@@ -98,8 +97,7 @@ describe("Auth", () => {
 
     return {
       near: {
-        cluesContract: contracts.nft.accountId,
-        guessContract: 'abcde',
+        gameContract: 'abcde',
         account: {
           id: contracts.nft.accountId,
           keyPair,
@@ -109,6 +107,7 @@ describe("Auth", () => {
           nodeUrl: worker.provider.connection.url,
         },
       },
+      game: {},
     };
   }
 

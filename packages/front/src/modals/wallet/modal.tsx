@@ -5,7 +5,7 @@ import { ChevronRightIcon } from "@heroicons/react/24/outline";
 import type { ModuleState } from "@near-wallet-selector/core";
 import { gameContract } from "@/constants/env";
 
-export function WalletSelectorModal(props: {}) {
+export function WalletModal() {
   const { selector, showModal, toggleModal } = useWalletSelector();
 
   const [modules, setModules] = useState<ModuleState[]>([]);
@@ -85,8 +85,8 @@ export function WalletSelectorModal(props: {}) {
                 <div className="flex flex-col rounded-[12px] border border-[#e0e1e4] divide-y-black overflow-hidden">
                   {modules.map((module) => (
                     <button
-                      key={"wallet-selector-modal-module" + module.id}
-                      onClick={() => handleWalletClick(module)}
+                      key={'wallet-selector-modal-module' + module.id}
+                      onClick={() => void handleWalletClick(module)}
                       className="
                         p-[16px] flex items-center hover:bg-white hover:text-purple-0 border-b border-[#e0e1e4]
                       "

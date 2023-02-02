@@ -1,7 +1,8 @@
 import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { App, WalletSelectorModal } from '@/components';
+import { App } from '@/components';
+import { WalletModal } from './modals';
 import { WalletSelectorContextProvider } from '@/context/wallet';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -9,7 +10,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <WalletSelectorContextProvider>
       <App />
 
-      <WalletSelectorModal />
+      <WalletModal />
     </WalletSelectorContextProvider>
   </React.StrictMode>,
 );

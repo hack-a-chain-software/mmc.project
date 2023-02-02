@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge';
 import { CheckIcon } from '@heroicons/react/24/solid';
 
-export const StakeCard = ({
+export const StakeNftCard = ({
   image,
   title,
   onSelect,
@@ -51,4 +51,4 @@ export const StakeCard = ({
   );
 };
 
-export default StakeCard;
+export default StakeNftCard;

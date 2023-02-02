@@ -1,6 +1,4 @@
 import { Fragment, useState } from 'react';
-import { CluesModal } from '../clues-modal';
-import { TokensModal } from '../tokens-modal';
 import { Menu, Transition } from '@headlessui/react';
 import { useWalletSelector } from '@/context/wallet';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -8,10 +6,10 @@ import toast from 'react-hot-toast';
 import { twMerge } from 'tailwind-merge';
 import { Square2StackIcon, PowerIcon, MagnifyingGlassIcon, BanknotesIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 import { UserCircleIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
-import { GuessesModal } from '@/modals';
+import { GameCluesModal, LockedTokensModal, GuessesModal } from '@/modals';
 import { shortenAddress } from '@/helpers';
 
-export const WalletDropdown = () => {
+export const WalletMenu = () => {
   const { accountId, toggleModal, signOut } = useWalletSelector();
   const [showCluesModal, setShowCluesModal] = useState(false);
   const [showTokensModal, setShowTokensModal] = useState(false);
@@ -19,12 +17,12 @@ export const WalletDropdown = () => {
 
   return (
     <>
-      <CluesModal
+      <GameCluesModal
         isOpen={showCluesModal}
         onClose={() => setShowCluesModal(false)}
       />
 
-      <TokensModal
+      <LockedTokensModal
         isOpen={showTokensModal}
         onClose={() => setShowTokensModal(false)}
       />
@@ -155,7 +153,7 @@ export const WalletDropdown = () => {
                   <Menu.Item>
                     <div>
                       <button
-                        onClick={() => signOut()}
+                        onClick={() => void signOut()}
                         className="pt-[19px] px-[24px] pb-[21px] w-full rounded-b-[16px] hover:bg-[#DB2B1F]/[0.65] flex items-center space-x-[8px] text-[#DB2B1F] hover:text-white"
                       >
                         <PowerIcon
@@ -192,4 +190,4 @@ export const WalletDropdown = () => {
   );
 };
 
-export default WalletDropdown;
+export default WalletMenu;
