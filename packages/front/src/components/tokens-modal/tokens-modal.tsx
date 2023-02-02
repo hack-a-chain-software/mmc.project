@@ -197,7 +197,7 @@ export const TokensModal = ({
                     }
                   </div>
 
-                  {!isSlastPage && (
+                  {!isEmpty(programs) && !isSlastPage && (
                     <div
                       className="w-full flex justify-center pt-8"
                     >
