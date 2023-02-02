@@ -11,6 +11,28 @@ import { Configuration } from 'src/config/configuration';
 
 import { CONNECTION_PROVIDER_KEY } from './constants';
 
+export type Token = {
+  token_id: string;
+  owner_id: string;
+  metadata: TokenMetadata;
+};
+
+export type TokenMetadata = {
+  title: string | null;
+  description: string | null;
+  media: string | null;
+  media_hash: string | null;
+  copies: number | null;
+  issued_at: number | null;
+  expires_at: number | null;
+  starts_at: number | null;
+  updated_at: number | null;
+  extra: string | null;
+  reference: string | null;
+  reference_hash: string | null;
+};
+
+
 @Injectable()
 export class NearService {
   private gameContract: string;
@@ -66,14 +88,32 @@ export class NearService {
     return result;
   }
 
-  async getNftTokensForOwner(accountId: string): Promise<any> {
+  async getNftTokensForOwner(
+    accountId: string = this.gameContract,
+  ): Promise<Token[]> {
     try {
-      const res = await this.callContractViewFunction({
+      const res = await this.callContractViewFunction<Token[]>({
         contractId: this.gameContract,
         methodName: 'nft_tokens_for_owner',
         args: {
           account_id: accountId,
         },
+      });
+
+      return res;
+    } catch (e) {
+      console.warn(e);
+
+      return [];
+    }
+  }
+
+  async getStakedClues(): Promise<any> {
+    try {
+      const res = await this.callContractViewFunction({
+        contractId: this.gameContract,
+        methodName: 'view_staked_clues',
+        args: {},
       });
 
       return res;

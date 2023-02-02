@@ -42,16 +42,6 @@ export class AuthService {
   > {
     let success = true;
     const clues: string[] = [];
-
-    // const isKeyValid = await this.nearService.validateAccessKey(
-    //   accountId,
-    //   signedMessage.publicKey,
-    // );
-
-    // if (!isKeyValid) {
-    //   return { success: false, error: 'Invalid permission for key' };
-    // }
-
     try {
       const isKeyValid = await this.nearService.validateAccessKey(
         accountId,
@@ -64,15 +54,7 @@ export class AuthService {
       }
     } catch (e) {
       success = false;
-      // console.warn(e);
     }
-
-    // const decodedMessage = this.codecService.decode(signedMessage.message);
-
-    // const isMessageValid = this.validateMessage(decodedMessage);
-    // if (!isMessageValid) {
-    //   return { success: false, error: 'Malformed or expired message' };
-    // }
 
     try {
       const decodedMessage = this.codecService.decode(signedMessage.message);
@@ -85,13 +67,7 @@ export class AuthService {
       }
     } catch (e) {
       success = false;
-      // console.warn(e);
     }
-
-    // const isSignatureValid = this.verifySignature(signedMessage);
-    // if (!isSignatureValid) {
-    //   return { success: false, error: 'Invalid signature' };
-    // }
 
     try {
       const isSignatureValid = this.verifySignature(signedMessage);
@@ -102,13 +78,12 @@ export class AuthService {
       }
     } catch (e) {
       success = false;
-      // console.warn(e);
     }
 
     if (success) {
       const res = await this.nearService.getNftTokensForOwner(accountId);
 
-      clues.push(...res);
+      clues.push(...res.map(({ token_id }) => token_id));
     }
 
     console.log(

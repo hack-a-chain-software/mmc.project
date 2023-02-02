@@ -245,15 +245,36 @@ export const useGame = create<{
 
 		const { getDetectivesById } = get();
 
-		const accountDetectives = getDetectivesById(accountId, connection);
+		const accountDetectives = await getDetectivesById(accountId, connection);
 
-		if (!isEmpty(accountDetectives)) {
+		if (isEmpty(accountDetectives)) {
 			toast.error("You don't have any detectives");
 
 			return;
 		}
 
 		const transactions: Transaction[] = [];
+
+		const storage = await getTokenStorage(
+      connection,
+      gameContract,
+      tokenContract,
+    );
+
+		if (!storage || storage.total < '0.10') {
+			transactions.push(
+				getTransaction(
+					accountId,
+					tokenContract as string,
+					'storage_deposit',
+					{
+						account_id: gameContract,
+						registration_only: true,
+					},
+					'0.25',
+				),
+			);
+		}
 
 		transactions.push(
 			getTransaction(accountId, detectivesContract, 'nft_transfer_call', {
@@ -269,6 +290,15 @@ export const useGame = create<{
 			}),
 		);
 
+    // const amount = await viewFunction(
+    //   connection,
+    //   gameContract,
+    //   'view_price',
+    //   {
+    //     currency: tokenContract,
+    //   },
+    // );
+
 		transactions.push(
 			getTransaction(accountId, tokenContract, 'ft_transfer_call', {
 				memo: null,
@@ -279,6 +309,7 @@ export const useGame = create<{
 					det_or_pup: detectivesContract,
 					token_id: tokenId,
 				}),
+        amount: '10',
 			}),
 		);
 
@@ -334,7 +365,7 @@ export const useGame = create<{
 			'nft_tokens_for_owner',
 			{
 				account_id: accountId,
-				from_index: '0',
+				from_index: null,
 				limit: 10,
 			},
 		);

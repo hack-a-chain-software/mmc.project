@@ -16,6 +16,8 @@ export interface ClueInterface {
   placeholder: string;
   position_top: string;
   position_left: string;
+  media_small: string;
+  placeholder_small: string;
   nft_id: string;
 }
 

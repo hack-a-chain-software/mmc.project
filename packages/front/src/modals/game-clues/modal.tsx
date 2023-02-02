@@ -97,8 +97,8 @@ export const GameCluesModal = ({
                     {!isEmpty(myClues) &&
                       myClues.map(
                         (
-                          { media, isMinted, isStaked, nft_id },
-                          index
+                          { media_small, isMinted, isStaked, nft_id },
+                          index,
                         ) => (
                           <div
                             key={`myclue-${index}`}
@@ -106,7 +106,7 @@ export const GameCluesModal = ({
                           >
                             <div className="w-[150px] h-[150px] rounded-[15px] flex items-center justify-center">
                               <img
-                                src={media}
+                                src={media_small}
                                 className="max-w-full max-h-full"
                               />
                             </div>
@@ -117,7 +117,7 @@ export const GameCluesModal = ({
                                   'text-base font-[300] text-white uppercase',
                                   isMinted
                                     ? 'opacity-1'
-                                    : 'opacity-[0.35]'
+                                    : 'opacity-[0.35]',
                                 )}
                               >
                                 Minted
@@ -130,7 +130,7 @@ export const GameCluesModal = ({
                                   'text-base font-[300] text-white uppercase',
                                   isStaked
                                     ? 'opacity-1'
-                                    : 'opacity-[0.35]'
+                                    : 'opacity-[0.35]',
                                 )}
                               >
                                 Staked

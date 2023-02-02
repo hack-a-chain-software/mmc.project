@@ -44,8 +44,6 @@ export class GameController {
     viewResult.clues = (await this.mapCluesForGame(
       viewResult.clues,
       req.user,
-      (clue, isOwner, isStaked) =>
-        isOwner || isStaked ? clue.media : clue.placeholder,
     )) as unknown as Clues[];
 
     return res.status(viewResult ? 200 : 403).json(viewResult);
@@ -108,12 +106,7 @@ export class GameController {
   ) {
     const viewResult = await this.gameService.findAllClues();
 
-    const clues = await this.mapCluesForGame(
-      viewResult,
-      req.user,
-      (clue, isOwner, isStaked) =>
-        isOwner || isStaked ? clue.media_small : clue.placeholder_small,
-    );
+    const clues = await this.mapCluesForGame(viewResult, req.user);
 
     return res.status(viewResult ? 200 : 403).json(clues);
   }
@@ -148,24 +141,21 @@ export class GameController {
     return res.status(200);
   }
 
-  async mapCluesForGame(
-    clues: Clues[],
-    user: JwtValidatedUser,
-    callbackMedia: (clue: Clues, isOwner, isStaked) => string,
-  ) {
-    // TODO: use view call to get all staked clues: view_staked_clues;
-    // TODO: use view call to get all minted clues: view_minted_clues;
-    const stakedClues = [];
+  async mapCluesForGame(clues: Clues[], user: JwtValidatedUser) {
+    const stakedClues = await this.nearService.getStakedClues();
 
-    // [] = todas as nfts -> filtro esse array por todas as nfts que o contrato é dono
-    // [] = todas as staked nfts -> pego todas as nfts stakads
-    // isMinted <- filtro de nfts que não estão em staked nfts
+    const contractNfts =
+      (await this.nearService.getNftTokensForOwner())?.map(
+        ({ token_id }) => token_id,
+      ) || [];
 
     return await Promise.all(
       clues.map(async (clue) => {
-        const isOwner = !!user.accountId;
-        // const isOwner = user.clues.includes(clue.nft_id as never);
+        const isOwner = user.clues.includes(clue.nft_id as never);
         const isStaked = stakedClues.includes(clue.nft_id as never);
+        const isMinted = isStaked || (!isStaked && !contractNfts.includes(`${clue.nft_id}`));
+
+        const showMedia = isOwner || isStaked;
 
         return {
           id: clue.id,
@@ -174,7 +164,7 @@ export class GameController {
           name: clue.name,
 
           isOwner,
-          isMinted: true,
+          isMinted,
           isStaked: isStaked,
 
           width: clue.width,
@@ -183,13 +173,13 @@ export class GameController {
           position_left: clue.position_left,
           position_top: clue.position_top,
 
-          media: callbackMedia(clue, isOwner, isStaked),
-          media_small: null,
+          media: showMedia ? clue.media : clue.placeholder,
+          media_small: showMedia ? clue.media_small : clue.placeholder_small,
 
           placeholder: null,
           placeholder_small: null,
 
-          description: isOwner || isStaked ? clue.description : null,
+          description: showMedia ? clue.description : null,
         };
       }),
     );
