@@ -9,10 +9,10 @@ import { useWalletSelector } from '@/context/wallet';
 import {
 	Button,
 	Socials,
-	WalletDropdown,
-	GuessingModal,
+	WalletMenu,
 } from '@/components';
 import { useGame } from '@/stores/game';
+import { GuessModal } from '@/modals';
 
 export function Header() {
 	const navigate = useNavigate();
@@ -30,7 +30,7 @@ export function Header() {
 
 	return (
 		<>
-			<GuessingModal
+			<GuessModal
 				isOpen={showGuessModal}
 				onClose={() => setShowGuessModal(false)}
 			/>
@@ -113,7 +113,7 @@ export function Header() {
 
 							<Socials />
 
-							<WalletDropdown />
+							<WalletMenu />
 						</>
 					)}
 				</nav>

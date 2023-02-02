@@ -6,7 +6,7 @@ import {
 	tokenContract,
 	undercoverPupsContract,
 } from '@/constants/env';
-import { GameConfigInterface, SceneInterface, GuessInterface } from '@/interfaces';
+import { GameConfigInterface, SceneInterface, GuessInterface, Token, ClueInterface } from '@/interfaces';
 import { WalletSelector } from '@near-wallet-selector/core';
 import {
 	gameContract,
@@ -22,15 +22,10 @@ import {
 } from '@/helpers/near';
 import isEmpty from 'lodash/isEmpty';
 import { toast } from 'react-hot-toast';
-import { Clue, Nft } from '@/components';
 import { AnimationControls } from 'framer-motion';
 import { getUTCDate } from '@/helpers';
 import { isBefore } from 'date-fns/esm';
-
-export interface Token {
-	nft_id: string;
-	owner_id: string;
-}
+import { Selected } from '@/modals';
 
 export interface LoginData {
 	accountId: string;
@@ -42,7 +37,7 @@ export interface LoginData {
 	};
 }
 
-interface GuessDto {
+export interface GuessDto {
   murdered: string;
   weapon: string;
   motive: string;
@@ -63,10 +58,10 @@ export const useGame = create<{
 	) => Promise<GameConfigInterface>;
 	login: (payload: LoginData) => Promise<{ jwt: string }>;
 	getScene: (id?: string) => Promise<SceneInterface>;
-	getClues: () => Promise<Clue[]>;
+	getClues: () => Promise<ClueInterface[]>;
   getGuess: () => Promise<GuessInterface[]>,
   claimAllGuessingRewards: () => Promise<void>,
-	pickClue: (
+	claimClue: (
 		tokenid: string,
 		accountId: string | null,
 		connection: WalletSelector
@@ -109,7 +104,7 @@ export const useGame = create<{
 		connection: WalletSelector
 	) => Promise<string>;
 	stakeNft: (
-		tokens: Nft[],
+		tokens: Selected[],
 		accountId: string | null,
 		connection: WalletSelector
 	) => Promise<void>;
@@ -243,7 +238,7 @@ export const useGame = create<{
 		return data;
 	},
 
-	pickClue: async (tokenId, accountId, connection) => {
+	claimClue: async (tokenId, accountId, connection) => {
 		if (!accountId) {
 			return;
 		}
@@ -271,7 +266,7 @@ export const useGame = create<{
 						account_id: accountId,
 					},
 				}),
-			})
+			}),
 		);
 
 		transactions.push(
@@ -284,7 +279,7 @@ export const useGame = create<{
 					det_or_pup: detectivesContract,
 					token_id: tokenId,
 				}),
-			})
+			}),
 		);
 
 		const wallet = await connection.wallet();

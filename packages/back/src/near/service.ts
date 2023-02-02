@@ -13,8 +13,7 @@ import { CONNECTION_PROVIDER_KEY } from './constants';
 
 @Injectable()
 export class NearService {
-  private cluesContract: string;
-  private guessContract: string;
+  private gameContract: string;
   private account: Promise<Account>;
 
   constructor(
@@ -24,8 +23,7 @@ export class NearService {
   ) {
     const nearConfig = configService.get('near', { infer: true });
 
-    this.cluesContract = nearConfig.cluesContract;
-    this.guessContract = nearConfig.guessContract;
+    this.gameContract = nearConfig.gameContract;
     this.account = this.connection.account(nearConfig.account.id);
   }
 
@@ -46,7 +44,7 @@ export class NearService {
 
     return (
       permission == 'FullAccess' ||
-      permission.FunctionCall.receiver_id == this.cluesContract
+      permission.FunctionCall.receiver_id == this.gameContract
     );
   }
 
@@ -71,7 +69,7 @@ export class NearService {
   async getNftTokensForOwner(accountId: string): Promise<any> {
     try {
       const res = await this.callContractViewFunction({
-        contractId: this.cluesContract,
+        contractId: this.gameContract,
         methodName: 'nft_tokens_for_owner',
         args: {
           account_id: accountId,
@@ -90,7 +88,7 @@ export class NearService {
     return this.callContractChangeFunction({
       args,
       methodName: 'save_guess',
-      contractId: this.guessContract,
+      contractId: this.gameContract,
     });
   }
 }
