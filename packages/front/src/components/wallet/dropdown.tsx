@@ -6,17 +6,16 @@ import { useWalletSelector } from '@/context/wallet';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import toast from 'react-hot-toast';
 import { twMerge } from 'tailwind-merge';
-import { Square2StackIcon, PowerIcon, MagnifyingGlassIcon, BanknotesIcon } from '@heroicons/react/24/outline';
+import { Square2StackIcon, PowerIcon, MagnifyingGlassIcon, BanknotesIcon, ChatBubbleBottomCenterTextIcon } from '@heroicons/react/24/outline';
 import { UserCircleIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
-
-
-const shortenAddress = (address: string, chars = 8): string =>
-  `${address.slice(0, chars)}...${address.slice(-chars)}`;
+import { GuessesModal } from '@/modals';
+import { shortenAddress } from '@/helpers';
 
 export const WalletDropdown = () => {
   const { accountId, toggleModal, signOut } = useWalletSelector();
   const [showCluesModal, setShowCluesModal] = useState(false);
   const [showTokensModal, setShowTokensModal] = useState(false);
+  const [showGuessesModal, setShowGuessesModal] = useState(false);
 
   return (
     <>
@@ -28,6 +27,11 @@ export const WalletDropdown = () => {
       <TokensModal
         isOpen={showTokensModal}
         onClose={() => setShowTokensModal(false)}
+      />
+
+      <GuessesModal
+        isOpen={showGuessesModal}
+        onClose={() => setShowGuessesModal(false)}
       />
 
       <Menu as="div" className="relative text-left hidden md:inline-block ml-8">
@@ -123,6 +127,26 @@ export const WalletDropdown = () => {
                           />
 
                           <span className="font-[400] text-[14px]">My Clues</span>
+                        </button>
+                      </div>
+                    )}
+                  </Menu.Item>
+
+                  <Menu.Item>
+                    {({ close }) => (
+                      <div>
+                        <button
+                          onClick={() => {
+                            setShowGuessesModal(true);
+                            close();
+                          }}
+                          className="pt-[19px] px-[24px] pb-[21px] w-full hover:bg-[#A500FB]/[0.10] flex items-center space-x-[8px] text-black "
+                        >
+                          <ChatBubbleBottomCenterTextIcon
+                            className="w-[18px]"
+                          />
+
+                          <span className="font-[400] text-[14px]">My Guesses</span>
                         </button>
                       </div>
                     )}

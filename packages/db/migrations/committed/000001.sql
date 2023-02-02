@@ -1,8 +1,8 @@
 --! Previous: -
---! Hash: sha1:9eb909842918d63a99a406f26f7fbd0f9ba2b779
+--! Hash: sha1:cef1341d56045915cfe4068987fc89b2f8e57629
 
 --! split: 1-current.sql
---! split: 1-current.sql
+-- Enter migration here
 drop table if exists seasons cascade;
 
 create table seasons (
@@ -21,7 +21,6 @@ comment on column seasons.config is 'Is the guess questions of guessing modal.';
 comment on column seasons.season_ends_at is 'When season ends.';
 comment on column seasons.created_at is 'When season created.';
 
---! split: 0002-scenes.sql
 drop table if exists scenes cascade;
 
 create table scenes (
@@ -36,7 +35,6 @@ create table scenes (
 comment on table scenes is 'The game''s screens. They are composed of a background image with clickable areas for interaction (clues and warps).';
 comment on column scenes.available_at is 'A timestamp indicating when the scene will become available for users.';
 
---! split: 0003-clues.sql
 drop table if exists clues cascade;
 
 create table clues (
@@ -71,7 +69,6 @@ comment on column clues.media_small is 'A reference to the static asset of the c
 comment on column clues.placeholder_small is 'A reference to the static asset of the clue''s placeholder.';
 comment on column clues.name is 'The description of the clue''s NFT.';
 
---! split: 0004-warps.sql
 drop table if exists warps cascade;
 
 create table warps (
@@ -95,7 +92,6 @@ comment on column warps.width is 'The CSS width of the warp clickable area, in p
 comment on column warps.height is 'The CSS height of the warp clickable area, in px units.';
 comment on column warps.warps_to is 'The ID of the scene the user will navigate to when clicking the warp.';
 
---! split: 0005-images.sql
 drop table if exists images cascade;
 
 create table images (
@@ -112,7 +108,6 @@ comment on table images is 'Composition of images of a scene.';
 comment on column images.media is 'An image of a composition of images of a scene.';
 comment on column images.z_index is 'The CSS z-index value of the image.';
 
---! split: 0006-guess.sql
 drop table if exists guess cascade;
 
 create table guess (
@@ -124,6 +119,7 @@ create table guess (
     motive text not null,
     random_number text not null,
     hash text not null,
+    burned boolean not null default false,
 
     created_at timestamptz not null default now()
 );

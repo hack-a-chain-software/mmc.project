@@ -83,7 +83,11 @@ export default function ConfirmStakeModal({
 								</div>
 
 								<Button
-                  onClick={() => void stakeClue(nft_id, accountId, selector)}
+                  onClick={() => void stakeClue(
+                    nft_id as string,
+                    accountId,
+                    selector,
+                  )}
 									className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto"
 								>
 									Ok

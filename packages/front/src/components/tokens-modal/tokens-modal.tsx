@@ -10,7 +10,7 @@ import isEmpty from 'lodash/isEmpty';
 import { ContractData, Token } from './locked-card';
 import { lockedContract, tokenContract } from '@/constants/env';
 
-const ITEMS_PER_PAGE = '10';
+const ITEMS_PER_PAGE = 10;
 
 export interface Vesting {
 	id?: string;
@@ -32,6 +32,7 @@ export const TokensModal = ({
 }) => {
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSlastPage, setIsLastPage] = useState(false);
 	const [programs, setPrograms] = useState<Vesting[]>([]);
 	const { selector, accountId } = useWalletSelector();
@@ -50,23 +51,29 @@ export const TokensModal = ({
 	};
 
 	const loadMore = async (indexOf: number) => {
+    setIsLoading(true);
+
 		const items: Vesting[] = await viewFunction(
 			selector,
 			lockedContract,
 			'view_vesting_paginated',
 			{
 				account_id: accountId,
-				initial_id: `${indexOf * 10}`,
-				// initial_id: initalId,
-				size: ITEMS_PER_PAGE,
+				initial_id: `${indexOf * ITEMS_PER_PAGE}`,
+				size: `${ITEMS_PER_PAGE}`,
 			},
 		);
 
-		setPrograms([...items.map((item, i) => ({ ...item, id: String(i) }))]);
+		setPrograms([
+      ...programs,
+      ...items.map((item, i) => ({ ...item, id: String(i) })),
+    ]);
 
-    const nextPage = getNextPage();
+    setPage(indexOf);
 
-    if (nextPage > totalPages) {
+    setIsLoading(false);
+
+    if (indexOf + 1 > totalPages) {
       setIsLastPage(true);
     }
 	};
@@ -86,7 +93,7 @@ export const TokensModal = ({
 				},
 			);
 
-			const res = getPages(totalPrograms, 10);
+			const res = getPages(totalPrograms, ITEMS_PER_PAGE);
 
 			setTotalPages(res as number);
 
@@ -151,7 +158,7 @@ export const TokensModal = ({
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95"
 							>
-								<Dialog.Panel className="w-full max-w-6xl h-[650px] overflow-auto transform bg-black shadow-xl transition-all py-[44px] px-[50px] text-white">
+								<Dialog.Panel className="w-full max-w-6xl h-[650px] overflow-auto transform bg-black shadow-xl transition-all flex flex-col py-[44px] px-[50px] text-white">
 									<div className="flex items-center justify-between pb-[45px]">
 										<div className="mr-[12px]]">
 											<span className="uppercase text-xl">
@@ -174,26 +181,28 @@ export const TokensModal = ({
 										</button>
 									</div>
 
+                  <div>
+                    {(!isEmpty(programs)) &&
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(315px,315px))] gap-7 justify-center flex-grow h-[calc(100%-85px)]">
+                          {programs.map((program, index) => (
+                            <LockedCard
+                              key={`locked-token-items-${index}`}
+                              contractData={contractData}
+                              token={baseTokenMetadata as Token}
+                              baseTokenBalance={baseTokenBalance}
+                              {...program}
+                            />
+                          ))}
+                      </div>
+                    }
+                  </div>
 
-                  {(!isEmpty(programs)) &&
-                      <div className="grid grid-cols-[repeat(auto-fill,minmax(315px,315px))] gap-7 justify-center flex-grow h-[calc(100%-85px)]">
-                        {programs.map((program, index) => (
-                          <LockedCard
-                            key={`locked-token-items-${index}`}
-                            contractData={contractData}
-                            token={baseTokenMetadata as Token}
-                            baseTokenBalance={baseTokenBalance}
-                            {...program}
-                          />
-                        ))}
-                    </div>
-                  }
-
-                  {/* {!isSlastPage && (
+                  {!isSlastPage && (
                     <div
-                      className=""
+                      className="w-full flex justify-center pt-8"
                     >
                       <Button
+                        disabled={isLoading}
                         onClick={async () => {
                           const nextPage = getNextPage();
 
@@ -203,7 +212,7 @@ export const TokensModal = ({
                         Load More
                       </Button>
                     </div>
-                  )} */}
+                  )}
 
                   {isEmpty(programs) && (
                     <div

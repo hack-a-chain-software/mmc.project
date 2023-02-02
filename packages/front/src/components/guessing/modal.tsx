@@ -278,7 +278,7 @@ export function GuessingModal({
 									<div
 										className={twMerge(
 											'',
-											hasTickets ? 'text-white' : 'text-[#DB2B1F]'
+											hasTickets ? 'text-white' : 'text-[#DB2B1F]',
 										)}
 									>
 										<span children={`Tickets Available: ${ticketsAmount}`} />

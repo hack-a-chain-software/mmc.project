@@ -12,6 +12,7 @@ import {
 	WalletDropdown,
 	GuessingModal,
 } from '@/components';
+import { useGame } from '@/stores/game';
 
 export function Header() {
 	const navigate = useNavigate();
@@ -20,6 +21,8 @@ export function Header() {
 	const [showGuessModal, setShowGuessModal] = useState(false);
 
 	const { pathname } = useLocation();
+
+  const { guessingIsOpen } = useGame();
 
 	const inGame = useMemo(() => {
 		return pathname === '/987654321';
@@ -96,13 +99,17 @@ export function Header() {
 								<span className="text-white">Back</span>
 							</button>
 
-							<Button
-								onClick={() => setShowGuessModal(true)}
-								disabled={!!!accountId}
-								className="mr-8"
-							>
-								<span>Guessing now open</span>
-							</Button>
+              {
+                guessingIsOpen() && (
+                  <Button
+                    onClick={() => setShowGuessModal(true)}
+                    disabled={!!!accountId}
+                    className="mr-8"
+                  >
+                    <span>Guessing now open</span>
+                  </Button>
+                )
+              }
 
 							<Socials />
 

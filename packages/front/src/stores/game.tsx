@@ -6,7 +6,7 @@ import {
 	tokenContract,
 	undercoverPupsContract,
 } from '@/constants/env';
-import { GameConfigInterface, SceneInterface } from '@/interfaces';
+import { GameConfigInterface, SceneInterface, GuessInterface } from '@/interfaces';
 import { WalletSelector } from '@near-wallet-selector/core';
 import {
 	gameContract,
@@ -22,8 +22,10 @@ import {
 } from '@/helpers/near';
 import isEmpty from 'lodash/isEmpty';
 import { toast } from 'react-hot-toast';
-import { Clue, GuessInterface, Nft } from '@/components';
+import { Clue, Nft } from '@/components';
 import { AnimationControls } from 'framer-motion';
+import { getUTCDate } from '@/helpers';
+import { isBefore } from 'date-fns/esm';
 
 export interface Token {
 	nft_id: string;
@@ -40,6 +42,12 @@ export interface LoginData {
 	};
 }
 
+interface GuessDto {
+  murdered: string;
+  weapon: string;
+  motive: string;
+}
+
 export const useGame = create<{
 	jwt: string;
 	accountId: string;
@@ -47,6 +55,7 @@ export const useGame = create<{
 	config: GameConfigInterface | null;
 	controls: AnimationControls | null;
 	connected: boolean;
+  guessingIsOpen: () => boolean,
 	init: (
 		jwt: string,
 		accountId: string,
@@ -55,6 +64,8 @@ export const useGame = create<{
 	login: (payload: LoginData) => Promise<{ jwt: string }>;
 	getScene: (id?: string) => Promise<SceneInterface>;
 	getClues: () => Promise<Clue[]>;
+  getGuess: () => Promise<GuessInterface[]>,
+  claimAllGuessingRewards: () => Promise<void>,
 	pickClue: (
 		tokenid: string,
 		accountId: string | null,
@@ -74,7 +85,7 @@ export const useGame = create<{
 		connection: WalletSelector
 	) => Promise<Token[]>;
 	sendGuess: (
-		gues: GuessInterface,
+		gues: GuessDto,
 		accountId: string | null,
 		connection: WalletSelector
 	) => Promise<void>;
@@ -131,7 +142,10 @@ export const useGame = create<{
 			jwt,
 			controls,
 			accountId,
-			config: data,
+			config: {
+        ...data,
+        ...data.config,
+      },
 			connected: true,
 		});
 
@@ -147,6 +161,53 @@ export const useGame = create<{
 
 		return data;
 	},
+
+  guessingIsOpen: () => {
+    const {
+      config,
+      accountId,
+    } = get();
+
+    if (!accountId || !config) {
+      return false;
+    }
+
+    const now = getUTCDate() as Date;
+
+    const openAt = getUTCDate(
+      new Date(config.guess_open_at as string).getMilliseconds(),
+    ) as Date;
+
+    return isBefore(openAt, now);
+  },
+
+  getGuess: async () => {
+		const { jwt } = get();
+
+		if (!jwt) {
+			return [];
+		}
+
+		const { data } = await api.get('/game/guess/', {
+			headers: { Authorization: `Bearer ${jwt}` },
+		});
+
+		return data;
+  },
+
+  claimAllGuessingRewards: async () => {
+		const { jwt } = get();
+
+		if (!jwt) {
+			return [];
+		}
+
+		const { data } = await api.post('/game/rewards/', {
+			headers: { Authorization: `Bearer ${jwt}` },
+		});
+
+		return data;
+  },
 
 	getScene: async (id = firstScene) => {
 		const { jwt } = get();
@@ -280,7 +341,7 @@ export const useGame = create<{
 				account_id: accountId,
 				from_index: '0',
 				limit: 10,
-			}
+			},
 		);
 	},
 
@@ -297,12 +358,12 @@ export const useGame = create<{
 				account_id: accountId,
 				from_index: '0',
 				limit: 10,
-			}
+			},
 		);
 	},
 
 	sendGuess: async (guess, accountId, connection) => {
-		if (!guess.weapon || !guess.motive || !guess.who_murdered) {
+		if (!guess.weapon || !guess.motive || !guess.murdered) {
 			toast.error('You must fill in all the answers.');
 
 			return;
@@ -317,7 +378,7 @@ export const useGame = create<{
 
 			weapon: guess.weapon,
 			motive: guess.motive,
-			murderer: guess.who_murdered,
+			murderer: guess.murdered,
 
 			random_number: randomNumber,
 		});
@@ -353,7 +414,7 @@ export const useGame = create<{
 			'tickets_available_per_user',
 			{
 				account_id: accountId,
-			}
+			},
 		);
 	},
 
@@ -366,7 +427,7 @@ export const useGame = create<{
 			'view_staked_det_or_pup_per_user',
 			{
 				account_id: accountId,
-			}
+			},
 		);
 	},
 
@@ -402,8 +463,8 @@ export const useGame = create<{
 						token_id: detOrPupId,
 					}),
 				},
-				amount
-			)
+				amount,
+			),
 		);
 
 		const wallet = await connection.wallet();
@@ -443,8 +504,8 @@ export const useGame = create<{
 						account_id: accountId,
 						registration_only: false,
 					},
-					'0.25'
-				)
+					'0.25',
+				),
 			);
 		}
 
@@ -460,7 +521,7 @@ export const useGame = create<{
 							account_id: accountId,
 						},
 					}),
-				})
+				}),
 			);
 		});
 
@@ -488,8 +549,8 @@ export const useGame = create<{
 						account_id: accountId,
 						registration_only: false,
 					},
-					'0.25'
-				)
+					'0.25',
+				),
 			);
 		}
 
@@ -503,7 +564,7 @@ export const useGame = create<{
 					account_id: accountId,
 					vesting_index: vesting,
 				}),
-			})
+			}),
 		);
 
 		const wallet = await selector.wallet();
@@ -530,8 +591,8 @@ export const useGame = create<{
 						account_id: accountId,
 						registration_only: false,
 					},
-					'0.25'
-				)
+					'0.25',
+				),
 			);
 		}
 
@@ -539,7 +600,7 @@ export const useGame = create<{
 			transactions.push(
 				getTransaction(accountId, lockedContract, 'withdraw_locked_tokens', {
 					vesting_id: vesting,
-				})
+				}),
 			);
 		});
 

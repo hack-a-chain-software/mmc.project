@@ -28,6 +28,8 @@ export const Scene = () => {
       return;
     }
 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
 		await controls.start({ clipPath: 'circle(0% at 50vw 50vh)' });
 
 		void getScene(id);

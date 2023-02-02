@@ -8,8 +8,6 @@ import { Seasons } from './entities/seasons.entity';
 
 @Injectable()
 export class GameService {
-  private contractId: string;
-
   constructor(
     @InjectRepository(Scenes)
     private scenesRepository: Repository<Scenes>,
@@ -52,6 +50,14 @@ export class GameService {
     return this.seasonsRepository.findOne({
       where: {
         id: seasonId,
+      },
+    });
+  }
+
+  findGuessByWalletId(walletId: string): Promise<Guess[]> {
+    return this.guessRepository.find({
+      where: {
+        wallet_id: walletId,
       },
     });
   }

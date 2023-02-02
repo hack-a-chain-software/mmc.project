@@ -7,10 +7,7 @@ export class Seasons {
   id: string;
 
   @Column()
-  guess_questions: string;
-
-  @Column()
-  guess_available_at: string;
+  config: string;
 
   @Column()
   season_ends_at: string;

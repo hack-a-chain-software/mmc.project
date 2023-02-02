@@ -6,6 +6,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog, Transition, Tab } from '@headlessui/react';
 import { ClueInterface } from '@/interfaces';
 import { useGame } from '@/stores/game';
+import isEmpty from 'lodash/isEmpty';
 
 export interface Clue extends ClueInterface {
   isMinted: boolean;
@@ -22,6 +23,7 @@ export function CluesModal({
 }) {
   const [clues, setClues] = useState<Clue[]>([]);
   const [stakeClue, setStakeClue] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [showConfirmStakeModal, setShowConfirmStakeModal] = useState(false);
 
   const { accountId, jwt, connected, getClues } = useGame();
@@ -35,6 +37,7 @@ export function CluesModal({
       const allClues = await getClues();
 
       setClues(allClues as Clue[]);
+      setIsLoading(false);
     })();
   }, [connected, isOpen, jwt, accountId]);
 
@@ -122,141 +125,163 @@ export function CluesModal({
                         className="w-full h-[2px] bg-[#A522FB] mb-[32px]"
                       />
 
-                      <Tab.Panel>
+                      {isLoading && (
                         <div
-                          className="flex space-x-[60px] px-[12px]"
+                          className="flex items-center justify-center h-[300px] w-full"
                         >
-                          {myClues.map(({
-                            media,
-                            isMinted,
-                            isStaked,
-                            nft_id,
-                          }, index) => (
-                            <div
-                              key={`myclue-${index}`}
-                              className="space-y-[18px] flex flex-col items-center "
-                            >
+                          <svg className="animate-spin h-8 w-8 border border-l-black rounded-full" viewBox="0 0 24 24"/>
+                        </div>
+                      )}
+
+                      {!isLoading && ( <>
+                        <Tab.Panel>
+                          <div
+                            className="flex space-x-[60px] px-[12px]"
+                          >
+                            {!isEmpty(myClues) && myClues.map(({
+                              media,
+                              isMinted,
+                              isStaked,
+                              nft_id,
+                            }, index) => (
                               <div
-                                className="w-[150px] h-[150px] rounded-[15px] flex items-center justify-center"
+                                key={`myclue-${index}`}
+                                className="space-y-[18px] flex flex-col items-center "
                               >
-                                <img
-                                  src={media}
-                                  className="max-w-full max-h-full"
-                                />
-                              </div>
-
-                              <div>
-                                <span
-                                  className={
-                                    twMerge(
-                                      'text-base font-[300] text-white uppercase',
-                                      isMinted ? 'opacity-1' : 'opacity-[0.35]',
-                                    )
-                                  }
+                                <div
+                                  className="w-[150px] h-[150px] rounded-[15px] flex items-center justify-center"
                                 >
-                                  Minted
-                                </span>
-                              </div>
+                                  <img
+                                    src={media}
+                                    className="max-w-full max-h-full"
+                                  />
+                                </div>
 
-                              <div>
-                                <span
-                                  className={
-                                    twMerge(
-                                      'text-base font-[300] text-white uppercase',
-                                      isStaked ? 'opacity-1' : 'opacity-[0.35]',
-                                    )
-                                  }
-                                >
-                                  Staked
-                                </span>
-                              </div>
+                                <div>
+                                  <span
+                                    className={
+                                      twMerge(
+                                        'text-base font-[300] text-white uppercase',
+                                        isMinted ? 'opacity-1' : 'opacity-[0.35]',
+                                      )
+                                    }
+                                  >
+                                    Minted
+                                  </span>
+                                </div>
 
-                              {
-                                !isStaked && (
-                                  <div>
-                                    <Button
-                                      onClick={
-                                        () => {
-                                          void setStakeClue(nft_id as string)
-                                          void setShowConfirmStakeModal(true);
+                                <div>
+                                  <span
+                                    className={
+                                      twMerge(
+                                        'text-base font-[300] text-white uppercase',
+                                        isStaked ? 'opacity-1' : 'opacity-[0.35]',
+                                      )
+                                    }
+                                  >
+                                    Staked
+                                  </span>
+                                </div>
+
+                                {
+                                  !isStaked && (
+                                    <div>
+                                      <Button
+                                        onClick={
+                                          () => {
+                                            void setStakeClue(nft_id as string)
+                                            void setShowConfirmStakeModal(true);
+                                          }
                                         }
-                                      }
-                                      className="w-[100px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:bg-transparent disabled:opacity-75 disabled:pointer-events-none"
-                                    >
-                                      Stake
-                                    </Button>
-                                  </div>
-                                )
-                              }
-                            </div>
-                          ))}
-                        </div>
-                      </Tab.Panel>
+                                        className="w-[100px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:bg-transparent disabled:opacity-75 disabled:pointer-events-none"
+                                      >
+                                        Stake
+                                      </Button>
+                                    </div>
+                                  )
+                                }
+                              </div>
+                            ))}
 
-                      <Tab.Panel>
-                        <div
-                          className="flex space-x-[60px] px-[12px]"
-                        >
-                          {clues && clues.map(({
-                            media,
-                            isMinted,
-                            isStaked,
-                          }, index) => (
-                            <div
-                              key={`allclues-${index}`}
-                              className="space-y-[18px] flex flex-col items-center "
-                            >
+                            {isEmpty(myClues) && (
                               <div
-                                className="w-[150px] h-[150px] rounded-[15px] flex items-center justify-center"
+                                className="w-full flex items-center justify-center bg-blue h-[300px]"
                               >
-                                <img
-                                  src={media}
-                                  className="max-w-full max-h-full"
-                                />
-                              </div>
-
-                              <div>
                                 <span
-                                  className={
-                                    twMerge(
-                                      'text-base font-[300] text-white uppercase',
-                                      !isMinted ? 'opacity-1' : 'opacity-[0.35]',
-                                    )
-                                  }
+                                  className="text-white"
                                 >
-                                  Not found
+                                  You don't have Clues
                                 </span>
                               </div>
+                            )}
+                          </div>
+                        </Tab.Panel>
 
-                              <div>
-                                <span
-                                  className={
-                                    twMerge(
-                                      'text-base font-[300] text-white uppercase',
-                                      isMinted ? 'opacity-1' : 'opacity-[0.35]',
-                                    )
-                                  }
+                        <Tab.Panel>
+                          <div
+                            className="flex space-x-[60px] px-[12px]"
+                          >
+                            {clues && clues.map(({
+                              media,
+                              isMinted,
+                              isStaked,
+                            }, index) => (
+                              <div
+                                key={`allclues-${index}`}
+                                className="space-y-[18px] flex flex-col items-center "
+                              >
+                                <div
+                                  className="w-[150px] h-[150px] rounded-[15px] flex items-center justify-center"
                                 >
-                                  Found
-                                </span>
-                              </div>
+                                  <img
+                                    src={media}
+                                    className="max-w-full max-h-full"
+                                  />
+                                </div>
 
-                              <div>
-                                <span
-                                  className={
-                                    twMerge(
-                                      'text-base font-[300] text-white uppercase',
-                                      isStaked ? 'opacity-1' : 'opacity-[0.35]',
-                                    )
-                                  }
-                                >
-                                  Revealed
-                                </span>
+                                <div>
+                                  <span
+                                    className={
+                                      twMerge(
+                                        'text-base font-[300] text-white uppercase',
+                                        !isMinted ? 'opacity-1' : 'opacity-[0.35]',
+                                      )
+                                    }
+                                  >
+                                    Not found
+                                  </span>
+                                </div>
+
+                                <div>
+                                  <span
+                                    className={
+                                      twMerge(
+                                        'text-base font-[300] text-white uppercase',
+                                        isMinted ? 'opacity-1' : 'opacity-[0.35]',
+                                      )
+                                    }
+                                  >
+                                    Found
+                                  </span>
+                                </div>
+
+                                <div>
+                                  <span
+                                    className={
+                                      twMerge(
+                                        'text-base font-[300] text-white uppercase',
+                                        isStaked ? 'opacity-1' : 'opacity-[0.35]',
+                                      )
+                                    }
+                                  >
+                                    Revealed
+                                  </span>
+                                </div>
                               </div>
-                            </div>
-                          ))}
-                        </div>
-                      </Tab.Panel>
+                            ))}
+                          </div>
+                        </Tab.Panel>
+                      </>)}
                     </Tab.Panels>
                   </Tab.Group>
                 </Dialog.Panel>

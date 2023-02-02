@@ -5,6 +5,7 @@
   "private": true,
   "main": "lib/index.ts",
   "scripts": {
+    "build:contract": "node compile.js",
     "dev:deploy:contract": "near dev-deploy",
     "deploy:contract": "near deploy"
   },
