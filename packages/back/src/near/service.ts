@@ -10,6 +10,9 @@ import { PublicKey } from 'near-api-js/lib/utils';
 import { Configuration } from 'src/config/configuration';
 
 import { CONNECTION_PROVIDER_KEY } from './constants';
+import * as BN from 'bn.js';
+
+const OneYOctoNear = '1000000000000000000000000';
 
 export type Token = {
   token_id: string;
@@ -129,6 +132,7 @@ export class NearService {
       args,
       methodName: 'save_guess',
       contractId: this.gameContract,
+      attachedDeposit: new BN('1'),
     });
   }
 }

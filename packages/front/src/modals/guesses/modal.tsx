@@ -23,7 +23,7 @@ export const GuessesModal = ({
     void (async () => {
       const userGuesses = await getGuess();
 
-      setGuesses(userGuesses as GuessInterface[]);
+      setGuesses((userGuesses || []) as GuessInterface[]);
       setIsLoading(false);
     })();
   }, [accountId, isOpen]);

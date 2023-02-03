@@ -15,6 +15,7 @@ import {
 } from '@/constants/env';
 import { GameConfigInterface, Token } from '@/interfaces';
 import { Selected } from '@/modals';
+import { viewFunction } from '@/helpers/near';
 
 export const GuessModal = ({
   isOpen,
@@ -42,12 +43,12 @@ export const GuessModal = ({
 	const [hasStakedGuessingNfts, sethasStakedGuessingNfts] = useState(false);
 
 	useEffect(() => {
-		if (!accountId) {
+		if (!accountId || !isOpen) {
 			return;
 		}
 
 		void (async () => {
-			const tickets = await getTicketsById(accountId, selector);
+			const tickets = await getTicketsById(accountId, selector) || 0;
 
 			setTicketsAmount(tickets as number);
 
@@ -55,7 +56,12 @@ export const GuessModal = ({
 
 			sethasStakedGuessingNfts(!isEmpty(totalGuess));
 		})();
-	}, [accountId]);
+
+    return () => {
+      setTicketsAmount(0);
+      sethasStakedGuessingNfts(false);
+    };
+	}, [accountId, isOpen]);
 
 	const hasTickets = useMemo(() => {
 		return ticketsAmount > 0;
@@ -66,7 +72,10 @@ export const GuessModal = ({
     <GuessFormModal
       config={config as GameConfigInterface}
       isOpen={showGuessingForm}
-      onClose={() => setShowGuessingForm(false)}
+      onClose={() => {
+        setShowGuessingForm(false);
+        onClose();
+      }}
     />
 
     <StakeNftModal
@@ -92,7 +101,7 @@ export const GuessModal = ({
         const undercoverPupsTokens = await getPupsById(accountId, selector);
 
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        tokens.push(...tokens, ...undercoverPupsTokens.map((pups: Token) =>
+        tokens.push(...undercoverPupsTokens.map((pups: Token) =>
           ({ ...pups, contract: undercoverPupsContract as string }),
         ));
 
@@ -120,39 +129,30 @@ export const GuessModal = ({
           selector,
         ));
       }}
-      // TODO: GET STAKED NFTS BY ID
-      // fetchTokens={async () => {
-      //   const nfts: Nft[] = [];
-
-      //   const detectives = await getStakedNftsById(
-      //     accountId,
-      //     selector,
-      //   );
-
-      //   nfts.push(detectives as Nft);
-
-      //   return nfts;
-      // }}
       fetchTokens={async () => {
         if (!accountId) {
           return [];
         }
 
-        const tokens: Selected[] = [];
+        const stakedNfts = await getStakedNftsById(accountId, selector);
 
-        const detectives = await getDetectivesById(accountId, selector);
+        const tokens: Selected[] = await Promise.all(
+          stakedNfts.map(async ([contract, tokenId]) => {
+            const token = await viewFunction(
+              selector,
+              contract,
+              'nft_token',
+              {
+                token_id: tokenId,
+              },
+            );
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        tokens.push(...detectives.map((detective: Token) =>
-          ({ ...detective, contract: detectivesContract as string }),
-        ));
-
-        const undercoverPupsTokens = await getPupsById(accountId, selector);
-
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        tokens.push(...tokens, ...undercoverPupsTokens.map((pups: Token) =>
-          ({ ...pups, contract: undercoverPupsContract as string }),
-        ));
+            return ({
+              ...token,
+              contract,
+            });
+          }),
+        );
 
         return tokens;
       }}

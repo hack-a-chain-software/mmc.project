@@ -91,7 +91,7 @@ export const useGame = create<{
 	getStakedNftsById: (
 		accountId: string | null,
 		connection: WalletSelector
-	) => Promise<Token[]>;
+	) => Promise<string[][]>;
 	buyTicketsWithTokens: (
 		tokenId: string,
 		tokenContract: string,
@@ -238,6 +238,7 @@ export const useGame = create<{
 		return data;
 	},
 
+
 	claimClue: async (tokenId, accountId, connection) => {
 		if (!accountId) {
 			return;
@@ -283,33 +284,31 @@ export const useGame = create<{
 				approval_id: null,
 				receiver_id: gameContract,
 				msg: JSON.stringify({
-					ProveOwner: {
-						account_id: accountId,
-					},
+          type: 'ProveOwner',
 				}),
 			}),
 		);
 
-    // const amount = await viewFunction(
-    //   connection,
-    //   gameContract,
-    //   'view_price',
-    //   {
-    //     currency: tokenContract,
-    //   },
-    // );
+    const amount = await viewFunction(
+      connection,
+      gameContract,
+      'view_price',
+      {
+        currency: tokenContract,
+      },
+    );
 
 		transactions.push(
 			getTransaction(accountId, tokenContract, 'ft_transfer_call', {
+        amount,
 				memo: null,
 				approval_id: null,
 				receiver_id: gameContract,
 				msg: JSON.stringify({
-					route: 'Claim',
-					det_or_pup: detectivesContract,
+					type: 'Claim',
 					token_id: tokenId,
+					// det_or_pup: detectivesContract,
 				}),
-        amount: '10',
 			}),
 		);
 
@@ -342,11 +341,10 @@ export const useGame = create<{
 				approval_id: null,
 				receiver_id: gameContract,
 				msg: JSON.stringify({
-					Stake: {
-						staked_nft_id: tokenId,
-					},
+          type: 'stake',
+          staked_nft_id: tokenId,
 				}),
-			})
+			}),
 		);
 
 		const wallet = await connection.wallet();
@@ -397,16 +395,16 @@ export const useGame = create<{
 
 		const { jwt } = get();
 
-		const randomNumber = Math.random() * 12;
+		const randomNumber = (Math.random() * 7).toFixed(0);
 
-		const guessHash = viewFunction(connection, gameContract, 'view_hash', {
-			account_id: accountId,
-
-			weapon: guess.weapon,
-			motive: guess.motive,
-			murderer: guess.murdered,
-
-			random_number: randomNumber,
+		const guessHash = await viewFunction(connection, gameContract, 'view_hash', {
+      guess: {
+        account_id: accountId,
+        weapon: guess.weapon,
+        motive: guess.motive,
+        murderer: guess.murdered,
+        random_number: `${randomNumber}`,
+      },
 		});
 
 		try {
@@ -419,25 +417,23 @@ export const useGame = create<{
 				},
 				{
 					headers: { Authorization: `Bearer ${jwt}` },
-				}
+				},
 			);
 
 			toast.success('Your guess has been successfully saved!');
 		} catch (e) {
 			console.warn(e);
 			toast.error(
-				'Something happens when saving your guess, please refresh your browser.'
+				'Something happens when saving your guess, please refresh your browser.',
 			);
 		}
 	},
 
 	getTicketsById: (accountId, connection) => {
-		return new Promise((resolve) => resolve('1'));
-
 		return viewFunction(
 			connection,
 			gameContract,
-			'tickets_available_per_user',
+			'view_user_tickets',
 			{
 				account_id: accountId,
 			},
@@ -445,8 +441,6 @@ export const useGame = create<{
 	},
 
 	getStakedNftsById: (accountId, connection) => {
-		return new Promise((resolve) => resolve([{ nft_id: '1', owner_id: '1' }]));
-
 		return viewFunction(
 			connection,
 			gameContract,
@@ -462,7 +456,7 @@ export const useGame = create<{
 		detOrPupContract,
 		currencyContract,
 		accountId,
-		connection
+		connection,
 	) => {
 		if (!accountId) {
 			return;
@@ -480,16 +474,16 @@ export const useGame = create<{
 				tokenContract,
 				'ft_transfer_call',
 				{
+          amount,
 					memo: null,
 					approval_id: null,
 					receiver_id: gameContract,
 					msg: JSON.stringify({
-						route: 'Guess',
+						type: 'Guess',
 						det_or_pup: detOrPupContract,
 						token_id: detOrPupId,
 					}),
 				},
-				amount,
 			),
 		);
 
@@ -511,30 +505,6 @@ export const useGame = create<{
 
 		const transactions: Transaction[] = [];
 
-		const stakingStorage = await getTokenStorage(
-			connection,
-			accountId,
-			gameContract
-		);
-
-		if (
-			!stakingStorage ||
-			new Big(stakingStorage?.available).lte('100000000000000000000000')
-		) {
-			transactions.push(
-				getTransaction(
-					accountId,
-					gameContract as string,
-					'storage_deposit',
-					{
-						account_id: accountId,
-						registration_only: false,
-					},
-					'0.25',
-				),
-			);
-		}
-
 		tokens.forEach(({ token_id, contract }) => {
 			transactions.push(
 				getTransaction(accountId, contract as string, 'nft_transfer_call', {
@@ -543,10 +513,8 @@ export const useGame = create<{
 					approval_id: null,
 					receiver_id: gameContract,
 					msg: JSON.stringify({
-						ProveOwner: {
-							account_id: accountId,
-						},
-					}),
+            type: 'Guess',
+          }),
 				}),
 			);
 		});

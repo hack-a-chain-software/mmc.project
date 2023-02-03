@@ -21,7 +21,7 @@ interface GuessDto {
   who_murdered: string;
   weapon: string;
   motive: string;
-  random_number: number;
+  random_number: string;
   hash: string;
 }
 
@@ -60,18 +60,19 @@ export class GameController {
       return res.status(400).json({ success: false, error: 'not validated' });
     }
 
-    // try {
-    //   await this.nearService.discountTicket({
-    //     guess_hash: body.hash,
-    //     account_id: req.user.accountId,
-    //   });
-    // } catch (e) {
-    //   console.warn(e);
+    try {
+      await this.nearService.discountTicket({
+        guess_hash: body.hash,
+        account_id: req.user.accountId,
+      });
+    } catch (e) {
+      console.warn(e);
 
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, error: 'Invalid permission for key' });
-    // }
+      return res.status(400).json({
+        success: false,
+        error: 'We have a problem to discount your ticket',
+      });
+    }
 
     const guess = new Guess({
       ...body,

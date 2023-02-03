@@ -18,7 +18,7 @@ export class Guess {
   motive: string;
 
   @Column()
-  random_number: number;
+  random_number: string;
 
   @Column()
   hash: string;

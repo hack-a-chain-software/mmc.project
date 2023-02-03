@@ -48,18 +48,18 @@ export const StakeNftModal = ({
   }, [accountId, isOpen]);
 
   const onSelect = (newValue: Selected) => {
-    if (!isMulti) {
-      setSelected([newValue]);
-
-      return;
-    }
-
     const hasEqualValue = selected.findIndex(
       item => isEqual(item, newValue),
     ) !== -1;
 
     if (hasEqualValue) {
       setSelected(selected.filter(item => !isEqual(item, newValue)));
+
+      return;
+    }
+
+    if (!isMulti) {
+      setSelected([newValue]);
 
       return;
     }
@@ -92,7 +92,7 @@ export const StakeNftModal = ({
                 item.contract === nft.contract
                 && item.token_id === nft.token_id
               )) !== -1}
-              onSelect={() => onSelect({...nft as Selected})}
+              onSelect={() => onSelect({ ...nft })}
               key={`stake-modal-nft-${nft.token_id as string}-${index}`}
             />
           ))}
