@@ -7,9 +7,12 @@ import {
   UseGuards,
   Param,
   Body,
+  Put,
 } from '@nestjs/common';
 import * as express from 'express';
+import { Repository } from 'typeorm';
 import { JwtAuthGuard } from 'src/jwt/auth.guard';
+import { InjectRepository } from '@nestjs/typeorm';
 import { JwtValidatedRequest, JwtValidatedUser } from 'src/jwt/types';
 import { GAME_URI } from './constants';
 import { GameService } from './service';
@@ -30,6 +33,8 @@ export class GameController {
   constructor(
     private gameService: GameService,
     private nearService: NearService,
+    @InjectRepository(Guess)
+    private guessRepository: Repository<Guess>,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -139,7 +144,46 @@ export class GameController {
       return res.status(400).json({ success: false, error: 'not validated' });
     }
 
-    return res.status(200);
+    const guesses = (await this.gameService.findGuessByWalletId(
+      req.user.accountId,
+    )) as Guess[];
+
+    try {
+      const transactions = await Promise.all(
+        guesses.map(
+          async ({
+            id,
+            wallet_id,
+            murdered,
+            weapon,
+            motive,
+            random_number,
+          }: Guess) => {
+            await this.nearService.claimGuessRewards({
+              account_id: wallet_id,
+              murderer: murdered,
+              weapon,
+              motive,
+              random_number,
+            });
+
+            await this.guessRepository.update(
+              { id },
+              {
+                burned: true,
+              },
+            );
+          },
+        ),
+      );
+
+      return res.status(200).json(transactions);
+    } catch (e) {
+      return res.status(400).json({
+        success: false,
+        error: 'We have a problem to discount your ticket',
+      });
+    }
   }
 
   async mapCluesForGame(clues: Clues[], user: JwtValidatedUser) {
@@ -154,7 +198,8 @@ export class GameController {
       clues.map(async (clue) => {
         const isOwner = user.clues.includes(clue.nft_id as never);
         const isStaked = stakedClues.includes(clue.nft_id as never);
-        const isMinted = isStaked || (!isStaked && !contractNfts.includes(`${clue.nft_id}`));
+        const isMinted =
+          isStaked || (!isStaked && !contractNfts.includes(`${clue.nft_id}`));
 
         const showMedia = isOwner || isStaked;
 

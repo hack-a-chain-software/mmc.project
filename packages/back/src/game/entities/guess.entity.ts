@@ -21,6 +21,9 @@ export class Guess {
   random_number: string;
 
   @Column()
+  burned: boolean;
+
+  @Column()
   hash: string;
 
   @Column()

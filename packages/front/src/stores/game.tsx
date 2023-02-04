@@ -26,6 +26,7 @@ import { AnimationControls } from 'framer-motion';
 import { getUTCDate } from '@/helpers';
 import { isBefore } from 'date-fns/esm';
 import { Selected } from '@/modals';
+import { Vesting } from '@/modals/locked-tokens/card';
 
 export interface LoginData {
 	accountId: string;
@@ -116,7 +117,7 @@ export const useGame = create<{
 		connection: WalletSelector
 	) => Promise<void>;
 	withdrawLockedTokens: (
-		vestings: string[],
+		vestings: Vesting[],
 		accountId: string | null,
 		connection: WalletSelector
 	) => Promise<void>;
@@ -148,8 +149,6 @@ export const useGame = create<{
 	},
 
 	login: async (payload: LoginData) => {
-		console.log('login', payload);
-
 		const { data } = await api.post<{ jwt: string }>('/auth/login', {
 			...payload,
 		});
@@ -183,11 +182,17 @@ export const useGame = create<{
 			return [];
 		}
 
-		const { data } = await api.get('/game/guess/', {
-			headers: { Authorization: `Bearer ${jwt}` },
-		});
+    try {
+      const { data } = await api.get('/game/guess/', {
+        headers: { Authorization: `Bearer ${jwt}` },
+      });
 
-		return data;
+      return data;
+    } catch (e) {
+      console.warn(e);
+
+      return [];
+    }
   },
 
   claimAllGuessingRewards: async () => {
@@ -197,11 +202,15 @@ export const useGame = create<{
 			return [];
 		}
 
-		const { data } = await api.post('/game/rewards/', {
-			headers: { Authorization: `Bearer ${jwt}` },
-		});
+    try {
+      const { data } = await api.post('/game/rewards/', {}, {
+        headers: { Authorization: `Bearer ${jwt}` },
+      });
 
-		return data;
+      return data;
+    } catch (e) {
+      console.warn(e);
+    }
   },
 
 	getScene: async (id = firstScene) => {
@@ -229,13 +238,16 @@ export const useGame = create<{
 			return;
 		}
 
-		const { data } = await api.get('/game/clues', {
-			headers: { Authorization: `Bearer ${jwt}` },
-		});
+    try {
+      const { data } = await api.get('/game/clues', {
+        headers: { Authorization: `Bearer ${jwt}` },
+      });
 
-		console.log(data);
-
-		return data;
+      return data;
+    } catch (e) {
+      console.warn(e);
+      return [];
+    }
 	},
 
 
@@ -270,6 +282,27 @@ export const useGame = create<{
 					'storage_deposit',
 					{
 						account_id: gameContract,
+						registration_only: false,
+					},
+					'0.25',
+				),
+			);
+		}
+
+		const tokenStorage = await getTokenStorage(
+      connection,
+      accountId,
+      tokenContract,
+    );
+
+		if (!tokenStorage || tokenStorage.total < '0.10') {
+			transactions.push(
+				getTransaction(
+					accountId,
+					tokenContract,
+					'storage_deposit',
+					{
+						account_id: accountId,
 						registration_only: true,
 					},
 					'0.25',
@@ -324,9 +357,12 @@ export const useGame = create<{
 
 		const { getDetectivesById } = get();
 
-		const accountDetectives = getDetectivesById(accountId, connection);
+		const accountDetectives: Token[] = await getDetectivesById(
+      accountId,
+      connection,
+    );
 
-		if (!isEmpty(accountDetectives)) {
+		if (isEmpty(accountDetectives)) {
 			toast.error("You don't have any detectives");
 
 			return;
@@ -336,12 +372,12 @@ export const useGame = create<{
 
 		transactions.push(
 			getTransaction(accountId, detectivesContract, 'nft_transfer_call', {
-				token_id: accountDetectives[0].nft_id,
+				token_id: accountDetectives[0].token_id,
 				memo: null,
 				approval_id: null,
 				receiver_id: gameContract,
 				msg: JSON.stringify({
-          type: 'stake',
+          type: 'Stake',
           staked_nft_id: tokenId,
 				}),
 			}),
@@ -466,7 +502,28 @@ export const useGame = create<{
 
 		const transactions: Transaction[] = [];
 
-		const amount = await getGuessTokenPrice(currencyContract, connection);
+		const storage = await getTokenStorage(
+      connection,
+      gameContract,
+      tokenContract,
+    );
+
+		if (!storage || storage.total < '0.10') {
+			transactions.push(
+				getTransaction(
+					accountId,
+					tokenContract,
+					'storage_deposit',
+					{
+						account_id: gameContract,
+						registration_only: true,
+					},
+					'0.25',
+				),
+			);
+		}
+
+		const amount = await getGuessTokenPrice(tokenContract, connection);
 
 		transactions.push(
 			getTransaction(
@@ -504,6 +561,27 @@ export const useGame = create<{
 		}
 
 		const transactions: Transaction[] = [];
+
+		const storage = await getTokenStorage(
+      connection,
+      accountId,
+      lockedContract,
+    );
+
+		if (!storage || storage.total < '0.10') {
+			transactions.push(
+				getTransaction(
+					accountId,
+					lockedContract,
+					'storage_deposit',
+					{
+						account_id: accountId,
+						registration_only: true,
+					},
+					'0.50',
+				),
+			);
+		}
 
 		tokens.forEach(({ token_id, contract }) => {
 			transactions.push(
@@ -590,10 +668,10 @@ export const useGame = create<{
 			);
 		}
 
-		vestings.forEach((vesting) => {
+		vestings.forEach(({ id }) => {
 			transactions.push(
 				getTransaction(accountId, lockedContract, 'withdraw_locked_tokens', {
-					vesting_id: vesting,
+					vesting_id: id,
 				}),
 			);
 		});

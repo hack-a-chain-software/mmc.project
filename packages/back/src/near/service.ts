@@ -135,4 +135,21 @@ export class NearService {
       attachedDeposit: new BN('1'),
     });
   }
+
+  async claimGuessRewards(args: {
+    motive: string;
+    weapon: string;
+    murderer: string;
+    account_id: string;
+    random_number: string;
+  }) {
+    return this.callContractChangeFunction({
+      args: {
+        guess: args,
+      },
+      gas: new BN('300000000000000'),
+      methodName: 'claim_guess_rewards',
+      contractId: this.gameContract,
+    });
+  }
 }
