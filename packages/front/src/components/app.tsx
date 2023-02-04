@@ -16,17 +16,18 @@ const Pages = () => {
 export const App = () => {
   const controls = useAnimationControls();
 
-  const { login, accountId: gameAccountid } = useGame();
+  const { login, accountId: gameAccountid, isLoading } = useGame();
 
   const { accountId, getLoginPayload } = useWalletSelector();
 
   useEffect(() => {
-    console.log('--------');
-    console.log('account id: ', accountId);
-    console.log('game account id: ', gameAccountid);
-    console.log('--------');
+    if (
+      typeof accountId !== 'string'
+      || accountId === gameAccountid
+      || isLoading
+    ) {
+      console.log('reutrn');
 
-    if (typeof accountId !== 'string' || accountId === gameAccountid) {
       return;
     }
 

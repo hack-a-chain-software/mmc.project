@@ -52,6 +52,7 @@ export const useGame = create<{
 	config: GameConfigInterface | null;
 	controls: AnimationControls | null;
 	connected: boolean;
+  isLoading: boolean;
   clues: ClueInterface[] | null;
   guessingIsOpen: () => boolean,
 	login: (
@@ -127,6 +128,7 @@ export const useGame = create<{
 	jwt: '',
   accountId: '',
   clues: null,
+  isLoading: true,
 	scene: null,
 	config: null,
 	controls: null,
@@ -138,6 +140,10 @@ export const useGame = create<{
       getScene,
       getClues,
     } = get();
+
+    set({
+      isLoading: true,
+    });
 
 		const { data: {
       jwt = '',
@@ -153,6 +159,7 @@ export const useGame = create<{
 			jwt,
 			controls,
 			accountId,
+      isLoading: false,
 			config: {
         ...data,
         ...data.config,

@@ -37,7 +37,7 @@ export const WalletSelectorContextProvider: React.FC<
 > = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
   const [keyPair, setKeypair] = useState<KeyPair>();
-  const [accountId, setAccountId] = useState<string | null>(null);
+  const [accountId, setAccountId] = useState<string | undefined>();
   const [accounts, setAccounts] = useState<AccountState[]>([]);
   const [selector, setSelector] = useState<WalletSelector | null>(null);
 
@@ -120,7 +120,9 @@ export const WalletSelectorContextProvider: React.FC<
 
   useEffect(() => {
     const newAccount =
-      accounts.find((account) => account.active)?.accountId || '';
+      accounts.find((account) => account.active)?.accountId;
+
+    console.log('set accounts', typeof newAccount, newAccount);
 
     setAccountId(newAccount);
 
