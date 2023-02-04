@@ -44,6 +44,8 @@ export class GameController {
     @Request() req: JwtValidatedRequest,
     @Response() res: express.Response,
   ) {
+    console.log('get scene by user: ', req.user);
+
     const viewResult = await this.gameService.findSceneById(sceneId);
 
     viewResult.clues = (await this.mapCluesForGame(
@@ -110,6 +112,8 @@ export class GameController {
     @Request() req: JwtValidatedRequest,
     @Response() res: express.Response,
   ) {
+    console.log('get clues by user: ', req.user);
+
     const viewResult = await this.gameService.findAllClues();
 
     const clues = await this.mapCluesForGame(viewResult, req.user);
