@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge';
 import { ConfirmStakeClueModal } from '@/modals';
 import { ClueInterface } from '@/interfaces';
 import { ModalTemplate } from '../modal-template';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { BaseModalPropsInterface } from '@/interfaces/modal';
 
 export interface Clue extends ClueInterface {
@@ -19,25 +19,13 @@ export const GameCluesModal = ({
   isOpen = false,
   onClose,
 }: BaseModalPropsInterface) => {
-	const [clues, setClues] = useState<Clue[]>([]);
 	const [stakeClue, setStakeClue] = useState('');
-	const [isLoading, setIsLoading] = useState(true);
 	const [showConfirmStakeModal, setShowConfirmStakeModal] = useState(false);
 
-	const { accountId, jwt, connected, getClues } = useGame();
-
-	useEffect(() => {
-		if (!connected || !isOpen || !jwt || !accountId) {
-			return;
-		}
-
-		void (async () => {
-			const allClues = await getClues();
-
-			setClues(allClues as Clue[]);
-			setIsLoading(false);
-		})();
-	}, [connected, isOpen, jwt, accountId]);
+	const {
+    clues,
+    accountId,
+  } = useGame();
 
 	const myClues = useMemo(() => {
 		if (!clues) {
@@ -45,7 +33,11 @@ export const GameCluesModal = ({
 		}
 
 		return clues.filter((clue) => clue.isOwner);
-	}, [clues, isOpen, accountId]);
+	}, [clues, accountId]);
+
+  const isLoading = useMemo(() => {
+    return typeof clues === null;
+  }, [clues]);
 
   return (
     <>
@@ -93,7 +85,9 @@ export const GameCluesModal = ({
             {!isLoading && (
               <>
                 <Tab.Panel>
-                  <div className="flex space-x-[60px] px-[12px]">
+                  <div className="
+                    grid grid-cols-[repeat(auto-fill,minmax(150px,150px))] gap-12 justify-center flex-grow max-h-[400px] h-[400px] overflow-auto
+                  ">
                     {!isEmpty(myClues) &&
                       myClues.map(
                         (
@@ -101,7 +95,7 @@ export const GameCluesModal = ({
                           index,
                         ) => (
                           <div
-                            key={`myclue-${index}`}
+                            key={`myclue-${index as number}`}
                             className="space-y-[18px] flex flex-col items-center "
                           >
                             <div className="w-[150px] h-[150px] rounded-[15px] flex items-center justify-center">
@@ -142,10 +136,10 @@ export const GameCluesModal = ({
                                 <Button
                                   onClick={() => {
                                     void setStakeClue(
-                                      nft_id as string
+                                      nft_id as string,
                                     );
                                     void setShowConfirmStakeModal(
-                                      true
+                                      true,
                                     );
                                   }}
                                   className="w-[100px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:bg-transparent disabled:opacity-75 disabled:pointer-events-none"
@@ -159,7 +153,7 @@ export const GameCluesModal = ({
                       )}
 
                     {isEmpty(myClues) && (
-                      <div className="w-full flex items-center justify-center bg-blue h-[300px]">
+                      <div className="col-span-full flex items-center justify-center bg-blue h-[300px]">
                         <span className="text-white">
                           You don't have Clues
                         </span>
@@ -169,12 +163,14 @@ export const GameCluesModal = ({
                 </Tab.Panel>
 
                 <Tab.Panel>
-                  <div className="flex space-x-[60px] px-[12px]">
+                  <div className="
+                    grid grid-cols-[repeat(auto-fill,minmax(150px,150px))] gap-12 justify-center flex-grow max-h-[400px] h-[400px] overflow-auto
+                  ">
                     {clues &&
                       clues.map(
                         ({ media, isMinted, isStaked }, index) => (
                           <div
-                            key={`allclues-${index}`}
+                            key={`allclues-${index as number}`}
                             className="space-y-[18px] flex flex-col items-center "
                           >
                             <div className="w-[150px] h-[150px] rounded-[15px] flex items-center justify-center">

@@ -57,10 +57,7 @@ export const GuessModal = ({
 			sethasStakedGuessingNfts(!isEmpty(totalGuess));
 		})();
 
-    return () => {
-      setTicketsAmount(0);
-      sethasStakedGuessingNfts(false);
-    };
+    return;
 	}, [accountId, isOpen]);
 
 	const hasTickets = useMemo(() => {

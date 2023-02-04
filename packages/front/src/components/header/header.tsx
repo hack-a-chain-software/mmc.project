@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useWalletSelector } from '@/context/wallet';
 import {
+  If,
 	Button,
 	Socials,
 	WalletMenu,
@@ -30,10 +31,14 @@ export function Header() {
 
 	return (
 		<>
-			<GuessModal
-				isOpen={showGuessModal}
-				onClose={() => setShowGuessModal(false)}
-			/>
+      <If
+        condition={showGuessModal}
+      >
+        <GuessModal
+          isOpen={showGuessModal}
+          onClose={() => setShowGuessModal(false)}
+        />
+      </If>
 
 			<header className="absolute w-full mx-auto pt-[32px] z-[9]">
 				<nav className="flex justify-between items-center w-[calc(100%-96px)] max-w-[1280px] h-[56px] mx-auto">

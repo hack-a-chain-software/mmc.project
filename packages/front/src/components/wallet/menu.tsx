@@ -8,6 +8,7 @@ import { Square2StackIcon, PowerIcon, MagnifyingGlassIcon, BanknotesIcon, ChatBu
 import { UserCircleIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/solid';
 import { GameCluesModal, LockedTokensModal, GuessesModal } from '@/modals';
 import { shortenAddress } from '@/helpers';
+import { If } from '@/components';
 
 export const WalletMenu = () => {
   const { accountId, toggleModal, signOut } = useWalletSelector();
@@ -17,20 +18,32 @@ export const WalletMenu = () => {
 
   return (
     <>
-      <GameCluesModal
-        isOpen={showCluesModal}
-        onClose={() => setShowCluesModal(false)}
-      />
+      <If
+        condition={showCluesModal}
+      >
+        <GameCluesModal
+          isOpen={showCluesModal}
+          onClose={() => setShowCluesModal(false)}
+        />
+      </If>
 
-      <LockedTokensModal
-        isOpen={showTokensModal}
-        onClose={() => setShowTokensModal(false)}
-      />
+      <If
+        condition={showTokensModal}
+      >
+        <LockedTokensModal
+          isOpen={showTokensModal}
+          onClose={() => setShowTokensModal(false)}
+        />
+      </If>
 
-      <GuessesModal
-        isOpen={showGuessesModal}
-        onClose={() => setShowGuessesModal(false)}
-      />
+      <If
+        condition={showGuessesModal}
+      >
+        <GuessesModal
+          isOpen={showGuessesModal}
+          onClose={() => setShowGuessesModal(false)}
+        />
+      </If>
 
       <Menu as="div" className="relative text-left hidden md:inline-block ml-8">
         <Menu.Button

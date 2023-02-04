@@ -52,6 +52,7 @@ export const useGame = create<{
 	config: GameConfigInterface | null;
 	controls: AnimationControls | null;
 	connected: boolean;
+  clues: ClueInterface[] | null;
   guessingIsOpen: () => boolean,
 	login: (
     payload: LoginData,
@@ -125,6 +126,7 @@ export const useGame = create<{
 }>((set, get) => ({
 	jwt: '',
   accountId: '',
+  clues: null,
 	scene: null,
 	config: null,
 	controls: null,
@@ -134,6 +136,7 @@ export const useGame = create<{
 	login: async (loginPayload, accountId, controls) => {
     const {
       getScene,
+      getClues,
     } = get();
 
 		const { data: {
@@ -146,8 +149,15 @@ export const useGame = create<{
 			headers: { Authorization: `Bearer ${jwt as string}` },
 		});
 
+    let clues: ClueInterface[] | null = null;
+
+    if (accountId) {
+      clues = await getClues();
+    }
+
 		set({
 			jwt,
+      clues,
 			controls,
 			accountId,
 			config: {
