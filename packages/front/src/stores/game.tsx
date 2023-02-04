@@ -149,16 +149,8 @@ export const useGame = create<{
 			headers: { Authorization: `Bearer ${jwt as string}` },
 		});
 
-    let clues: ClueInterface[] | null = null;
-
-    if (accountId) {
-      console.log('get clues-', accountId);
-      clues = await getClues();
-    }
-
 		set({
 			jwt,
-      clues,
 			controls,
 			accountId,
 			config: {
@@ -168,6 +160,17 @@ export const useGame = create<{
 			connected: true,
       autenticated: !!accountId,
 		});
+
+    let clues: ClueInterface[] | null = null;
+
+    if (accountId) {
+      console.log('get clues-', accountId);
+      clues = await getClues();
+    }
+
+    set({
+      clues,
+    });
 
     await getScene();
 
@@ -274,6 +277,8 @@ export const useGame = create<{
 
 	getClues: async () => {
 		const { jwt } = get();
+
+    console.log('jwt', jwt);
 
 		if (!jwt) {
 			return;

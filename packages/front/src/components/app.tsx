@@ -22,8 +22,8 @@ export const App = () => {
 
   useEffect(() => {
     console.log('--------');
-    console.log(accountId);
-    console.log(gameAccountid);
+    console.log('account id: ', accountId);
+    console.log('game account id: ', gameAccountid);
     console.log('--------');
 
     if (typeof accountId !== 'string' || accountId === gameAccountid) {
