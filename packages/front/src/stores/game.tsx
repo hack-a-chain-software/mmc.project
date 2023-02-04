@@ -46,18 +46,18 @@ export interface GuessDto {
 
 export const useGame = create<{
 	jwt: string;
-	accountId: string;
+  accountId: string;
+	autenticated: boolean;
 	scene: SceneInterface | null;
 	config: GameConfigInterface | null;
 	controls: AnimationControls | null;
 	connected: boolean;
   guessingIsOpen: () => boolean,
-	init: (
-		jwt: string,
+	login: (
+    payload: LoginData,
 		accountId: string,
 		controls: AnimationControls
-	) => Promise<GameConfigInterface>;
-	login: (payload: LoginData) => Promise<{ jwt: string }>;
+  ) => Promise<GameConfigInterface>;
 	getScene: (id?: string) => Promise<SceneInterface>;
 	getClues: () => Promise<ClueInterface[]>;
   getGuess: () => Promise<GuessInterface[]>,
@@ -121,17 +121,29 @@ export const useGame = create<{
 		accountId: string | null,
 		connection: WalletSelector
 	) => Promise<void>;
+  moveToScene: (id: string) => Promise<void>;
 }>((set, get) => ({
 	jwt: '',
-	accountId: '',
+  accountId: '',
 	scene: null,
 	config: null,
 	controls: null,
 	connected: false,
+  autenticated: false,
 
-	init: async (jwt, accountId, controls) => {
+	login: async (loginPayload, accountId, controls) => {
+    const {
+      getScene,
+    } = get();
+
+		const { data: {
+      jwt = '',
+    } } = await api.post<{ jwt: string }>('/auth/login', {
+			...loginPayload,
+		});
+
 		const { data } = await api.get('/game/config', {
-			headers: { Authorization: `Bearer ${jwt}` },
+			headers: { Authorization: `Bearer ${jwt as string}` },
 		});
 
 		set({
@@ -143,15 +155,10 @@ export const useGame = create<{
         ...data.config,
       },
 			connected: true,
+      autenticated: !!accountId,
 		});
 
-		return data;
-	},
-
-	login: async (payload: LoginData) => {
-		const { data } = await api.post<{ jwt: string }>('/auth/login', {
-			...payload,
-		});
+    await getScene();
 
 		return data;
 	},
@@ -211,6 +218,29 @@ export const useGame = create<{
     } catch (e) {
       console.warn(e);
     }
+  },
+
+  moveToScene: async (id) => {
+		const {
+      controls,
+      connected,
+      getScene,
+    } = get();
+
+    if (!connected || !controls) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+		await controls.start({ clipPath: 'circle(0% at 50vw 50vh)' });
+
+    set({
+      scene: null,
+    });
+
+		void await getScene(id);
+
   },
 
 	getScene: async (id = firstScene) => {

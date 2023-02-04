@@ -5,35 +5,19 @@ import { SuspenseImage } from '@/components';
 import { useGame } from '@/stores/game';
 
 export const Scene = () => {
-  const { controls, config, scene, getScene, jwt } = useGame();
-
-  useEffect(() => {
-    if (!jwt && !config) {
-      return;
-    }
-
-    void getScene();
-  }, [jwt, config]);
+  const {
+    scene,
+    controls,
+    moveToScene,
+  } = useGame();
 
 	useEffect(() => {
-    if (!scene || !controls) {
+    if (!!!scene || !!!controls) {
       return;
     }
 
     controls.start({ clipPath: 'circle(100% at 50vw 50vh)' });
 	});
-
-	const moveToScene = async (id) => {
-    if (!controls) {
-      return;
-    }
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-		await controls.start({ clipPath: 'circle(0% at 50vw 50vh)' });
-
-		void getScene(id);
-	};
 
 	return (
 		<div className="relative bg-blue-100 min-h-screen">
@@ -60,7 +44,7 @@ export const Scene = () => {
 				scene?.warps.map(({ position_top, position_left, warps_to }, index) => (
 					<Portal
 						position={{ left: `${position_left as string}%`, top: `${position_top as string}%` }}
-						onClick={() => void moveToScene(warps_to)}
+						onClick={() => void moveToScene(warps_to as string)}
 						key={`mmc-scene-portal-${index as number}`}
 					/>
 				))}

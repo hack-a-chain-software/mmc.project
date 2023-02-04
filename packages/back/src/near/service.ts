@@ -35,7 +35,6 @@ export type TokenMetadata = {
   reference_hash: string | null;
 };
 
-
 @Injectable()
 export class NearService {
   private gameContract: string;

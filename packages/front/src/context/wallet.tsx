@@ -37,7 +37,7 @@ export const WalletSelectorContextProvider: React.FC<
 > = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
   const [keyPair, setKeypair] = useState<KeyPair>();
-  const [accountId, setAccountId] = useState<string>('');
+  const [accountId, setAccountId] = useState<string | null>(null);
   const [accounts, setAccounts] = useState<AccountState[]>([]);
   const [selector, setSelector] = useState<WalletSelector | null>(null);
 
@@ -108,7 +108,7 @@ export const WalletSelectorContextProvider: React.FC<
     }
 
     return {
-      accountId: accountId,
+      accountId: accountId as string,
       seasonId: gameSeason as string,
       signedMessage: {
         message: message.toString(),
@@ -146,7 +146,6 @@ export const WalletSelectorContextProvider: React.FC<
         selector,
         showModal,
         accountId,
-
         signOut,
         toggleModal,
         getLoginPayload,

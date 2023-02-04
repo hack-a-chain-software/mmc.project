@@ -1,7 +1,10 @@
+import { FungibleTokenMetadata } from "./near";
+
 export interface GameConfigInterface {
   created_at: string;
   season_ends_at: string;
   guess_open_at: string;
+  game_currencies: GameCurrencyInterface[],
   guess_questions: GuessQuestionInterface[],
 }
 
@@ -26,4 +29,9 @@ export interface GuessInterface {
   wallet_id: string;
   random_number: string;
   created_at: string;
+}
+
+export interface GameCurrencyInterface {
+  contract: string;
+  metadata: FungibleTokenMetadata;
 }

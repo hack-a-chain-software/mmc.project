@@ -16,19 +16,19 @@ const Pages = () => {
 export const App = () => {
   const controls = useAnimationControls();
 
-  const { init, login } = useGame();
+  const { login, accountId: gameAccountid } = useGame();
 
   const { accountId, getLoginPayload } = useWalletSelector();
 
   useEffect(() => {
+    if (typeof accountId !== 'string' || accountId === gameAccountid) {
+      return;
+    }
+
     void (async () => {
       const loginPayload = getLoginPayload();
 
-      const {
-        jwt,
-      } = await login(loginPayload);
-
-      await init(jwt, accountId || '', controls);
+      await login(loginPayload, accountId || '', controls);
     })();
   }, [accountId]);
 
