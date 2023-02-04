@@ -152,6 +152,7 @@ export const useGame = create<{
     let clues: ClueInterface[] | null = null;
 
     if (accountId) {
+      console.log('get clues-', accountId);
       clues = await getClues();
     }
 

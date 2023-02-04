@@ -21,6 +21,11 @@ export const App = () => {
   const { accountId, getLoginPayload } = useWalletSelector();
 
   useEffect(() => {
+    console.log('--------');
+    console.log(accountId);
+    console.log(gameAccountid);
+    console.log('--------');
+
     if (typeof accountId !== 'string' || accountId === gameAccountid) {
       return;
     }

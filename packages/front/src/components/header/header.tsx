@@ -17,13 +17,12 @@ import { GuessModal } from '@/modals';
 
 export function Header() {
 	const navigate = useNavigate();
-	const { accountId } = useWalletSelector();
 
 	const [showGuessModal, setShowGuessModal] = useState(false);
 
 	const { pathname } = useLocation();
 
-  const { guessingIsOpen } = useGame();
+  const { guessingIsOpen, autenticated } = useGame();
 
 	const inGame = useMemo(() => {
 		return pathname === '/987654321';
@@ -105,10 +104,10 @@ export function Header() {
 							</button>
 
               {
-                guessingIsOpen() && (
+                guessingIsOpen() && autenticated && (
                   <Button
                     onClick={() => setShowGuessModal(true)}
-                    disabled={!!!accountId}
+                    disabled={!autenticated}
                     className="mr-8"
                   >
                     <span>Guessing now open</span>

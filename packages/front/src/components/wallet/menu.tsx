@@ -9,12 +9,16 @@ import { UserCircleIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/so
 import { GameCluesModal, LockedTokensModal, GuessesModal } from '@/modals';
 import { shortenAddress } from '@/helpers';
 import { If } from '@/components';
+import { useGame } from '@/stores/game';
 
 export const WalletMenu = () => {
   const { accountId, toggleModal, signOut } = useWalletSelector();
+
   const [showCluesModal, setShowCluesModal] = useState(false);
   const [showTokensModal, setShowTokensModal] = useState(false);
   const [showGuessesModal, setShowGuessesModal] = useState(false);
+
+  const { autenticated } = useGame();
 
   return (
     <>
@@ -54,7 +58,7 @@ export const WalletMenu = () => {
             className={
               twMerge(
                 'text-white w-8',
-                !!accountId && 'text-[#A500FB]',
+                !!autenticated && 'text-[#A500FB]',
               )
             }
           />
@@ -85,7 +89,7 @@ export const WalletMenu = () => {
             "
           >
             {
-              !!accountId ? (
+              !!autenticated ? (
                 <>
                   <div className="py-[14px] px-[24px]">
                     <CopyToClipboard
