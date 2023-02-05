@@ -16,27 +16,34 @@ const Pages = () => {
 export const App = () => {
   const controls = useAnimationControls();
 
-  const { login, accountId: gameAccountid, isLoading } = useGame();
+  const { login, accountId: gameAccountid } = useGame();
 
-  const { accountId, getLoginPayload } = useWalletSelector();
+  const {
+    accountId,
+    getLoginPayload,
+    isLoading: isLoadingWallet,
+  } = useWalletSelector();
 
   useEffect(() => {
-    if (
-      typeof accountId !== 'string'
-      || accountId === gameAccountid
-      || isLoading
-    ) {
-      console.log('reutrn');
-
+    if (accountId === undefined || isLoadingWallet) {
       return;
     }
 
+    console.log('-----');
+    console.log('(1) accountid', accountId);
+    console.log('(2) typeof', typeof accountId === undefined);
+    console.log('(3) game accountid', gameAccountid);
+    console.log('(4) isLoadingWallet', isLoadingWallet);
+    console.log('-----');
+
     void (async () => {
+      console.log('oha', accountId);
+
       const loginPayload = getLoginPayload();
 
       await login(loginPayload, accountId || '', controls);
     })();
-  }, [accountId]);
+  }, [accountId, gameAccountid, isLoadingWallet]);
 
   return (
     <Router>

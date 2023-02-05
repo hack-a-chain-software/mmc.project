@@ -18,10 +18,11 @@ import { LoginData } from '@/stores/game';
 
 interface WalletContextValue {
   showModal: boolean;
-  accountId: string | null;
+  accountId: string | undefined;
   toggleModal: () => void;
   selector: WalletSelector;
   signOut: () => Promise<void>;
+  isLoading: boolean;
   getLoginPayload: () => LoginData;
 }
 
@@ -36,6 +37,7 @@ export const WalletSelectorContextProvider: React.FC<
   PropsWithChildren<Record<any, any>>
 > = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsloading] = useState(true);
   const [keyPair, setKeypair] = useState<KeyPair>();
   const [accountId, setAccountId] = useState<string | undefined>();
   const [accounts, setAccounts] = useState<AccountState[]>([]);
@@ -64,6 +66,8 @@ export const WalletSelectorContextProvider: React.FC<
 
     setAccounts(state.accounts);
     setSelector(newSelector);
+
+    setIsloading(false);
   }, []);
 
   useEffect(() => {
@@ -122,8 +126,6 @@ export const WalletSelectorContextProvider: React.FC<
     const newAccount =
       accounts.find((account) => account.active)?.accountId;
 
-    console.log('set accounts', typeof newAccount, newAccount);
-
     setAccountId(newAccount);
 
     void (async () => {
@@ -131,7 +133,7 @@ export const WalletSelectorContextProvider: React.FC<
 
       const accountKeyPair = await keystore.getKey(
         network as string,
-        newAccount,
+        newAccount as string,
       );
 
       setKeypair(accountKeyPair);
@@ -147,6 +149,7 @@ export const WalletSelectorContextProvider: React.FC<
       value={{
         selector,
         showModal,
+        isLoading,
         accountId,
         signOut,
         toggleModal,
