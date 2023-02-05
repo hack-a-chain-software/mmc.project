@@ -28,7 +28,7 @@ export const GameCluesModal = ({
   } = useGame();
 
 	const myClues = useMemo(() => {
-		if (!clues) {
+		if (!clues || !autenticated) {
 			return [];
 		}
 
@@ -62,7 +62,7 @@ export const GameCluesModal = ({
                 className={({ selected }) =>
                   twMerge(
                     'w-[150px] min-h-[40px] tracking-[0px] rounded-[50px] font-[400] text-sm border border-white outline-none',
-                    selected ? 'bg-purple-0' : 'bg-transparent'
+                    selected ? 'bg-purple-0' : 'bg-transparent',
                   )
                 }
                 children={tab}
@@ -149,7 +149,7 @@ export const GameCluesModal = ({
                               </div>
                             )}
                           </div>
-                        )
+                        ),
                       )}
 
                     {isEmpty(myClues) && (
@@ -219,7 +219,7 @@ export const GameCluesModal = ({
                               </span>
                             </div>
                           </div>
-                        )
+                        ),
                       )}
                   </div>
                 </Tab.Panel>
