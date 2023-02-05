@@ -6,7 +6,6 @@ import { useEffect, useMemo } from 'react';
 import { useWalletSelector } from '@/context/wallet';
 import { Toaster } from 'react-hot-toast';
 import { useGame } from '@/stores/game';
-import { useLocation } from 'react-router-dom';
 import { useAnimationControls } from 'framer-motion';
 import { gameRoute } from '@/constants';
 
@@ -20,11 +19,9 @@ export const App = () => {
 
   const { login } = useGame();
 
-	const { pathname } = useLocation();
-
 	const inGame = useMemo(() => {
-		return pathname === gameRoute;
-	}, [pathname]);
+		return window.location.pathname === gameRoute;
+	}, [window.location.pathname]);
 
   const {
     isLoading,
