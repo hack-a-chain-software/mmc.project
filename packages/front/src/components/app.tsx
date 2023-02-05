@@ -6,6 +6,7 @@ import { useEffect, useMemo } from 'react';
 import { useWalletSelector } from '@/context/wallet';
 import { Toaster } from 'react-hot-toast';
 import { useGame } from '@/stores/game';
+import { useLocation } from 'react-router-dom';
 import { useAnimationControls } from 'framer-motion';
 import { gameRoute } from '@/constants';
 
@@ -41,6 +42,7 @@ export const App = () => {
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     console.log(`app.tsx: login trigged for account id ${accountId as string} and isLoading: ${isLoading}`);
 
     void (async () => {
