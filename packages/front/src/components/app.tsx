@@ -19,31 +19,23 @@ export const App = () => {
   const { login, accountId: gameAccountid } = useGame();
 
   const {
+    isLoading,
     accountId,
     getLoginPayload,
-    isLoading: isLoadingWallet,
   } = useWalletSelector();
 
   useEffect(() => {
-    if (accountId === undefined || isLoadingWallet) {
+    if (
+      isLoading && typeof accountId === 'undefined') {
       return;
     }
 
-    console.log('-----');
-    console.log('(1) accountid', accountId);
-    console.log('(2) typeof', typeof accountId === undefined);
-    console.log('(3) game accountid', gameAccountid);
-    console.log('(4) isLoadingWallet', isLoadingWallet);
-    console.log('-----');
-
     void (async () => {
-      console.log('oha', accountId);
-
       const loginPayload = getLoginPayload();
 
       await login(loginPayload, accountId || '', controls);
     })();
-  }, [accountId, gameAccountid, isLoadingWallet]);
+  }, [accountId]);
 
   return (
     <Router>

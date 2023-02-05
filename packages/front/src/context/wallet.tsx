@@ -138,7 +138,7 @@ export const WalletSelectorContextProvider: React.FC<
 
       setKeypair(accountKeyPair);
     })();
-  }, [accounts]);
+  }, [accounts, isLoading]);
 
   if (!selector) {
     return null;
