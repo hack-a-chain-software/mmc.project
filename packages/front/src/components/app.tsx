@@ -2,11 +2,12 @@ import routes from '~react-pages';
 import { Header } from './header';
 import { Footer } from './footer';
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useWalletSelector } from '@/context/wallet';
 import { Toaster } from 'react-hot-toast';
 import { useGame } from '@/stores/game';
 import { useAnimationControls } from 'framer-motion';
+import { gameRoute } from '@/constants';
 
 const Pages = () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -17,6 +18,12 @@ export const App = () => {
   const controls = useAnimationControls();
 
   const { login } = useGame();
+
+	const { pathname } = useLocation();
+
+	const inGame = useMemo(() => {
+		return pathname === gameRoute;
+	}, [pathname]);
 
   const {
     isLoading,
@@ -30,7 +37,7 @@ export const App = () => {
     console.log(`app.tsx: useffect trigged for account id ${accountId as string} and isLoading: ${isLoading}`);
 
     if (
-      isLoading && typeof accountId === 'undefined') {
+      inGame && isLoading && typeof accountId === 'undefined') {
       return;
     }
 

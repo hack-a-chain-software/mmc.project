@@ -1,2 +1,3 @@
-export * from "./near";
-export * from "./contracts";
+export * from './near';
+export * from './game';
+export * from './contracts';
