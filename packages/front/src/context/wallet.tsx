@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   PropsWithChildren,
+  useMemo,
 } from 'react';
 import { keyStores } from 'near-api-js';
 import type { AccountView } from 'near-api-js/lib/providers/provider';
@@ -37,13 +38,18 @@ export const WalletSelectorContextProvider: React.FC<
   PropsWithChildren<Record<any, any>>
 > = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
-  const [isLoading, setIsloading] = useState(true);
+  const [isLoadingInit, setIsLoadingInit] = useState(true);
+  const [isLoadingAccountId, setIsLoadingAccountId] = useState(true);
   const [keyPair, setKeypair] = useState<KeyPair>();
   const [accountId, setAccountId] = useState<string | undefined>();
   const [accounts, setAccounts] = useState<AccountState[]>([]);
   const [selector, setSelector] = useState<WalletSelector | null>(null);
 
   const toggleModal = () => setShowModal(!showModal);
+
+  const isLoading = useMemo(() => {
+    return isLoadingInit || isLoadingAccountId;
+  }, [isLoadingInit && isLoadingAccountId]);
 
   const signOut = async () => {
     if (!selector) {
@@ -67,7 +73,7 @@ export const WalletSelectorContextProvider: React.FC<
     setAccounts(state.accounts);
     setSelector(newSelector);
 
-    setIsloading(false);
+    setIsLoadingInit(false);
   }, []);
 
   useEffect(() => {
@@ -127,6 +133,7 @@ export const WalletSelectorContextProvider: React.FC<
       accounts.find((account) => account.active)?.accountId;
 
     setAccountId(newAccount);
+    setIsLoadingAccountId(false);
 
     void (async () => {
       const keystore = new keyStores.BrowserLocalStorageKeyStore();

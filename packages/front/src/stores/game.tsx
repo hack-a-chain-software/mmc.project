@@ -164,10 +164,10 @@ export const useGame = create<{
     let clues: ClueInterface[] | null = null;
 
     if (accountId) {
-      console.log('-- game.tsx --');
-      console.log('get clues for id:', accountId);
-      console.log('get clues for jwt:', jwt);
-      console.log('-- game.tsx --');
+      console.log('');
+      console.log('game.tsx: get clues for id:', accountId);
+      console.log('');
+
       clues = await getClues();
     }
 
@@ -280,8 +280,6 @@ export const useGame = create<{
 
 	getClues: async () => {
 		const { jwt } = get();
-
-    console.log('jwt', jwt);
 
 		if (!jwt) {
 			return;

@@ -25,27 +25,23 @@ export const App = () => {
   } = useWalletSelector();
 
   useEffect(() => {
-    console.log('-- app.tsx --');
-    console.log('walelt selector account id: ', accountId);
-    console.log('walelt selector is loading: ', isLoading);
-    console.log('-- app.tsx --');
+    console.log('');
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    console.log(`app.tsx: useffect trigged for account id ${accountId as string} and isLoading: ${isLoading}`);
 
     if (
       isLoading && typeof accountId === 'undefined') {
       return;
     }
 
-    console.log('-- app.tsx --');
-    console.log('walelt selector account id: ', accountId);
-    console.log('walelt selector is loading: ', isLoading);
-    console.log('-- app.tsx --');
+    console.log(`app.tsx: login trigged for account id ${accountId as string} and isLoading: ${isLoading}`);
 
     void (async () => {
       const loginPayload = getLoginPayload();
 
       await login(loginPayload, accountId || '', controls);
     })();
-  }, [accountId]);
+  }, [accountId, isLoading]);
 
   return (
     <Router>

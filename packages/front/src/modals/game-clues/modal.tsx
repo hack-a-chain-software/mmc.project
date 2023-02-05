@@ -24,7 +24,7 @@ export const GameCluesModal = ({
 
 	const {
     clues,
-    accountId,
+    autenticated,
   } = useGame();
 
 	const myClues = useMemo(() => {
@@ -33,7 +33,7 @@ export const GameCluesModal = ({
 		}
 
 		return clues.filter((clue) => clue.isOwner);
-	}, [clues, accountId]);
+	}, [clues, autenticated]);
 
   const isLoading = useMemo(() => {
     return typeof clues === null;
