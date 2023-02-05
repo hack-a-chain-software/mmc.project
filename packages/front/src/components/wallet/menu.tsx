@@ -89,7 +89,7 @@ export const WalletMenu = () => {
             "
           >
             {
-              !!autenticated ? (
+              autenticated && accountId ? (
                 <>
                   <div className="py-[14px] px-[24px]">
                     <CopyToClipboard
