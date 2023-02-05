@@ -16,7 +16,7 @@ const Pages = () => {
 export const App = () => {
   const controls = useAnimationControls();
 
-  const { login, accountId: gameAccountid } = useGame();
+  const { login } = useGame();
 
   const {
     isLoading,
@@ -25,10 +25,20 @@ export const App = () => {
   } = useWalletSelector();
 
   useEffect(() => {
+    console.log('-- app.tsx --');
+    console.log('walelt selector account id: ', accountId);
+    console.log('walelt selector is loading: ', isLoading);
+    console.log('-- app.tsx --');
+
     if (
       isLoading && typeof accountId === 'undefined') {
       return;
     }
+
+    console.log('-- app.tsx --');
+    console.log('walelt selector account id: ', accountId);
+    console.log('walelt selector is loading: ', isLoading);
+    console.log('-- app.tsx --');
 
     void (async () => {
       const loginPayload = getLoginPayload();

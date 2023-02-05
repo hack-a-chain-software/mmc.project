@@ -164,10 +164,10 @@ export const useGame = create<{
     let clues: ClueInterface[] | null = null;
 
     if (accountId) {
-      console.log('--------');
+      console.log('-- game.tsx --');
       console.log('get clues for id:', accountId);
       console.log('get clues for jwt:', jwt);
-      console.log('---------');
+      console.log('-- game.tsx --');
       clues = await getClues();
     }
 
