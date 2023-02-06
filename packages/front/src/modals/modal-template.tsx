@@ -5,11 +5,12 @@ import { BaseModalPropsInterface } from '@/interfaces';
 import { twMerge } from 'tailwind-merge';
 
 export const ModalTemplate = ({
+  title,
   children,
   isOpen = false,
   className = '',
   onClose = () => {},
-}: BaseModalPropsInterface & PropsWithChildren) => (
+}: Partial<BaseModalPropsInterface> & PropsWithChildren) => (
   <Transition appear show={isOpen} as={Fragment}>
     <Dialog
       as="div"
@@ -42,27 +43,37 @@ export const ModalTemplate = ({
             <Dialog.Panel
               className={
                 twMerge(
-                  'w-full max-w-4xl transform overflow-hidden bg-black shadow-xl transition-all pt-[32px] p-[25px] text-white',
+                  'w-full max-w-4xl transform overflow-hidden bg-black shadow-xl transition-all px-9 py-6 text-white space-y-6',
                   className as string,
                 )
               }
             >
-              <button
-                onClick={() => onClose()}
-                className="
-                  h-10 w-10
-                  absolute
-                  top-[25px]
-                  right-[25px]
-                  text-white
-                  border border-white
-                  flex items-center justify-center
-                  outline-none
-                  hover:bg-white hover:text-black
-                "
+              <div
+                className="flex items-center justify-between pb-4"
               >
-                <XMarkIcon className="w-12 h-12 text-current" />
-              </button>
+                <div
+                  className="mr-[12px]"
+                >
+                  <span
+                    children={title}
+                    className="text-current text-xl"
+                  />
+                </div>
+
+                <button
+                  onClick={() => onClose()}
+                  className="
+                    h-10 w-10
+                    text-current
+                    outline-none
+                    hover:opacity-[0.6]
+                    border border-current
+                    flex items-center justify-center
+                  "
+                >
+                  <XMarkIcon className="w-12 h-12 text-current" />
+                </button>
+              </div>
               {children}
             </Dialog.Panel>
           </Transition.Child>

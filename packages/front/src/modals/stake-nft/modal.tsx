@@ -71,14 +71,9 @@ export const StakeNftModal = ({
     <ModalTemplate
       isOpen={isOpen}
       onClose={onClose}
-      className="w-full max-w-[639px] min-h-[443px] transform overflow-hidden bg-white rounded-md transition-all py-4 px-8 text-white space-y-4"
+      title="Select NFT's"
+      className="w-full max-w-[639px] min-h-[443px] transform overflow-hidden bg-white rounded-md transition-all py-4 px-8 text-black space-y-4"
     >
-      <div className="mr-[12px]">
-        <span className="uppercase text-xl text-black">
-          Select NFT's
-        </span>
-      </div>
-
       {!isLoading && !isEmpty(tokens) && (
         <div
           className="grid grid-cols-[repeat(auto-fill,minmax(173px,173px))] gap-7 justify-center max-h-[300px] overflow-auto min-h-[300px]"

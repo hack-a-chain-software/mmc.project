@@ -25,7 +25,7 @@ export const FastPassModal = ({
   acceleration,
   isOpen = false,
   onClose,
-}: BaseModalPropsInterface & FastPassModalPropsInterface) => {
+}: Partial<BaseModalPropsInterface> & FastPassModalPropsInterface) => {
   const { accountId, selector } = useWalletSelector();
 
   const { buyFastPass } = useGame();
@@ -56,40 +56,31 @@ export const FastPassModal = ({
     <ModalTemplate
       isOpen={isOpen}
       onClose={onClose}
+      title="Buy Fast Pass!"
     >
-      <div
-        className="w-full"
-      >
-        <div className="pb-[24px]">
-          <span className="uppercase text-sm">
-            Buy Fast Pass!
-          </span>
-        </div>
-
-        <div className="pb-[24px] text-sm">
-          <span>
-            With the fast pass, your vesting period is reduced and you
-            get your locked tokens faster
-          </span>
-        </div>
-
-        <div className="pb-[27px] text-sm">
-          <span>Time decrease:{
-            (-100 / acceleration+100).toFixed(0)
-          }%</span>
-        </div>
-
-        <div className="pb-[27px] text-sm">
-          Price: {formattedTotal} {token?.symbol}
-        </div>
-
-        <Button
-          onClick={() => void buy()}
-          className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto"
-        >
-          Buy Now!
-        </Button>
+      <div className="text-sm">
+        <span>
+          With the fast pass, your vesting period is reduced and you
+          get your locked tokens faster
+        </span>
       </div>
+
+      <div className="text-sm">
+        <span>Time decrease:{
+          (-100 / acceleration+100).toFixed(0)
+        }%</span>
+      </div>
+
+      <div className="text-sm">
+        Price: {formattedTotal} {token?.symbol}
+      </div>
+
+      <Button
+        onClick={() => void buy()}
+        className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto"
+      >
+        Buy Now!
+      </Button>
     </ModalTemplate>
   );
 };

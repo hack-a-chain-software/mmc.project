@@ -8,6 +8,7 @@ import { Button } from '@/components';
 import isEmpty from 'lodash/isEmpty';
 import { LockedTokensCard, ContractData, Token } from './card';
 import { lockedContract, tokenContract } from '@/constants/env';
+import { useGame } from '@/stores/game';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -31,10 +32,15 @@ export const LockedTokensModal = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isSlastPage, setIsLastPage] = useState(false);
 	const [programs, setPrograms] = useState<Vesting[]>([]);
-	const { selector, accountId } = useWalletSelector();
+	const { selector } = useWalletSelector();
 	const [contractData, setContractData] = useState<ContractData>([]);
 	const [baseTokenMetadata, setBaseTokenMetadata] = useState<Token>();
 	const [baseTokenBalance, setBaseTokenBalance] = useState('');
+
+  const {
+    autenticated,
+    accountId,
+  } = useGame();
 
 	const getNextPage = () => {
 		const next = page + 1;
@@ -75,7 +81,7 @@ export const LockedTokensModal = ({
 	};
 
 	useEffect(() => {
-		if (!accountId) {
+		if (!accountId || !autenticated || !isOpen) {
 			return;
 		}
 
@@ -121,66 +127,61 @@ export const LockedTokensModal = ({
 
 			void (await loadMore(0));
 		})();
-	}, [accountId]);
+
+    return () => {
+      setPrograms([]);
+    };
+	}, [accountId, autenticated, isOpen]);
 
   return (
     <ModalTemplate
       isOpen={isOpen}
       onClose={onClose}
+      title="My Locked Tokens"
       className="w-full max-w-6xl h-[650px] overflow-auto transform bg-black shadow-xl transition-all flex flex-col py-[44px] px-[50px] text-white"
     >
-      <div
-        className="w-full"
-      >
-        <div className="mr-[12px] pb-[45px]">
-          <span className="uppercase text-xl">
-            My Locked Tokens
+      <div>
+        {(!isEmpty(programs)) &&
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(315px,315px))] gap-7 justify-center flex-grow h-[calc(100%-85px)]">
+              {programs.map((program, index) => (
+                <LockedTokensCard
+                  key={`locked-token-items-${index}`}
+                  contractData={contractData}
+                  token={baseTokenMetadata as Token}
+                  baseTokenBalance={baseTokenBalance}
+                  {...program}
+                />
+              ))}
+          </div>
+        }
+      </div>
+
+      {!isEmpty(programs) && !isSlastPage && (
+        <div
+          className="w-full flex justify-center pt-8"
+        >
+          <Button
+            disabled={isLoading}
+            onClick={async () => {
+              const nextPage = getNextPage();
+
+              void await loadMore(nextPage);
+            }}
+          >
+            Load More
+          </Button>
+        </div>
+      )}
+
+      {isEmpty(programs) && (
+        <div
+          className="w-full h-[500px] flex items-center justify-center"
+        >
+          <span>
+            You have no Locked Tokens
           </span>
         </div>
-
-        <div>
-          {(!isEmpty(programs)) &&
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(315px,315px))] gap-7 justify-center flex-grow h-[calc(100%-85px)]">
-                {programs.map((program, index) => (
-                  <LockedTokensCard
-                    key={`locked-token-items-${index}`}
-                    contractData={contractData}
-                    token={baseTokenMetadata as Token}
-                    baseTokenBalance={baseTokenBalance}
-                    {...program}
-                  />
-                ))}
-            </div>
-          }
-        </div>
-
-        {!isEmpty(programs) && !isSlastPage && (
-          <div
-            className="w-full flex justify-center pt-8"
-          >
-            <Button
-              disabled={isLoading}
-              onClick={async () => {
-                const nextPage = getNextPage();
-
-                void await loadMore(nextPage);
-              }}
-            >
-              Load More
-            </Button>
-          </div>
-        )}
-
-        {isEmpty(programs) && (
-          <div
-            className="w-full h-[500px] flex items-center justify-center"
-          >
-            <span>
-              You have no Locked Tokens
-            </span>
-          </div>
-        )}
-      </div>
+      )}
     </ModalTemplate>
   );
 };

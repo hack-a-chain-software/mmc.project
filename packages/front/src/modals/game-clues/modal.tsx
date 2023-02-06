@@ -18,7 +18,7 @@ const tabs = ['My Clues', 'All Clues'];
 export const GameCluesModal = ({
   isOpen = false,
   onClose,
-}: BaseModalPropsInterface) => {
+}: Partial<BaseModalPropsInterface>) => {
 	const [stakeClue, setStakeClue] = useState('');
 	const [showConfirmStakeModal, setShowConfirmStakeModal] = useState(false);
 

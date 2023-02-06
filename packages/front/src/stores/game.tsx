@@ -6,7 +6,7 @@ import {
 	tokenContract,
 	undercoverPupsContract,
 } from '@/constants/env';
-import { GameConfigInterface, SceneInterface, GuessInterface, Token, ClueInterface } from '@/interfaces';
+import { GameConfigInterface, SceneInterface, GuessInterface, Token, ClueInterface, GameCurrencyInterface } from '@/interfaces';
 import { WalletSelector } from '@near-wallet-selector/core';
 import {
 	gameContract,
@@ -97,7 +97,7 @@ export const useGame = create<{
 	buyTicketsWithTokens: (
 		tokenId: string,
 		tokenContract: string,
-		currencyContract: string,
+    currency: GameCurrencyInterface,
 		accountId: string | null,
 		connection: WalletSelector
 	) => Promise<any>;
@@ -165,7 +165,7 @@ export const useGame = create<{
 
     if (accountId) {
       console.log('');
-      console.log('game.tsx: get clues for id:', accountId);
+      console.log('stores/game.tsx: get clues for id:', accountId);
       console.log('');
 
       clues = await getClues();

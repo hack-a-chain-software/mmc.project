@@ -2,20 +2,25 @@ import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { ModalTemplate } from '../modal-template';
 import GuessFormModal from './form';
 import { Button } from '@/components';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useWalletSelector } from '@/context/wallet';
 import { twMerge } from 'tailwind-merge';
 import isEmpty from 'lodash/isEmpty';
 import { useGame } from '@/stores/game';
-import { StakeNftModal } from '@/modals';
+import { StakeNftModal, CurrencyModal } from '@/modals';
 import {
 	detectivesContract,
-	tokenContract,
 	undercoverPupsContract,
 } from '@/constants/env';
-import { GameConfigInterface, Token } from '@/interfaces';
+import { GameConfigInterface, GameCurrencyInterface, Token } from '@/interfaces';
 import { Selected } from '@/modals';
 import { viewFunction } from '@/helpers/near';
+
+type CurrencyCallback = (currency: GameCurrencyInterface) => void;
+
+type ToggleCurrencyModalWithCallback = (
+  callback: CurrencyCallback,
+) => Promise<void>;
 
 export const GuessModal = ({
   isOpen,
@@ -33,6 +38,10 @@ export const GuessModal = ({
 		getDetectivesById,
 		buyTicketsWithTokens,
 	} = useGame();
+
+  const currency = useRef<{
+    ToggleCurrencyModalWithCallback: ToggleCurrencyModalWithCallback
+  }>();
 
 	const [ticketsAmount, setTicketsAmount] = useState(0);
 
@@ -66,107 +75,116 @@ export const GuessModal = ({
 
   return (
     <>
-    <GuessFormModal
-      config={config as GameConfigInterface}
-      isOpen={showGuessingForm}
-      onClose={() => {
-        setShowGuessingForm(false);
-        onClose();
-      }}
-    />
+      <CurrencyModal
+        ref={currency}
+      />
 
-    <StakeNftModal
-      isOpen={showStakeModal}
-      onClose={() => setShowStakeModal(false)}
-      onStake={async (selected) =>
-        void (await stakeNft(selected, accountId, selector))
-      }
-      fetchTokens={async () => {
-        if (!accountId) {
-          return [];
+      <GuessFormModal
+        config={config as GameConfigInterface}
+        isOpen={showGuessingForm}
+        onClose={() => {
+          setShowGuessingForm(false);
+          onClose();
+        }}
+      />
+
+      <StakeNftModal
+        isOpen={showStakeModal}
+        onClose={() => setShowStakeModal(false)}
+        onStake={async (selected) =>
+          void (await stakeNft(selected, accountId, selector))
         }
+        fetchTokens={async () => {
+          if (!accountId) {
+            return [];
+          }
 
-        const tokens: Selected[] = [];
+          const tokens: Selected[] = [];
 
-        const detectives = await getDetectivesById(accountId, selector);
+          const detectives = await getDetectivesById(accountId, selector);
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        tokens.push(...detectives.map((detective: Token) =>
-          ({ ...detective, contract: detectivesContract as string }),
-        ));
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          tokens.push(...detectives.map((detective: Token) =>
+            ({ ...detective, contract: detectivesContract as string }),
+          ));
 
-        const undercoverPupsTokens = await getPupsById(accountId, selector);
+          const undercoverPupsTokens = await getPupsById(accountId, selector);
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        tokens.push(...undercoverPupsTokens.map((pups: Token) =>
-          ({ ...pups, contract: undercoverPupsContract as string }),
-        ));
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          tokens.push(...undercoverPupsTokens.map((pups: Token) =>
+            ({ ...pups, contract: undercoverPupsContract as string }),
+          ));
 
-        return tokens;
-      }}
-    />
+          return tokens;
+        }}
+      />
 
-    <StakeNftModal
-      isMulti={false}
-      isOpen={showStakedModal}
-      buttonText={'Buy Ticket'}
-      onClose={() => setShowStakedModal(false)}
-      onStake={async (selected) => {
-        const {
-          // eslint-disable-next-line @typescript-eslint/naming-convention
-          token_id,
-          contract,
-        } = selected[0];
+      <StakeNftModal
+        isMulti={false}
+        isOpen={showStakedModal}
+        buttonText={'Buy Ticket'}
+        onClose={() => setShowStakedModal(false)}
+        onStake={async (
+          selected,
+        ) => void await currency.current?.ToggleCurrencyModalWithCallback((
+            data: GameCurrencyInterface,
+          ) => {
+            console.log('aaa');
+            console.log(data);
 
-        void (await buyTicketsWithTokens(
-          token_id,
-          contract,
-          tokenContract,
-          accountId,
-          selector,
-        ));
-      }}
-      fetchTokens={async () => {
-        if (!accountId) {
-          return [];
-        }
+            const {
+              // eslint-disable-next-line @typescript-eslint/naming-convention
+              token_id,
+              contract,
+            } = selected[0];
 
-        const stakedNfts = await getStakedNftsById(accountId, selector);
-
-        const tokens: Selected[] = await Promise.all(
-          stakedNfts.map(async ([contract, tokenId]) => {
-            const token = await viewFunction(
+            void (buyTicketsWithTokens(
+              token_id,
+              contract,
+              data,
+              accountId,
               selector,
-              contract,
-              'nft_token',
-              {
-                token_id: tokenId,
-              },
-            );
+            ));
+          },
+        )}
+        fetchTokens={async () => {
+          if (!accountId) {
+            return [];
+          }
 
-            return ({
-              ...token,
-              contract,
-            });
-          }),
-        );
+          const stakedNfts = await getStakedNftsById(accountId, selector);
 
-        return tokens;
-      }}
-    />
+          const tokens: Selected[] = await Promise.all(
+            stakedNfts.map(async ([contract, tokenId]) => {
+              const token = await viewFunction(
+                selector,
+                contract,
+                'nft_token',
+                {
+                  token_id: tokenId,
+                },
+              );
+
+              return ({
+                ...token,
+                contract,
+              });
+            }),
+          );
+
+          return tokens;
+        }}
+      />
 
       <ModalTemplate
         isOpen={isOpen}
         onClose={onClose}
+        title="Ready to guess?"
         className="w-full max-w-3xl transform overflow-hidden bg-black shadow-xl transition-all py-[44px] px-[50px] text-white"
       >
         <div
           className="w-full space-y-4"
         >
-          <div className="mr-[12px] pb-4">
-            <span className="uppercase text-xl">Ready to guess?</span>
-          </div>
-
           <div>
             <span>
               You need to burn tickets for every guess you want to risk

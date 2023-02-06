@@ -1,6 +1,7 @@
 export * from './guess';
 export * from './wallet';
 export * from './guesses';
+export * from './currency';
 export * from './fast-pass';
 export * from './stake-nft';
 export * from './scene-clue';
