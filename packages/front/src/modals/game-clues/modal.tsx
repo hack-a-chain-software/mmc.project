@@ -50,6 +50,7 @@ export const GameCluesModal = ({
       <ModalTemplate
         isOpen={isOpen}
         onClose={onClose}
+        title="All Clues"
       >
         <Tab.Group
           as="div"
