@@ -1,6 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import { Button } from '@/components';
-import { useGame } from '@/stores/game';
+import { useUser } from '@/stores/user';
 import { Tab } from '@headlessui/react';
 import { twMerge } from 'tailwind-merge';
 import { ConfirmStakeClueModal } from '@/modals';
@@ -8,6 +8,7 @@ import { ClueInterface } from '@/interfaces';
 import { ModalTemplate } from '../modal-template';
 import { useMemo, useState } from 'react';
 import { BaseModalPropsInterface } from '@/interfaces/modal';
+import { useGame } from '@/stores/game';
 
 export interface Clue extends ClueInterface {
 	isMinted: boolean;
@@ -23,8 +24,11 @@ export const GameCluesModal = ({
 	const [showConfirmStakeModal, setShowConfirmStakeModal] = useState(false);
 
 	const {
-    clues,
     autenticated,
+  } = useUser();
+
+  const {
+    clues,
   } = useGame();
 
 	const myClues = useMemo(() => {

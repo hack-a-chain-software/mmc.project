@@ -11,19 +11,25 @@ import { GameConfigInterface } from '@/interfaces';
 import { StakeDetect } from './stake-detect';
 import { BuyTickets } from './buy-tickets';
 import { useWallet } from '@/stores/wallet';
+import { useUser } from '@/stores/user';
 
 export const GuessModal = ({
   isOpen,
   onClose,
 }: Partial<BaseModalPropsInterface>) => {
+  const [isLoading, setIsLoading] = useState(true);
+
 	const { selector } = useWallet();
 
 	const {
 		config,
-		accountId,
 		getTicketsById,
 		getStakedNftsById,
 	} = useGame();
+
+  const {
+    accountId,
+  } = useUser();
 
   const stakeDetect = useRef<{
     toggleStakeDetectModal: () => void,
@@ -39,18 +45,22 @@ export const GuessModal = ({
 	const [hasStakedGuessingNfts, sethasStakedGuessingNfts] = useState(false);
 
 	useEffect(() => {
-		if (!accountId || !isOpen) {
+		if (!accountId || !isOpen || !selector) {
 			return;
 		}
 
 		void (async () => {
-			const tickets = await getTicketsById(accountId, selector!) || 0;
+      setIsLoading(true);
+
+			const tickets = await getTicketsById(accountId, selector) || 0;
 
 			setTicketsAmount(tickets as number);
 
-			const totalGuess = await getStakedNftsById(accountId, selector!);
+			const totalGuess = await getStakedNftsById(accountId, selector);
 
 			sethasStakedGuessingNfts(!isEmpty(totalGuess));
+
+      setIsLoading(false);
 		})();
 
     return;
@@ -81,6 +91,7 @@ export const GuessModal = ({
       <ModalTemplate
         isOpen={isOpen}
         onClose={onClose}
+        isLoading={isLoading}
         title="Ready to guess?"
         className="w-full max-w-3xl transform overflow-hidden bg-black shadow-xl transition-all py-[44px] px-[50px] text-white"
       >

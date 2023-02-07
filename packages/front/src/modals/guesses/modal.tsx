@@ -6,17 +6,23 @@ import isEmpty from 'lodash/isEmpty';
 import { ModalTemplate } from '../modal-template';
 import { GuessItem } from './guess-item';
 import { Button } from '@/components';
+import { useUser } from '@/stores/user';
 
 export const GuessesModal = ({
   isOpen,
   onClose,
 }: Partial<BaseModalPropsInterface>) => {
-  const { claimAllGuessingRewards, getGuess, accountId, connected } = useGame();
+  const { claimAllGuessingRewards, getGuess } = useGame();
+  const {
+    accountId,
+    autenticated,
+  } = useUser();
+
   const [guesses, setGuesses] = useState<GuessInterface[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!accountId || !connected || !isOpen) {
+    if (!accountId || !autenticated || !isOpen) {
       return;
     }
 

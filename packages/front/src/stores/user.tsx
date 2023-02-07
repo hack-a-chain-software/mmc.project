@@ -16,19 +16,21 @@ export const useUser = create<UserStoreInterface>((set, get) => ({
 
     const loginPayload = await getLoginPayload();
 
-		const { data: {
-      jwt = '',
-    } } = await api.post<{ jwt: string }>('/auth/login', {
+    const {
+      sendRequest,
+    } = get();
+
+		const { data } = await sendRequest('/auth/login', 'post', {
 			...loginPayload,
 		});
 
 		set({
-			jwt,
+			jwt: data.jwt,
       autenticated: !!accountId,
       accountId: accountId || '',
 		});
 
-		return jwt;
+		return data.jwt;
 	},
 
   toggleAutenticated: () => {
@@ -47,5 +49,18 @@ export const useUser = create<UserStoreInterface>((set, get) => ({
     return {
       headers: { Authorization: `Bearer ${jwt as string}` },
     };
+  },
+
+  sendRequest: (url, method, data) => {
+    const {
+      getRequestConfig,
+    } = get();
+
+    return api({
+      url,
+      data,
+      method,
+      ...getRequestConfig(),
+    });
   },
 }));

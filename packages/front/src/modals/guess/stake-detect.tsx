@@ -6,9 +6,9 @@ import { Selected } from '@/modals';
 import { Token } from '@/interfaces';
 import { useGame } from '@/stores/game';
 import { StakeNftModal } from '@/modals';
-// import { useWalletSelector } from '@/context/wallet';
 import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useWallet } from '@/stores/wallet';
+import { useUser } from '@/stores/user';
 
 export const StakeDetect = forwardRef((_, ref) => {
 	const { selector } = useWallet();
@@ -23,13 +23,16 @@ export const StakeDetect = forwardRef((_, ref) => {
 
 	const {
 		stakeNft,
-		accountId,
 		getPupsById,
 		getDetectivesById,
 	} = useGame();
 
+  const {
+    accountId,
+  } = useUser();
+
   const onStake = async (selected: Selected[]) =>
-    void (await stakeNft(selected, accountId, selector!));
+    void (await stakeNft(selected, accountId, selector as any));
 
   const fetchTokens = async () => {
     if (!accountId) {
@@ -38,14 +41,14 @@ export const StakeDetect = forwardRef((_, ref) => {
 
     const tokens: Selected[] = [];
 
-    const detectives = await getDetectivesById(accountId, selector!);
+    const detectives = await getDetectivesById(accountId, selector as any);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     tokens.push(...detectives.map((detective: Token) =>
       ({ ...detective, contract: detectivesContract as string }),
     ));
 
-    const undercoverPupsTokens = await getPupsById(accountId, selector!);
+    const undercoverPupsTokens = await getPupsById(accountId, selector as any);
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     tokens.push(...undercoverPupsTokens.map((pups: Token) =>

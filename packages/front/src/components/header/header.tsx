@@ -12,6 +12,7 @@ import {
 	WalletMenu,
 } from '@/components';
 import { useGame } from '@/stores/game';
+import { useUser } from '@/stores/user';
 import { GuessModal } from '@/modals';
 
 export function Header() {
@@ -21,7 +22,11 @@ export function Header() {
 
 	const { pathname } = useLocation();
 
-  const { guessingIsOpen, autenticated } = useGame();
+  const { guessingIsOpen } = useGame();
+
+  const {
+    autenticated,
+  } = useUser();
 
 	const inGame = useMemo(() => {
 		return pathname === '/987654321';

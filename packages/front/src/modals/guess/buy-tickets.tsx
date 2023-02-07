@@ -3,10 +3,10 @@ import { useGame } from '@/stores/game';
 import { StakeNftModal } from '@/modals';
 import { viewFunction } from '@/helpers/near';
 import { GameCurrencyInterface } from '@/interfaces';
-// import { useWalletSelector } from '@/context/wallet';
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { tokenContract } from '@/constants/env';
 import { useWallet } from '@/stores/wallet';
+import { useUser } from '@/stores/user';
 
 export const BuyTickets = forwardRef((_, ref) => {
   const { selector } = useWallet();
@@ -26,10 +26,13 @@ export const BuyTickets = forwardRef((_, ref) => {
   }));
 
 	const {
-		accountId,
 		getStakedNftsById,
 		buyTicketsWithTokens,
 	} = useGame();
+
+  const {
+    accountId,
+  } = useUser();
 
   const currency = useMemo(() => {
     return config?.currencies.find(({ contract }) =>
@@ -49,7 +52,7 @@ export const BuyTickets = forwardRef((_, ref) => {
       contract,
       currency,
       accountId,
-      selector!,
+      selector as any,
     );
   };
 
@@ -58,7 +61,7 @@ export const BuyTickets = forwardRef((_, ref) => {
       return [];
     }
 
-    const stakedNfts = await getStakedNftsById(accountId, selector);
+    const stakedNfts = await getStakedNftsById(accountId, selector as any);
 
     const tokens: Selected[] = await Promise.all(
       stakedNfts.map(async ([contract, tokenId]) => {

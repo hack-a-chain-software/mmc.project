@@ -1,6 +1,5 @@
 import Big from 'big.js';
 import { create } from 'zustand';
-import api from '@/services/api';
 import {
 	firstScene,
 	tokenContract,
@@ -35,10 +34,10 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 	initGame: async (controls) => {
     const {
       accountId,
-      getRequestConfig,
+      sendRequest,
     } = useUser.getState();
 
-		const { data } = await api.get('/game/config', getRequestConfig());
+		const { data } = await sendRequest('/game/config', 'get');
 
 		set({
 			controls,
@@ -96,11 +95,11 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 
   getGuess: async () => {
     const {
-      getRequestConfig,
+      sendRequest,
     } = useUser.getState();
 
     try {
-      const { data } = await api.get('/game/guess/', getRequestConfig());
+      const { data } = await sendRequest('/game/guess/', 'get');
 
       return data;
     } catch (e) {
@@ -112,11 +111,11 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 
   claimAllGuessingRewards: async () => {
     const {
-      getRequestConfig,
+      sendRequest,
     } = useUser.getState();
 
     try {
-      const { data } = await api.post('/game/rewards/', {}, getRequestConfig());
+      const { data } = await sendRequest('/game/rewards/', 'post', {});
 
       return data;
     } catch (e) {
@@ -148,10 +147,10 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 
 	getScene: async (id = firstScene) => {
     const {
-      getRequestConfig,
+      sendRequest,
     } = useUser.getState();
 
-		const { data } = await api.get(`/game/scene/${id as string}`, getRequestConfig());
+    const { data } = await sendRequest(`/game/scene/${id as string}`, 'get');
 
 		set({
 			scene: data,
@@ -162,11 +161,11 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 
 	getClues: async () => {
     const {
-      getRequestConfig,
+      sendRequest,
     } = useUser.getState();
 
     try {
-      const { data } = await api.get('/game/clues', getRequestConfig());
+      const { data } = await sendRequest('/game/clues', 'get');
 
       return data;
     } catch (e) {
@@ -247,15 +246,6 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 			}),
 		);
 
-    // const amount = await viewFunction(
-    //   connection,
-    //   gameContract,
-    //   'view_price',
-    //   {
-    //     currency: tokenContract,
-    //   },
-    // );
-
 		transactions.push(
 			getTransaction(accountId, currency.contract, 'ft_transfer_call', {
         amount: currency.token_price,
@@ -265,7 +255,6 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 				msg: JSON.stringify({
 					type: 'Claim',
 					token_id: tokenId,
-					// det_or_pup: detectivesContract,
 				}),
 			}),
 		);
@@ -355,7 +344,7 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 		}
 
     const {
-      getRequestConfig,
+      sendRequest,
     } = useUser.getState();
 
 		const randomNumber = (Math.random() * 7).toFixed(0);
@@ -371,15 +360,15 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 		});
 
 		try {
-			await api.post(
-				'game/guess',
+      await sendRequest(
+        'game/guess',
+        'post',
 				{
 					hash: guessHash,
 					random_number: randomNumber,
 					...guess,
 				},
-        getRequestConfig(),
-			);
+      );
 
 			toast.success('Your guess has been successfully saved!');
 		} catch (e) {

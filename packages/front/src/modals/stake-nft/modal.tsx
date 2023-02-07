@@ -3,7 +3,6 @@ import StakeNftCard from './card';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 import { Button } from '@/components';
-import { useGame } from '@/stores/game';
 import { viewFunction } from '@/helpers/near';
 import { ModalTemplate } from '../modal-template';
 import { useState, useEffect, useMemo } from 'react';
@@ -12,6 +11,7 @@ import { GameCurrencyInterface, Token } from '@/interfaces';
 // import { useWalletSelector } from '@/context/wallet';
 import { gameContract } from '@/constants/env';
 import { useWallet } from '@/stores/wallet';
+import { useUser } from '@/stores/user';
 
 export interface Selected extends Token {
   contract: string;
@@ -41,7 +41,7 @@ export const StakeNftModal = ({
   const [selected, setSelected] = useState<Selected[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const { accountId } = useGame();
+  const { accountId } = useUser();
 
   const {
     selector,

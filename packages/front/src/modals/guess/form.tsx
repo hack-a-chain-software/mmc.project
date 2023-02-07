@@ -5,8 +5,10 @@ import { useCallback, useState } from 'react';
 // import { useWalletSelector } from '@/context/wallet';
 import { useGame } from '@/stores/game';
 import { GuessInterface, GameConfigInterface } from '@/interfaces';
-import { GuessDto } from '@/stores/game';
 import { useWallet } from '@/stores/wallet';
+import { useUser } from '@/stores/user';
+
+import { GuessDto } from '@/interfaces/store/game';
 
 const defaultGuess = {
   weapon: '',
@@ -25,13 +27,17 @@ export const GuessFormModal = ({
 
   const { selector } = useWallet();
 
-  const { jwt, sendGuess, accountId } = useGame();
+  const { sendGuess } = useGame();
+
+  const {
+    accountId,
+  } = useUser();
 
   const send = useCallback(async () => {
-    await sendGuess(guess as GuessDto, accountId, selector!);
+    await sendGuess(guess as GuessDto, accountId, selector as any);
     setGuess({ ...defaultGuess });
     onClose();
-  }, [jwt, guess, accountId]);
+  }, [guess, accountId]);
 
   return (
     <ModalTemplate

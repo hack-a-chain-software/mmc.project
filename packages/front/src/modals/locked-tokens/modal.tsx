@@ -8,7 +8,7 @@ import { Button } from '@/components';
 import isEmpty from 'lodash/isEmpty';
 import { LockedTokensCard, ContractData, Token } from './card';
 import { lockedContract, tokenContract } from '@/constants/env';
-import { useGame } from '@/stores/game';
+import { useUser } from '@/stores/user';
 import { useWallet } from '@/stores/wallet';
 
 const ITEMS_PER_PAGE = 10;
@@ -41,7 +41,7 @@ export const LockedTokensModal = ({
   const {
     autenticated,
     accountId,
-  } = useGame();
+  } = useUser();
 
 	const getNextPage = () => {
 		const next = page + 1;
