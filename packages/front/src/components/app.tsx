@@ -22,7 +22,6 @@ export const App = () => {
   // const inGame = useIsGame();
 
   const {
-    isLoading,
     accountId,
     getLoginPayload,
   } = useWalletSelector();
@@ -30,22 +29,21 @@ export const App = () => {
   useEffect(() => {
     console.log('');
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    console.log(`components/app.tsx: (1) useffect trigged for account id ${accountId as string} and isLoading: ${isLoading}`);
+    console.log(`components/app.tsx: (1) useffect trigged for account id ${accountId as string}`);
 
-    if (
-      isLoading && typeof accountId === 'undefined') {
+    if (typeof accountId === 'undefined') {
       return;
     }
 
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    console.log(`components/app.tsx: (2) login trigged for account id ${accountId as string} and isLoading: ${isLoading}`);
+    console.log(`components/app.tsx: (2) login trigged for account id ${accountId as string}`);
 
     void (async () => {
-      const loginPayload = getLoginPayload();
+      const loginPayload = await getLoginPayload();
 
       await login(loginPayload, accountId || '', controls);
     })();
-  }, [accountId, isLoading]);
+  }, [accountId]);
 
   return (
     <Router>

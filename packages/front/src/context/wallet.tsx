@@ -4,17 +4,14 @@ import React, {
   useEffect,
   useState,
   PropsWithChildren,
-  useMemo,
 } from 'react';
 import { keyStores } from 'near-api-js';
 import type { AccountView } from 'near-api-js/lib/providers/provider';
-import { map, distinctUntilChanged } from 'rxjs';
 import { setupWalletSelector } from '@near-wallet-selector/core';
-import type { WalletSelector, AccountState } from '@near-wallet-selector/core';
+import type { WalletSelector } from '@near-wallet-selector/core';
 import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
 import { setupNearWallet } from '@near-wallet-selector/near-wallet';
 import { gameSeason, network } from '@/constants/env';
-import { KeyPair } from 'near-api-js';
 import { LoginData } from '@/stores/game';
 
 interface WalletContextValue {
@@ -23,8 +20,7 @@ interface WalletContextValue {
   toggleModal: () => void;
   selector: WalletSelector;
   signOut: () => Promise<void>;
-  isLoading: boolean;
-  getLoginPayload: () => LoginData;
+  getLoginPayload: () => Promise<LoginData>;
 }
 
 export type Account = AccountView & {
@@ -38,18 +34,10 @@ export const WalletSelectorContextProvider: React.FC<
   PropsWithChildren<Record<any, any>>
 > = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
-  const [isLoadingInit, setIsLoadingInit] = useState(true);
-  const [isLoadingAccountId, setIsLoadingAccountId] = useState(true);
-  const [keyPair, setKeypair] = useState<KeyPair>();
   const [accountId, setAccountId] = useState<string | undefined>();
-  const [accounts, setAccounts] = useState<AccountState[]>([]);
   const [selector, setSelector] = useState<WalletSelector | null>(null);
 
   const toggleModal = () => setShowModal(!showModal);
-
-  const isLoading = useMemo(() => {
-    return isLoadingInit || isLoadingAccountId;
-  }, [isLoadingInit, isLoadingAccountId]);
 
   const signOut = async () => {
     if (!selector) {
@@ -70,10 +58,11 @@ export const WalletSelectorContextProvider: React.FC<
 
     const state = newSelector.store.getState();
 
-    setAccounts(state.accounts);
-    setSelector(newSelector);
+    const newAccount =
+      state?.accounts.find((account) => account.active)?.accountId || '';
 
-    setIsLoadingInit(false);
+    setAccountId(newAccount);
+    setSelector(newSelector);
   }, []);
 
   useEffect(() => {
@@ -83,25 +72,18 @@ export const WalletSelectorContextProvider: React.FC<
     });
   }, [init]);
 
-  useEffect(() => {
-    if (!selector) {
-      return;
+  const getLoginPayload = async () => {
+    const keystore = new keyStores.BrowserLocalStorageKeyStore();
+
+    let keypair;
+
+    if (accountId) {
+      keypair = await keystore.getKey(
+        network as string,
+        accountId,
+      );
     }
 
-    const subscription = selector.store.observable
-      .pipe(
-        map(({ accounts: storeAccounts }) => storeAccounts),
-        distinctUntilChanged(),
-      )
-      .subscribe((nextAccounts) => {
-        setAccounts(nextAccounts);
-        setShowModal(false);
-      });
-
-    return () => subscription.unsubscribe();
-  }, [selector]);
-
-  const getLoginPayload = () => {
     const textEncoder = new TextEncoder();
 
     const message = textEncoder.encode(JSON.stringify(
@@ -110,8 +92,8 @@ export const WalletSelectorContextProvider: React.FC<
 
     let signature, publicKey;
 
-    if (keyPair && accountId) {
-      const signed = keyPair.sign(message);
+    if (keypair && accountId) {
+      const signed = keypair.sign(message);
 
       signature = signed.signature;
       publicKey = signed.publicKey;
@@ -128,25 +110,6 @@ export const WalletSelectorContextProvider: React.FC<
     };
   };
 
-  useEffect(() => {
-    const newAccount =
-      accounts.find((account) => account.active)?.accountId;
-
-    setAccountId(newAccount);
-    setIsLoadingAccountId(false);
-
-    void (async () => {
-      const keystore = new keyStores.BrowserLocalStorageKeyStore();
-
-      const accountKeyPair = await keystore.getKey(
-        network as string,
-        newAccount as string,
-      );
-
-      setKeypair(accountKeyPair);
-    })();
-  }, [isLoadingInit]);
-
   if (!selector) {
     return null;
   }
@@ -156,7 +119,6 @@ export const WalletSelectorContextProvider: React.FC<
       value={{
         selector,
         showModal,
-        isLoading,
         accountId,
         signOut,
         toggleModal,

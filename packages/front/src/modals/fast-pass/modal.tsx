@@ -57,6 +57,7 @@ export const FastPassModal = ({
       isOpen={isOpen}
       onClose={onClose}
       title="Buy Fast Pass!"
+      className="max-w-md text-black bg-white rounded-md"
     >
       <div className="text-sm">
         <span>
@@ -77,7 +78,7 @@ export const FastPassModal = ({
 
       <Button
         onClick={() => void buy()}
-        className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto"
+        className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed hover:border-purple-0 uppercase mx-auto"
       >
         Buy Now!
       </Button>
