@@ -22,7 +22,7 @@ export const CurrencyItem = ({
   return (
     <div
       onClick={() => void callbackCurrency({ contract, metadata, token_price })}
-      className="flex items-center space-x-3 hover:cursor-pointer mx-auto hover:bg-white/10 px-2 py-4 rounded-md"
+      className="flex items-center space-x-3 hover:cursor-pointer mx-auto hover:bg-white/10 px-2 py-4 rounded-md hover:opacity-75"
     >
       <div
         className="rounded-full bg-white overflow-hidden"
@@ -46,7 +46,7 @@ export const CurrencyItem = ({
         className="flex-grow pl-[12px]"
       >
         <ChevronRightIcon
-          className="w-4 text-white ml-auto"
+          className="w-4 text-current ml-auto"
         />
       </div>
     </div>

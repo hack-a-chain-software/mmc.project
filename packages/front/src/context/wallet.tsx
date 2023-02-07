@@ -49,7 +49,7 @@ export const WalletSelectorContextProvider: React.FC<
 
   const isLoading = useMemo(() => {
     return isLoadingInit || isLoadingAccountId;
-  }, [isLoadingInit && isLoadingAccountId]);
+  }, [isLoadingInit, isLoadingAccountId]);
 
   const signOut = async () => {
     if (!selector) {
@@ -145,7 +145,7 @@ export const WalletSelectorContextProvider: React.FC<
 
       setKeypair(accountKeyPair);
     })();
-  }, [accounts, isLoading]);
+  }, [isLoadingInit]);
 
   if (!selector) {
     return null;

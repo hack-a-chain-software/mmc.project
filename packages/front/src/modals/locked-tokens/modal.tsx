@@ -26,7 +26,7 @@ export interface Vesting {
 export const LockedTokensModal = ({
   isOpen,
   onClose,
-}: BaseModalPropsInterface) => {
+}: Partial<BaseModalPropsInterface>) => {
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -75,7 +75,7 @@ export const LockedTokensModal = ({
 
     setIsLoading(false);
 
-    if (indexOf + 1 > totalPages) {
+    if (indexOf >= totalPages) {
       setIsLastPage(true);
     }
 	};
@@ -137,6 +137,7 @@ export const LockedTokensModal = ({
     <ModalTemplate
       isOpen={isOpen}
       onClose={onClose}
+      isLoading={isLoading}
       title="My Locked Tokens"
       className="w-full max-w-6xl h-[650px] overflow-auto transform bg-black shadow-xl transition-all flex flex-col py-[44px] px-[50px] text-white"
     >

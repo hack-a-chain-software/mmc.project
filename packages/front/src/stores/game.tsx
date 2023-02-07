@@ -53,6 +53,7 @@ export const useGame = create<{
 	controls: AnimationControls | null;
 	connected: boolean;
   clues: ClueInterface[] | null;
+  toggleAutenticated: () => void,
   guessingIsOpen: () => boolean,
 	login: (
     payload: LoginData,
@@ -65,6 +66,7 @@ export const useGame = create<{
   claimAllGuessingRewards: () => Promise<void>,
 	claimClue: (
 		tokenid: string,
+    currency: GameCurrencyInterface,
 		accountId: string | null,
 		connection: WalletSelector
 	) => Promise<void>;
@@ -199,6 +201,12 @@ export const useGame = create<{
     return isBefore(openAt, now);
   },
 
+  toggleAutenticated: () => {
+    set({
+      autenticated: false,
+    });
+  },
+
   getGuess: async () => {
 		const { jwt } = get();
 
@@ -298,7 +306,7 @@ export const useGame = create<{
 	},
 
 
-	claimClue: async (tokenId, accountId, connection) => {
+	claimClue: async (tokenId, currency, accountId, connection) => {
 		if (!accountId) {
 			return;
 		}
@@ -369,18 +377,18 @@ export const useGame = create<{
 			}),
 		);
 
-    const amount = await viewFunction(
-      connection,
-      gameContract,
-      'view_price',
-      {
-        currency: tokenContract,
-      },
-    );
+    // const amount = await viewFunction(
+    //   connection,
+    //   gameContract,
+    //   'view_price',
+    //   {
+    //     currency: tokenContract,
+    //   },
+    // );
 
 		transactions.push(
-			getTransaction(accountId, tokenContract, 'ft_transfer_call', {
-        amount,
+			getTransaction(accountId, currency.contract, 'ft_transfer_call', {
+        amount: currency.token_price,
 				memo: null,
 				approval_id: null,
 				receiver_id: gameContract,

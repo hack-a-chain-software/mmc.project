@@ -3,12 +3,14 @@ import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { BaseModalPropsInterface } from '@/interfaces';
 import { twMerge } from 'tailwind-merge';
+import { If, Spinner } from '@/components';
 
 export const ModalTemplate = ({
   title,
   children,
   isOpen = false,
   className = '',
+  isLoading = false,
   onClose = () => {},
 }: Partial<BaseModalPropsInterface> & PropsWithChildren) => (
   <Transition appear show={isOpen} as={Fragment}>
@@ -43,13 +45,13 @@ export const ModalTemplate = ({
             <Dialog.Panel
               className={
                 twMerge(
-                  'w-full max-w-4xl transform overflow-hidden bg-black shadow-xl transition-all px-9 py-6 text-white space-y-6',
+                  'w-full max-w-4xl transform overflow-hidden bg-black shadow-xl transition-all px-9 py-6 text-white space-y-6 rounded-md',
                   className as string,
                 )
               }
             >
               <div
-                className="flex items-center justify-between pb-4"
+                className="flex items-center justify-between"
               >
                 <div
                   className="mr-[12px]"
@@ -62,19 +64,25 @@ export const ModalTemplate = ({
 
                 <button
                   onClick={() => onClose()}
-                  className="
-                    h-10 w-10
-                    text-current
-                    outline-none
-                    hover:opacity-[0.6]
-                    border border-current
-                    flex items-center justify-center
-                  "
+                  className={
+                    twMerge(
+                      'h-10 w-10 text-current outline-none hover:opacity-[0.6] flex items-center justify-center',
+                      !!!title && 'absolute right-4 top-4',
+                    )
+                  }
                 >
-                  <XMarkIcon className="w-12 h-12 text-current" />
+                  <XMarkIcon className="w-8 h-8 text-current" />
                 </button>
               </div>
-              {children}
+
+              <If
+                condition={!isLoading}
+                fallback={(
+                  <Spinner/>
+                ) as any}
+              >
+                {children}
+              </If>
             </Dialog.Panel>
           </Transition.Child>
         </div>

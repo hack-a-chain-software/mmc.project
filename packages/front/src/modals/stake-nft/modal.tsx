@@ -113,6 +113,7 @@ export const StakeNftModal = ({
       title={title}
       isOpen={isOpen}
       onClose={onClose}
+      isLoading={false}
       className="w-full max-w-[639px] min-h-[443px] transform overflow-hidden bg-white rounded-md transition-all py-4 px-8 text-black space-y-4"
     >
       {!isLoading && !isEmpty(tokens) && (

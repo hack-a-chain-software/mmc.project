@@ -8,4 +8,3 @@ export * from './scene-clue';
 export * from './game-clues';
 export * from './locked-tokens';
 export * from './confirm-stake-clue';
-export * from './confirm-claim-clue';

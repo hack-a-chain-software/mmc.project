@@ -30,7 +30,7 @@ export const App = () => {
   useEffect(() => {
     console.log('');
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    console.log(`components/app.tsx: useffect trigged for account id ${accountId as string} and isLoading: ${isLoading}`);
+    console.log(`components/app.tsx: (1) useffect trigged for account id ${accountId as string} and isLoading: ${isLoading}`);
 
     if (
       isLoading && typeof accountId === 'undefined') {
@@ -38,7 +38,7 @@ export const App = () => {
     }
 
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    console.log(`components/app.tsx: login trigged for account id ${accountId as string} and isLoading: ${isLoading}`);
+    console.log(`components/app.tsx: (2) login trigged for account id ${accountId as string} and isLoading: ${isLoading}`);
 
     void (async () => {
       const loginPayload = getLoginPayload();

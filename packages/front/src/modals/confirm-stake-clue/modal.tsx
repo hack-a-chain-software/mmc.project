@@ -18,7 +18,8 @@ export const ConfirmStakeClueModal = ({
     <ModalTemplate
       isOpen={isOpen}
       onClose={onClose}
-      title="By stake this clue:"
+      title="Stake Clue"
+      className="max-w-xl text-black bg-white rounded-md"
     >
       <div className="text-sm">
         <span>
@@ -38,7 +39,7 @@ export const ConfirmStakeClueModal = ({
           accountId,
           selector,
         )}
-        className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto"
+        className="w-[185px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto hover:border-purple-0"
       >
         Stake now
       </Button>

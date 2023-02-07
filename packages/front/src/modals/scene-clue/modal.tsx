@@ -1,10 +1,18 @@
-import {Fragment,  useState } from 'react';
-import { ClueInterface } from '@/interfaces';
+import { useGame } from '@/stores/game';
 import { Button, Socials } from '@/components';
+import { useRef, Fragment,  useState } from 'react';
+import { useWalletSelector } from '@/context/wallet';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { BaseModalPropsInterface } from '@/interfaces/modal';
-import { ConfirmClaimClueModal, ConfirmStakeClueModal } from '@/modals';
+import { ConfirmStakeClueModal, CurrencyModal } from '@/modals';
+import { ClueInterface, GameCurrencyInterface } from '@/interfaces';
+
+type CurrencyCallback = (currency: GameCurrencyInterface) => void;
+
+type ToggleCurrencyModalWithCallback = (
+  callback: CurrencyCallback,
+) => Promise<void>;
 
 export const SceneClueModal = ({
   name,
@@ -18,15 +26,42 @@ export const SceneClueModal = ({
 	sceneName,
   description,
 }: BaseModalPropsInterface & ClueInterface & { sceneName: string }) => {
-	const [showConfirmPickModal, setShowConfirmPickModal] = useState(false);
   const [showConfirmStakeModal, setShowConfirmStakeModal] = useState(false);
+
+  const currency = useRef<{
+    ToggleCurrencyModalWithCallback: ToggleCurrencyModalWithCallback
+  }>();
+
+  const {
+    selector,
+    accountId,
+  } = useWalletSelector();
+
+  const { claimClue } = useGame();
+
+  const onClaim = () => void currency
+    .current?.ToggleCurrencyModalWithCallback((
+      selectedCurrency: GameCurrencyInterface,
+    ) => {
+      if (!accountId) {
+        return;
+      }
+
+      void claimClue(
+        nft_id as string,
+        selectedCurrency,
+        accountId,
+        selector,
+      );
+    },
+  );
 
   return (
     <>
-      <ConfirmClaimClueModal
-        nft_id={nft_id}
-        isOpen={showConfirmPickModal}
-        onClose={() => setShowConfirmPickModal(false)}
+      <CurrencyModal
+        ref={currency}
+        title={'Mint clue'}
+        buttonText={'Mint Now'}
       />
 
       <ConfirmStakeClueModal
@@ -149,7 +184,7 @@ export const SceneClueModal = ({
 											<div className="mr-[32px] flex space-x-[20px]">
 												<Button
                           disabled={isMinted}
-													onClick={() => setShowConfirmPickModal(true)}
+													onClick={() => onClaim()}
 													className="w-[125px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:bg-transparent disabled:opacity-75 disabled:cursor-not-allowed disabled:text-white"
 												>
 													Mint

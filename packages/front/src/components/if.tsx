@@ -4,9 +4,5 @@ export const If = ({
   condition,
   fallback = null,
 }) => {
-  return (
-    <div>
-      { condition ? children : fallback || null }
-    </div>
-  );
+  return ( condition ? children : fallback || null );
 };

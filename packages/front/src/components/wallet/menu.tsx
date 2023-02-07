@@ -18,7 +18,16 @@ export const WalletMenu = () => {
   const [showTokensModal, setShowTokensModal] = useState(false);
   const [showGuessesModal, setShowGuessesModal] = useState(false);
 
-  const { autenticated } = useGame();
+  const {
+    autenticated,
+    toggleAutenticated,
+   } = useGame();
+
+  const logout = async () => {
+    toggleAutenticated();
+
+    await signOut();
+  };
 
   return (
     <>
@@ -170,7 +179,7 @@ export const WalletMenu = () => {
                   <Menu.Item>
                     <div>
                       <button
-                        onClick={() => void signOut()}
+                        onClick={() => logout()}
                         className="pt-[19px] px-[24px] pb-[21px] w-full rounded-b-[16px] hover:bg-[#DB2B1F]/[0.65] flex items-center space-x-[8px] text-[#DB2B1F] hover:text-white"
                       >
                         <PowerIcon

@@ -7,23 +7,14 @@ import { useWalletSelector } from '@/context/wallet';
 import { twMerge } from 'tailwind-merge';
 import isEmpty from 'lodash/isEmpty';
 import { useGame } from '@/stores/game';
-import { StakeNftModal, CurrencyModal } from '@/modals';
-import { GameConfigInterface, GameCurrencyInterface } from '@/interfaces';
-import { Selected } from '@/modals';
-import { viewFunction } from '@/helpers/near';
+import { GameConfigInterface } from '@/interfaces';
 import { StakeDetect } from './stake-detect';
 import { BuyTickets } from './buy-tickets';
-
-type CurrencyCallback = (currency: GameCurrencyInterface) => void;
-
-type ToggleCurrencyModalWithCallback = (
-  callback: CurrencyCallback,
-) => Promise<void>;
 
 export const GuessModal = ({
   isOpen,
   onClose,
-}: BaseModalPropsInterface) => {
+}: Partial<BaseModalPropsInterface>) => {
 	const { selector } = useWalletSelector();
 
 	const {
@@ -31,12 +22,7 @@ export const GuessModal = ({
 		accountId,
 		getTicketsById,
 		getStakedNftsById,
-		buyTicketsWithTokens,
 	} = useGame();
-
-  const currency = useRef<{
-    ToggleCurrencyModalWithCallback: ToggleCurrencyModalWithCallback
-  }>();
 
   const stakeDetect = useRef<{
     toggleStakeDetectModal: () => void,
@@ -47,8 +33,6 @@ export const GuessModal = ({
   }>();
 
 	const [ticketsAmount, setTicketsAmount] = useState(0);
-
-	const [showStakedModal, setShowStakedModal] = useState(false);
 
 	const [showGuessingForm, setShowGuessingForm] = useState(false);
 	const [hasStakedGuessingNfts, sethasStakedGuessingNfts] = useState(false);
@@ -77,16 +61,11 @@ export const GuessModal = ({
 
   return (
     <>
-      <CurrencyModal
-        ref={currency}
-      />
-
       <GuessFormModal
         config={config as GameConfigInterface}
         isOpen={showGuessingForm}
         onClose={() => {
           setShowGuessingForm(false);
-          onClose();
         }}
       />
 
@@ -97,63 +76,6 @@ export const GuessModal = ({
       <BuyTickets
         ref={buyTickets}
       />
-
-      {/* <StakeNftModal
-        isMulti={false}
-        isOpen={showStakedModal}
-        buttonText={'Buy Ticket'}
-        onClose={() => setShowStakedModal(false)}
-        onStake={async (
-          selected,
-        ) => void await currency.current?.ToggleCurrencyModalWithCallback((
-            data: GameCurrencyInterface,
-          ) => {
-            console.log('aaa');
-            console.log(data);
-
-            const {
-              // eslint-disable-next-line @typescript-eslint/naming-convention
-              token_id,
-              contract,
-            } = selected[0];
-
-            void (buyTicketsWithTokens(
-              token_id,
-              contract,
-              data,
-              accountId,
-              selector,
-            ));
-          },
-        )}
-        fetchTokens={async () => {
-          if (!accountId) {
-            return [];
-          }
-
-          const stakedNfts = await getStakedNftsById(accountId, selector);
-
-          const tokens: Selected[] = await Promise.all(
-            stakedNfts.map(async ([contract, tokenId]) => {
-              const token = await viewFunction(
-                selector,
-                contract,
-                'nft_token',
-                {
-                  token_id: tokenId,
-                },
-              );
-
-              return ({
-                ...token,
-                contract,
-              });
-            }),
-          );
-
-          return tokens;
-        }}
-      /> */}
 
       <ModalTemplate
         isOpen={isOpen}

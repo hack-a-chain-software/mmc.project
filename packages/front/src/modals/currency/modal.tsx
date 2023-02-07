@@ -1,14 +1,16 @@
+import { CurrencyItem } from './item';
 import { useGame } from '@/stores/game';
 import { ModalTemplate } from '../modal-template';
 import { GameCurrencyInterface } from '@/interfaces';
 import { useMemo, useState, forwardRef, useImperativeHandle } from 'react';
-import { CurrencyItem } from './item';
 
 type CurrencyCallback = (currency: GameCurrencyInterface) => void;
 
 let callback;
 
-export const CurrencyModal = forwardRef((_, ref) => {
+export const CurrencyModal = forwardRef(({
+  title = 'Select the currency',
+}: { title?: string, buttonText: string }, ref) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const ToggleCurrencyModalWithCallback = (value: CurrencyCallback) => {
@@ -33,20 +35,38 @@ export const CurrencyModal = forwardRef((_, ref) => {
     return config.currencies;
   }, [config]);
 
+  const onClaim = async (payload: GameCurrencyInterface) => {
+    if (!callback) {
+      return;
+    }
+
+    callback(payload);
+  };
+
   return (
     <ModalTemplate
+      title={title}
       isOpen={isOpen}
       onClose={() => setIsOpen(false)}
-      title="Select the currency"
-      className="max-w-md pb-[38px]"
+      className="max-w-md text-black bg-white rounded-md"
     >
-      {currencies.map((currency) => (
-        <CurrencyItem
-          {...currency}
-          callbackCurrency={(args) => callback(args)}
-          key={`select-currency-modal-item: ${currency.contract as string}`}
-        />
-      ))}
+      <div>
+        <div>
+          <span
+            className=""
+          >
+            Select payment currency:
+          </span>
+        </div>
+
+        {currencies.map((currency) => (
+          <CurrencyItem
+            {...currency}
+            callbackCurrency={(args) => onClaim(args)}
+            key={`select-currency-modal-item: ${currency.contract as string}`}
+          />
+        ))}
+      </div>
     </ModalTemplate>
   );
 });
