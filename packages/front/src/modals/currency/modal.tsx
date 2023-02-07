@@ -2,7 +2,7 @@ import { useGame } from '@/stores/game';
 import { ModalTemplate } from '../modal-template';
 import { GameCurrencyInterface } from '@/interfaces';
 import { useMemo, useState, forwardRef, useImperativeHandle } from 'react';
-import { CurrencyItem } from './currency-item';
+import { CurrencyItem } from './item';
 
 type CurrencyCallback = (currency: GameCurrencyInterface) => void;
 

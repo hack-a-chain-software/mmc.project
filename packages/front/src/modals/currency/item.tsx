@@ -21,7 +21,7 @@ export const CurrencyItem = ({
 
   return (
     <div
-      onClick={() => callbackCurrency({ contract, metadata, token_price })}
+      onClick={() => void callbackCurrency({ contract, metadata, token_price })}
       className="flex items-center space-x-3 hover:cursor-pointer mx-auto hover:bg-white/10 px-2 py-4 rounded-md"
     >
       <div

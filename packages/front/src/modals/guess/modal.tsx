@@ -8,13 +8,11 @@ import { twMerge } from 'tailwind-merge';
 import isEmpty from 'lodash/isEmpty';
 import { useGame } from '@/stores/game';
 import { StakeNftModal, CurrencyModal } from '@/modals';
-import {
-	detectivesContract,
-	undercoverPupsContract,
-} from '@/constants/env';
-import { GameConfigInterface, GameCurrencyInterface, Token } from '@/interfaces';
+import { GameConfigInterface, GameCurrencyInterface } from '@/interfaces';
 import { Selected } from '@/modals';
 import { viewFunction } from '@/helpers/near';
+import { StakeDetect } from './stake-detect';
+import { BuyTickets } from './buy-tickets';
 
 type CurrencyCallback = (currency: GameCurrencyInterface) => void;
 
@@ -30,12 +28,9 @@ export const GuessModal = ({
 
 	const {
 		config,
-		stakeNft,
 		accountId,
-		getPupsById,
 		getTicketsById,
 		getStakedNftsById,
-		getDetectivesById,
 		buyTicketsWithTokens,
 	} = useGame();
 
@@ -43,9 +38,16 @@ export const GuessModal = ({
     ToggleCurrencyModalWithCallback: ToggleCurrencyModalWithCallback
   }>();
 
+  const stakeDetect = useRef<{
+    toggleStakeDetectModal: () => void,
+  }>();
+
+  const buyTickets = useRef<{
+    toggleBuyTicketsModal: () => void,
+  }>();
+
 	const [ticketsAmount, setTicketsAmount] = useState(0);
 
-	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showStakedModal, setShowStakedModal] = useState(false);
 
 	const [showGuessingForm, setShowGuessingForm] = useState(false);
@@ -88,38 +90,15 @@ export const GuessModal = ({
         }}
       />
 
-      <StakeNftModal
-        isOpen={showStakeModal}
-        onClose={() => setShowStakeModal(false)}
-        onStake={async (selected) =>
-          void (await stakeNft(selected, accountId, selector))
-        }
-        fetchTokens={async () => {
-          if (!accountId) {
-            return [];
-          }
-
-          const tokens: Selected[] = [];
-
-          const detectives = await getDetectivesById(accountId, selector);
-
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          tokens.push(...detectives.map((detective: Token) =>
-            ({ ...detective, contract: detectivesContract as string }),
-          ));
-
-          const undercoverPupsTokens = await getPupsById(accountId, selector);
-
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          tokens.push(...undercoverPupsTokens.map((pups: Token) =>
-            ({ ...pups, contract: undercoverPupsContract as string }),
-          ));
-
-          return tokens;
-        }}
+      <StakeDetect
+        ref={stakeDetect}
       />
 
-      <StakeNftModal
+      <BuyTickets
+        ref={buyTickets}
+      />
+
+      {/* <StakeNftModal
         isMulti={false}
         isOpen={showStakedModal}
         buttonText={'Buy Ticket'}
@@ -174,7 +153,7 @@ export const GuessModal = ({
 
           return tokens;
         }}
-      />
+      /> */}
 
       <ModalTemplate
         isOpen={isOpen}
@@ -211,7 +190,7 @@ export const GuessModal = ({
 
           <div className="flex items-center space-x-[10px]">
             <Button
-              onClick={() => setShowStakeModal(true)}
+              onClick={() => stakeDetect.current?.toggleStakeDetectModal()}
               className="w-full text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto bg-transparent"
             >
               With Stake
@@ -219,7 +198,7 @@ export const GuessModal = ({
 
             <Button
               disabled={!hasStakedGuessingNfts}
-              onClick={() => setShowStakedModal(true)}
+              onClick={() => buyTickets.current?.toggleBuyTicketsModal()}
               className="w-full text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto bg-transparent"
             >
               With MMC Tokens
