@@ -9,8 +9,9 @@ import { ModalTemplate } from '../modal-template';
 import { useState, useEffect, useMemo } from 'react';
 import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { GameCurrencyInterface, Token } from '@/interfaces';
-import { useWalletSelector } from '@/context/wallet';
+// import { useWalletSelector } from '@/context/wallet';
 import { gameContract } from '@/constants/env';
+import { useWallet } from '@/stores/wallet';
 
 export interface Selected extends Token {
   contract: string;
@@ -33,7 +34,7 @@ export const StakeNftModal = ({
   title = "Select NFT's",
   onStake = async () => {},
 }: Partial<StakeNftModalPropsInterface> & {
-  currency: GameCurrencyInterface | null;
+  currency?: GameCurrencyInterface;
 }) => {
   const [price, setPrice] = useState('');
   const [tokens, setTokens] = useState<Selected[]>([]);
@@ -44,7 +45,7 @@ export const StakeNftModal = ({
 
   const {
     selector,
-  }  = useWalletSelector();
+  }  = useWallet();
 
   const decimals = useMemo(() => {
     return new Big(10).pow(currency?.metadata?.decimals ?? 0);

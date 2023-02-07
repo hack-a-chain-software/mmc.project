@@ -3,9 +3,10 @@ import { useMemo } from 'react';
 import { Button } from '@/components';
 import { useGame } from '@/stores/game';
 import { ModalTemplate } from '../modal-template';
-import { useWalletSelector } from '@/context/wallet';
+// import { useWalletSelector } from '@/context/wallet';
 import { FungibleTokenMetadata } from '@/interfaces';
 import { BaseModalPropsInterface } from '@/interfaces/modal';
+import { useWallet } from '@/stores/wallet';
 
 export interface FastPassModalPropsInterface {
   token: FungibleTokenMetadata;
@@ -26,7 +27,7 @@ export const FastPassModal = ({
   isOpen = false,
   onClose,
 }: Partial<BaseModalPropsInterface> & FastPassModalPropsInterface) => {
-  const { accountId, selector } = useWalletSelector();
+  const { accountId, selector } = useWallet();
 
   const { buyFastPass } = useGame();
 
@@ -48,7 +49,7 @@ export const FastPassModal = ({
       totalAmount?.toString() || '',
       passCost?.toString() || '',
       accountId,
-      selector,
+      selector!,
     );
   };
 

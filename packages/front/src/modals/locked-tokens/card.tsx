@@ -2,11 +2,12 @@ import Big from 'big.js';
 import { useState, useMemo } from 'react';
 import { format, differenceInMilliseconds, addMilliseconds, isBefore } from 'date-fns';
 import { getUTCDate, formatBigNumberWithDecimals } from '@/helpers';
-import { useWalletSelector } from '@/context/wallet';
+// import { useWalletSelector } from '@/context/wallet';
 import { Button, ProgressBar } from '@/components';
 import { twMerge } from 'tailwind-merge';
 import { useGame } from '@/stores/game';
 import { FastPassModal } from '@/modals';
+import { useWallet } from '@/stores/wallet';
 
 export interface Vesting {
   id?: string;
@@ -45,7 +46,7 @@ export const LockedTokensCard = (
     token: Token; contractData: ContractData, baseTokenBalance: string,
   },
 ) => {
-  const { accountId, selector } = useWalletSelector();
+  const { accountId, selector } = useWallet();
   const [showFastPass, setShowFastPass] = useState(false);
 
   const { withdrawLockedTokens } = useGame();
@@ -100,7 +101,7 @@ export const LockedTokensCard = (
       return;
     }
 
-    await withdrawLockedTokens([props], accountId, selector);
+    await withdrawLockedTokens([props], accountId, selector!);
   };
 
   return (
@@ -244,7 +245,7 @@ export const LockedTokensCard = (
         onClose={() => setShowFastPass(false)}
         isOpen={showFastPass}
         token={props.token}
-        vestingId={props.id || ""}
+        vestingId={props.id || ''}
         passCost={props.contractData.fast_pass_cost}
         totalAmount={props.locked_value}
         acceleration={Number(props.contractData?.fast_pass_acceleration)}

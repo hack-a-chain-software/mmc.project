@@ -1,12 +1,13 @@
 import { useGame } from '@/stores/game';
 import { Button, Socials } from '@/components';
 import { useRef, Fragment,  useState } from 'react';
-import { useWalletSelector } from '@/context/wallet';
+// import { useWalletSelector } from '@/context/wallet';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { ConfirmStakeClueModal, CurrencyModal } from '@/modals';
 import { ClueInterface, GameCurrencyInterface } from '@/interfaces';
+import { useWallet } from '@/stores/wallet';
 
 type CurrencyCallback = (currency: GameCurrencyInterface) => void;
 
@@ -35,7 +36,7 @@ export const SceneClueModal = ({
   const {
     selector,
     accountId,
-  } = useWalletSelector();
+  } = useWallet();
 
   const { claimClue } = useGame();
 
@@ -51,7 +52,7 @@ export const SceneClueModal = ({
         nft_id as string,
         selectedCurrency,
         accountId,
-        selector,
+        selector!,
       );
     },
   );

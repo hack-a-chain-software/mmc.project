@@ -1,7 +1,7 @@
 import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { ModalTemplate } from '../modal-template';
 import { useEffect, useState } from 'react';
-import { useWalletSelector } from '@/context/wallet';
+// import { useWalletSelector } from '@/context/wallet';
 import { viewFunction } from '@/helpers/near';
 import { getPages } from '@/helpers';
 import { Button } from '@/components';
@@ -9,6 +9,7 @@ import isEmpty from 'lodash/isEmpty';
 import { LockedTokensCard, ContractData, Token } from './card';
 import { lockedContract, tokenContract } from '@/constants/env';
 import { useGame } from '@/stores/game';
+import { useWallet } from '@/stores/wallet';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -32,7 +33,7 @@ export const LockedTokensModal = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isSlastPage, setIsLastPage] = useState(false);
 	const [programs, setPrograms] = useState<Vesting[]>([]);
-	const { selector } = useWalletSelector();
+	const { selector } = useWallet();
 	const [contractData, setContractData] = useState<ContractData>([]);
 	const [baseTokenMetadata, setBaseTokenMetadata] = useState<Token>();
 	const [baseTokenBalance, setBaseTokenBalance] = useState('');

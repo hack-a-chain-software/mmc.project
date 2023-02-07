@@ -1,6 +1,5 @@
 import { Fragment, useState } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { useWalletSelector } from '@/context/wallet';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import toast from 'react-hot-toast';
 import { twMerge } from 'tailwind-merge';
@@ -9,19 +8,24 @@ import { UserCircleIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/so
 import { GameCluesModal, LockedTokensModal, GuessesModal } from '@/modals';
 import { shortenAddress } from '@/helpers';
 import { If } from '@/components';
-import { useGame } from '@/stores/game';
+import { useWallet } from '@/stores/wallet';
+import { useUser } from '@/stores/user';
 
 export const WalletMenu = () => {
-  const { accountId, toggleModal, signOut } = useWalletSelector();
-
   const [showCluesModal, setShowCluesModal] = useState(false);
   const [showTokensModal, setShowTokensModal] = useState(false);
   const [showGuessesModal, setShowGuessesModal] = useState(false);
 
   const {
+    accountId,
+    signOut,
+    toggleModal,
+  } = useWallet();
+
+  const {
     autenticated,
     toggleAutenticated,
-   } = useGame();
+  } = useUser();
 
   const logout = async () => {
     toggleAutenticated();

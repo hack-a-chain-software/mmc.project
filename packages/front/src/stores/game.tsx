@@ -1,13 +1,12 @@
 import Big from 'big.js';
-import create from 'zustand';
+import { create } from 'zustand';
 import api from '@/services/api';
 import {
 	firstScene,
 	tokenContract,
 	undercoverPupsContract,
 } from '@/constants/env';
-import { GameConfigInterface, SceneInterface, GuessInterface, Token, ClueInterface, GameCurrencyInterface } from '@/interfaces';
-import { WalletSelector } from '@near-wallet-selector/core';
+import { Token, ClueInterface } from '@/interfaces';
 import {
 	gameContract,
 	detectivesContract,
@@ -22,146 +21,37 @@ import {
 } from '@/helpers/near';
 import isEmpty from 'lodash/isEmpty';
 import { toast } from 'react-hot-toast';
-import { AnimationControls } from 'framer-motion';
 import { getUTCDate } from '@/helpers';
 import { isBefore } from 'date-fns/esm';
-import { Selected } from '@/modals';
-import { Vesting } from '@/modals/locked-tokens/card';
+import { useUser } from './user';
+import { GameStoreInterface } from '@/interfaces/store/game';
 
-export interface LoginData {
-	accountId: string;
-	seasonId: string;
-	signedMessage: {
-		message: string;
-		signature: string;
-		publicKey: string;
-	};
-}
-
-export interface GuessDto {
-  murdered: string;
-  weapon: string;
-  motive: string;
-}
-
-export const useGame = create<{
-	jwt: string;
-  accountId: string;
-	autenticated: boolean;
-	scene: SceneInterface | null;
-	config: GameConfigInterface | null;
-	controls: AnimationControls | null;
-	connected: boolean;
-  clues: ClueInterface[] | null;
-  toggleAutenticated: () => void,
-  guessingIsOpen: () => boolean,
-	login: (
-    payload: LoginData,
-		accountId: string,
-		controls: AnimationControls
-  ) => Promise<GameConfigInterface>;
-	getScene: (id?: string) => Promise<SceneInterface>;
-	getClues: () => Promise<ClueInterface[]>;
-  getGuess: () => Promise<GuessInterface[]>,
-  claimAllGuessingRewards: () => Promise<void>,
-	claimClue: (
-		tokenid: string,
-    currency: GameCurrencyInterface,
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<void>;
-	stakeClue: (
-		tokenid: string,
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<void>;
-	getDetectivesById: (
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<Token[]>;
-	getPupsById: (
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<Token[]>;
-	sendGuess: (
-		gues: GuessDto,
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<void>;
-	getTicketsById: (
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<any>;
-	getStakedNftsById: (
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<string[][]>;
-	buyTicketsWithTokens: (
-		tokenId: string,
-		tokenContract: string,
-    currency: GameCurrencyInterface,
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<any>;
-	getGuessTokenPrice: (
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<string>;
-	stakeNft: (
-		tokens: Selected[],
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<void>;
-	buyFastPass: (
-		vesting: string,
-		amount: string,
-		passCost: string,
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<void>;
-	withdrawLockedTokens: (
-		vestings: Vesting[],
-		accountId: string | null,
-		connection: WalletSelector
-	) => Promise<void>;
-  moveToScene: (id: string) => Promise<void>;
-}>((set, get) => ({
-	jwt: '',
-  accountId: '',
+export const useGame = create<GameStoreInterface>((set, get) => ({
   clues: null,
 	scene: null,
 	config: null,
 	controls: null,
-	connected: false,
-  autenticated: false,
 
-	login: async (loginPayload, accountId, controls) => {
+	initGame: async (controls) => {
     const {
-      getScene,
-      getClues,
-    } = get();
+      accountId,
+      getRequestConfig,
+    } = useUser.getState();
 
-		const { data: {
-      jwt = '',
-    } } = await api.post<{ jwt: string }>('/auth/login', {
-			...loginPayload,
-		});
-
-		const { data } = await api.get('/game/config', {
-			headers: { Authorization: `Bearer ${jwt as string}` },
-		});
+		const { data } = await api.get('/game/config', getRequestConfig());
 
 		set({
-			jwt,
 			controls,
-			accountId,
 			config: {
         ...data,
         ...data.config,
       },
-			connected: true,
-      autenticated: !!accountId,
 		});
+
+    const {
+      getClues,
+      getScene,
+    } = get();
 
     let clues: ClueInterface[] | null = null;
 
@@ -185,8 +75,11 @@ export const useGame = create<{
   guessingIsOpen: () => {
     const {
       config,
-      accountId,
     } = get();
+
+    const {
+      accountId,
+    } = useUser.getState();
 
     if (!accountId || !config) {
       return false;
@@ -201,23 +94,13 @@ export const useGame = create<{
     return isBefore(openAt, now);
   },
 
-  toggleAutenticated: () => {
-    set({
-      autenticated: false,
-    });
-  },
-
   getGuess: async () => {
-		const { jwt } = get();
-
-		if (!jwt) {
-			return [];
-		}
+    const {
+      getRequestConfig,
+    } = useUser.getState();
 
     try {
-      const { data } = await api.get('/game/guess/', {
-        headers: { Authorization: `Bearer ${jwt}` },
-      });
+      const { data } = await api.get('/game/guess/', getRequestConfig());
 
       return data;
     } catch (e) {
@@ -228,16 +111,12 @@ export const useGame = create<{
   },
 
   claimAllGuessingRewards: async () => {
-		const { jwt } = get();
-
-		if (!jwt) {
-			return [];
-		}
+    const {
+      getRequestConfig,
+    } = useUser.getState();
 
     try {
-      const { data } = await api.post('/game/rewards/', {}, {
-        headers: { Authorization: `Bearer ${jwt}` },
-      });
+      const { data } = await api.post('/game/rewards/', {}, getRequestConfig());
 
       return data;
     } catch (e) {
@@ -248,11 +127,10 @@ export const useGame = create<{
   moveToScene: async (id) => {
 		const {
       controls,
-      connected,
       getScene,
     } = get();
 
-    if (!connected || !controls) {
+    if (!controls) {
       return;
     }
 
@@ -269,15 +147,11 @@ export const useGame = create<{
   },
 
 	getScene: async (id = firstScene) => {
-		const { jwt } = get();
+    const {
+      getRequestConfig,
+    } = useUser.getState();
 
-		if (!jwt) {
-			return;
-		}
-
-		const { data } = await api.get(`/game/scene/${id}`, {
-			headers: { Authorization: `Bearer ${jwt}` },
-		});
+		const { data } = await api.get(`/game/scene/${id as string}`, getRequestConfig());
 
 		set({
 			scene: data,
@@ -287,16 +161,12 @@ export const useGame = create<{
 	},
 
 	getClues: async () => {
-		const { jwt } = get();
-
-		if (!jwt) {
-			return;
-		}
+    const {
+      getRequestConfig,
+    } = useUser.getState();
 
     try {
-      const { data } = await api.get('/game/clues', {
-        headers: { Authorization: `Bearer ${jwt}` },
-      });
+      const { data } = await api.get('/game/clues', getRequestConfig());
 
       return data;
     } catch (e) {
@@ -484,7 +354,9 @@ export const useGame = create<{
 			return;
 		}
 
-		const { jwt } = get();
+    const {
+      getRequestConfig,
+    } = useUser.getState();
 
 		const randomNumber = (Math.random() * 7).toFixed(0);
 
@@ -506,9 +378,7 @@ export const useGame = create<{
 					random_number: randomNumber,
 					...guess,
 				},
-				{
-					headers: { Authorization: `Bearer ${jwt}` },
-				},
+        getRequestConfig(),
 			);
 
 			toast.success('Your guess has been successfully saved!');

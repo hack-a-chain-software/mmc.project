@@ -3,19 +3,20 @@ import { ModalTemplate } from '../modal-template';
 import GuessFormModal from './form';
 import { Button } from '@/components';
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { useWalletSelector } from '@/context/wallet';
+// import { useWalletSelector } from '@/context/wallet';
 import { twMerge } from 'tailwind-merge';
 import isEmpty from 'lodash/isEmpty';
 import { useGame } from '@/stores/game';
 import { GameConfigInterface } from '@/interfaces';
 import { StakeDetect } from './stake-detect';
 import { BuyTickets } from './buy-tickets';
+import { useWallet } from '@/stores/wallet';
 
 export const GuessModal = ({
   isOpen,
   onClose,
 }: Partial<BaseModalPropsInterface>) => {
-	const { selector } = useWalletSelector();
+	const { selector } = useWallet();
 
 	const {
 		config,
@@ -43,11 +44,11 @@ export const GuessModal = ({
 		}
 
 		void (async () => {
-			const tickets = await getTicketsById(accountId, selector) || 0;
+			const tickets = await getTicketsById(accountId, selector!) || 0;
 
 			setTicketsAmount(tickets as number);
 
-			const totalGuess = await getStakedNftsById(accountId, selector);
+			const totalGuess = await getStakedNftsById(accountId, selector!);
 
 			sethasStakedGuessingNfts(!isEmpty(totalGuess));
 		})();

@@ -1,17 +1,18 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
-import { useWalletSelector } from "@/context/wallet";
-import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import type { ModuleState } from "@near-wallet-selector/core";
-import { gameContract } from "@/constants/env";
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment, useEffect, useState } from 'react';
+// import { useWalletSelector } from '@/context/wallet';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import type { ModuleState } from '@near-wallet-selector/core';
+import { gameContract } from '@/constants/env';
+import { useWallet } from '@/stores/wallet';
 
 export function WalletModal() {
-  const { selector, showModal, toggleModal } = useWalletSelector();
+  const { selector, showWalletModal, toggleModal } = useWallet();
 
   const [modules, setModules] = useState<ModuleState[]>([]);
 
   useEffect(() => {
-    const subscription = selector.store.observable.subscribe((state) => {
+    const subscription = selector?.store.observable.subscribe((state) => {
       state.modules.sort((current, next) => {
         if (current.metadata.deprecated === next.metadata.deprecated) {
           return 0;
@@ -23,20 +24,20 @@ export function WalletModal() {
       setModules(state.modules);
     });
 
-    return () => subscription.unsubscribe();
-  }, []);
+    return () => subscription?.unsubscribe();
+  }, [selector]);
 
   const handleWalletClick = async (module: ModuleState) => {
     try {
       const { available } = module.metadata;
 
-      if (module.type === "injected" && !available) {
+      if (module.type === 'injected' && !available) {
         return;
       }
 
       const wallet = await module.wallet();
 
-      if (wallet.type === "hardware") {
+      if (wallet.type === 'hardware') {
         return;
       }
 
@@ -50,7 +51,7 @@ export function WalletModal() {
   };
 
   return (
-    <Transition appear show={showModal} as={Fragment}>
+    <Transition appear show={showWalletModal} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={() => toggleModal()}>
         <Transition.Child
           as={Fragment}

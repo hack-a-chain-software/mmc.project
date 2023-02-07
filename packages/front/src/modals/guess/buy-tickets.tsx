@@ -3,12 +3,13 @@ import { useGame } from '@/stores/game';
 import { StakeNftModal } from '@/modals';
 import { viewFunction } from '@/helpers/near';
 import { GameCurrencyInterface } from '@/interfaces';
-import { useWalletSelector } from '@/context/wallet';
+// import { useWalletSelector } from '@/context/wallet';
 import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { tokenContract } from '@/constants/env';
+import { useWallet } from '@/stores/wallet';
 
 export const BuyTickets = forwardRef((_, ref) => {
-  const { selector } = useWalletSelector();
+  const { selector } = useWallet();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -48,7 +49,7 @@ export const BuyTickets = forwardRef((_, ref) => {
       contract,
       currency,
       accountId,
-      selector,
+      selector!,
     );
   };
 
