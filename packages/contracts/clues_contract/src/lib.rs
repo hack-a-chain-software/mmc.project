@@ -158,6 +158,7 @@ impl NonFungibleTokenCore for Contract {
     approval_id: Option<u64>,
     memo: Option<String>,
   ) {
+    //can only transfer NFTs that are not staked
     self.assert_token_unstaked(&token_id);
 
     self

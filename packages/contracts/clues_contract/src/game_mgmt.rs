@@ -13,6 +13,12 @@ impl Contract {
     self.only_owner();
 
     assert!(
+      new_guesssing_date > env::block_timestamp(),
+      "{}",
+      "The new Guessing date can't be a date in the past "
+    );
+
+    assert!(
       new_guesssing_date < self.season_end,
       "{}",
       "The new Guessing date must be before the end of the season"
@@ -23,6 +29,12 @@ impl Contract {
 
   pub fn change_season_end_date(&mut self, new_end_date: Timestamp) {
     self.only_owner();
+
+    assert!(
+      new_end_date > env::block_timestamp(),
+      "{}",
+      "The new end date can't be a date in the past "
+    );
 
     assert!(
       new_end_date > self.guessing_start,
