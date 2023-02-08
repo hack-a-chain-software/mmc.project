@@ -15,7 +15,7 @@ impl Contract {
     guess.to_hash()
   }
 
-  pub fn view_guess_was_inserted(&self, hash: U256) -> bool{
+  pub fn view_guess_was_inserted(&self, hash: U256) -> bool {
     self.guesses.contains_key(&hash)
   }
 
@@ -62,13 +62,20 @@ impl Contract {
     self.staked_tokens.to_vec()
   }
 
-  pub fn view_staked_guesses_contain(&self, tuple: (AccountId, TokenId)) -> bool{
+  pub fn view_staked_guesses_contain(&self, tuple: (AccountId, TokenId)) -> bool {
     self.staked_guesses.contains(&tuple)
   }
 
-
   pub fn view_user_tickets(&self, account_id: AccountId) -> Option<u32> {
     self.guess_ticket.get(&account_id)
+  }
+
+  pub fn view_guessing_date(&self) -> Timestamp {
+    self.guessing_start
+  }
+
+  pub fn view_season_end_date(&self) -> Timestamp {
+    self.season_end
   }
 
   pub fn view_ticket_price(&self, token_id: TokenId, account_id: AccountId) {

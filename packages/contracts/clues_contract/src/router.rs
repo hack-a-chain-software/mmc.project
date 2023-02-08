@@ -13,7 +13,7 @@ pub enum TransactionType {
   ProveOwner,
   Stake { staked_nft_id: TokenId },
   Guess,
-} 
+}
 
 #[derive(Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde", tag = "type")]
@@ -22,9 +22,10 @@ pub enum TokenRoute {
     det_or_pup: AccountId,
     token_id: TokenId,
   },
-  Claim { token_id: TokenId },
-} 
-
+  Claim {
+    token_id: TokenId,
+  },
+}
 
 #[near_bindgen]
 impl Contract {
@@ -36,20 +37,21 @@ impl Contract {
     token_id: String,
     msg: String,
   ) -> bool {
-    
     println!("{}", "ENTROU NO ON TRANSFER");
     let nft_contract = env::predecessor_account_id();
 
-    println!("{}{}", "previous_owner_id: ", previous_owner_id );
+    println!("{}{}", "previous_owner_id: ", previous_owner_id);
 
-    match serde_json::from_str::<TransactionType>(&msg).expect("Error with the message for nft trasnfer call"){
+    match serde_json::from_str::<TransactionType>(&msg)
+      .expect("Error with the message for nft trasnfer call")
+    {
       TransactionType::ProveOwner => self.prove_ownership(previous_owner_id.parse().unwrap()),
       TransactionType::Stake { staked_nft_id } => {
         self.stake(staked_nft_id, previous_owner_id.parse().unwrap())
-      },
+      }
       TransactionType::Guess => {
         self.stake_for_guessing(previous_owner_id.parse().unwrap(), token_id, nft_contract)
-      },
+      }
     }
   }
 
@@ -57,12 +59,14 @@ impl Contract {
   pub fn ft_on_transfer(&mut self, sender_id: String, amount: U128, msg: String) {
     let currency = env::predecessor_account_id();
 
-    match serde_json::from_str::<TokenRoute>(&msg).expect("Error with the message for FT transfer call") {
-      TokenRoute::Guess { det_or_pup,token_id} => 
-      {
-        self.buy_guessing_ticket(sender_id.try_into().unwrap(), token_id, det_or_pup, amount)
-      }
-      TokenRoute:: Claim { token_id } => self.claim(
+    match serde_json::from_str::<TokenRoute>(&msg)
+      .expect("Error with the message for FT transfer call")
+    {
+      TokenRoute::Guess {
+        det_or_pup,
+        token_id,
+      } => self.buy_guessing_ticket(sender_id.try_into().unwrap(), token_id, det_or_pup, amount),
+      TokenRoute::Claim { token_id } => self.claim(
         token_id,
         sender_id.try_into().unwrap(),
         env::predecessor_account_id(),
@@ -71,7 +75,3 @@ impl Contract {
     };
   }
 }
-
-
-
-
