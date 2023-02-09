@@ -20,14 +20,10 @@ export type GameClueModalInterface = Partial<BaseModalPropsInterface>;
 
 export const GameCluesModal = () => {
   const {
-    props,
     gameClues,
     onCloseModal,
     onShowModal,
   } = useModal();
-
-  const {} = useMemo(
-    () => props.gameClues as GameClueModalInterface || {}, [props]);
 
 	const {
     autenticated,
@@ -38,7 +34,7 @@ export const GameCluesModal = () => {
   } = useGame();
 
   const isLoading = useMemo(() => {
-    return !autenticated || typeof clues === null;
+    return !autenticated || !clues || !gameClues;
   }, [clues, autenticated]);
 
 	const myClues = useMemo(() => {

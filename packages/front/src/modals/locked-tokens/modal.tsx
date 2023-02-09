@@ -1,6 +1,6 @@
 import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { ModalTemplate } from '../modal-template';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { viewFunction } from '@/helpers/near';
 import { getPages } from '@/helpers';
 import { Button } from '@/components';
@@ -34,7 +34,7 @@ export const LockedTokensModal = () => {
 
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingPrograms, setIsLoadingPrograms] = useState(true);
   const [isSlastPage, setIsLastPage] = useState(false);
 	const [programs, setPrograms] = useState<Vesting[]>([]);
 	const { selector } = useWallet();
@@ -47,6 +47,10 @@ export const LockedTokensModal = () => {
     accountId,
   } = useUser();
 
+  const isLoading = useMemo(() => {
+    return !autenticated || isLoadingPrograms || !isOpen;
+  }, [autenticated, setIsLoadingPrograms]);
+
 	const getNextPage = () => {
 		const next = page + 1;
 
@@ -58,8 +62,6 @@ export const LockedTokensModal = () => {
 	};
 
 	const loadMore = async (indexOf: number) => {
-    setIsLoading(true);
-
 		const items: Vesting[] = await viewFunction(
 			selector,
 			lockedContract,
@@ -78,7 +80,7 @@ export const LockedTokensModal = () => {
 
     setPage(indexOf);
 
-    setIsLoading(false);
+    setIsLoadingPrograms(false);
 
     if (indexOf >= totalPages) {
       setIsLastPage(true);
@@ -132,10 +134,6 @@ export const LockedTokensModal = () => {
 
 			void (await loadMore(0));
 		})();
-
-    return () => {
-      setPrograms([]);
-    };
 	}, [accountId, autenticated, isOpen]);
 
   return (

@@ -23,9 +23,6 @@ export const Play = () => {
             className="min-h-screen relative"
           >
             <Suspense fallback={null}>
-              <div className="absolute px-[30px] w-full max-w-[1340px] pt-[32px] z-[9] flex items-center justify-end space-x-[32px] left-1/2 -translate-x-1/2">
-              </div>
-
               <Scene />
             </Suspense>
           </motion.div>
