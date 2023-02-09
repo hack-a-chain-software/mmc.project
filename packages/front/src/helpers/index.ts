@@ -37,6 +37,10 @@ export const getPages = (total, limit) => {
   return base;
 };
 
+export const getNextPage = (pages: number, page: number): number => {
+  return 0;
+};
+
 export const shortenAddress = (address: string, chars = 8): string => {
   if (!address) {
     return '';

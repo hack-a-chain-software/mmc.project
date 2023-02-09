@@ -2,7 +2,7 @@ import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { ModalTemplate } from '../modal-template';
 import { useEffect, useMemo, useState } from 'react';
 import { viewFunction } from '@/helpers/near';
-import { getPages } from '@/helpers';
+import { getPages, getNextPage } from '@/helpers';
 import { Button } from '@/components';
 import isEmpty from 'lodash/isEmpty';
 import { LockedTokensCard, ContractData, Token } from './card';
@@ -33,7 +33,8 @@ export const LockedTokensModal = () => {
   } = useModal();
 
 	const [totalPages, setTotalPages] = useState(1);
-	const [page, setPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+
   const [isLoadingPrograms, setIsLoadingPrograms] = useState(true);
   const [isSlastPage, setIsLastPage] = useState(false);
 	const [programs, setPrograms] = useState<Vesting[]>([]);
@@ -51,24 +52,18 @@ export const LockedTokensModal = () => {
     return !autenticated || !isOpen || !accountId;
   }, [autenticated, isOpen, accountId]);
 
-	const getNextPage = () => {
-		const next = page + 1;
+	const loadMore = async (nextPage: number) => {
+    if (currentPage === 0 && !isEmpty(programs)) {
+      return;
+    }
 
-		if (isEmpty(programs)) {
-			return 0;
-		}
-
-		return next;
-	};
-
-	const loadMore = async (indexOf: number) => {
 		const items: Vesting[] = await viewFunction(
 			selector,
 			lockedContract,
 			'view_vesting_paginated',
 			{
 				account_id: accountId,
-				initial_id: `${indexOf * ITEMS_PER_PAGE}`,
+				initial_id: `${nextPage * ITEMS_PER_PAGE}`,
 				size: `${ITEMS_PER_PAGE}`,
 			},
 		);
@@ -78,11 +73,10 @@ export const LockedTokensModal = () => {
       ...items.map((item, i) => ({ ...item, id: String(i) })),
     ]);
 
-    setPage(indexOf);
-
     setIsLoadingPrograms(false);
+    setCurrentPage(nextPage);
 
-    if (indexOf >= totalPages) {
+    if (isEmpty(items)) {
       setIsLastPage(true);
     }
 	};
@@ -132,7 +126,9 @@ export const LockedTokensModal = () => {
 
 			setBaseTokenBalance(balance as string);
 
-			void (await loadMore(0));
+      const nextPage = getNextPage(totalPages, currentPage);
+
+      void await loadMore(nextPage as number);
 		})();
 	}, [accountId, isLoading]);
 
@@ -140,7 +136,7 @@ export const LockedTokensModal = () => {
     <ModalTemplate
       isOpen={isOpen}
       onClose={() => onCloseModal('lockedTokens')}
-      isLoading={isLoadingPrograms || isLoading}
+      isLoading={isLoadingPrograms}
       title="My Locked Tokens"
       className="w-full max-w-6xl h-[650px] overflow-auto transform bg-black shadow-xl transition-all flex flex-col py-[44px] px-[50px] text-white"
     >
@@ -167,9 +163,9 @@ export const LockedTokensModal = () => {
           <Button
             disabled={isLoading}
             onClick={async () => {
-              const nextPage = getNextPage();
+              const nextPage = getNextPage(totalPages, currentPage);
 
-              void await loadMore(nextPage);
+              void await loadMore(nextPage as number);
             }}
           >
             Load More
