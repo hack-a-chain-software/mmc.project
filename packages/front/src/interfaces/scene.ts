@@ -14,6 +14,8 @@ export interface ClueInterface {
   isMinted: boolean;
   description?: string;
   placeholder: string;
+  width: string;
+  height: string;
   position_top: string;
   position_left: string;
   media_small: string;

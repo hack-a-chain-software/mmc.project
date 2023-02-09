@@ -3,12 +3,14 @@ import { useMemo } from 'react';
 import { Button } from '@/components';
 import { useGame } from '@/stores/game';
 import { ModalTemplate } from '../modal-template';
-// import { useWalletSelector } from '@/context/wallet';
 import { FungibleTokenMetadata } from '@/interfaces';
 import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { useWallet } from '@/stores/wallet';
+import { useModal } from '@/stores/modal';
 
-export interface FastPassModalPropsInterface {
+export interface FastPassModalPropsInterface extends Partial<
+  BaseModalPropsInterface
+> {
   token: FungibleTokenMetadata;
   isOpen: boolean;
   acceleration: number;
@@ -17,16 +19,22 @@ export interface FastPassModalPropsInterface {
   passCost: string;
 }
 
+export const FastPassModal = () => {
+  const {
+    props,
+    fastPass,
+    onCloseModal,
+  } = useModal();
 
-export const FastPassModal = ({
-  token,
-  passCost,
-  vestingId,
-  totalAmount,
-  acceleration,
-  isOpen = false,
-  onClose,
-}: Partial<BaseModalPropsInterface> & FastPassModalPropsInterface) => {
+  const {
+    token,
+    passCost,
+    vestingId,
+    totalAmount,
+    acceleration,
+  } = useMemo(
+    () => props.fastPass as FastPassModalPropsInterface || {}, [props]);
+
   const { accountId, selector } = useWallet();
 
   const { buyFastPass } = useGame();
@@ -49,14 +57,14 @@ export const FastPassModal = ({
       totalAmount?.toString() || '',
       passCost?.toString() || '',
       accountId,
-      selector!,
+      selector as any,
     );
   };
 
   return (
     <ModalTemplate
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={fastPass}
+      onClose={() => onCloseModal('fastPass')}
       title="Buy Fast Pass!"
       className="max-w-md text-black bg-white rounded-md"
     >
@@ -69,7 +77,7 @@ export const FastPassModal = ({
 
       <div className="text-sm">
         <span>Time decrease:{
-          (-100 / acceleration+100).toFixed(0)
+          (-100 / acceleration + 100).toFixed(0)
         }%</span>
       </div>
 

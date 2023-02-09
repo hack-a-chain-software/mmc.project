@@ -86,9 +86,9 @@ export const LockedTokensCard = (
     return formatBigNumberWithDecimals(props.available_to_withdraw, decimals);
   }, [props, decimals]);
 
-  // const withdrawnAmount = useMemo(() => {
-  //   return formatBigNumberWithDecimals(props.withdrawn_tokens, decimals);
-  // }, [props, decimals]);
+  const withdrawnAmount = useMemo(() => {
+    return formatBigNumberWithDecimals(props.withdrawn_tokens, decimals);
+  }, [props, decimals]);
 
   const isEnded = useMemo(() => {
     const today = getUTCDate();
@@ -101,7 +101,7 @@ export const LockedTokensCard = (
       return;
     }
 
-    await withdrawLockedTokens([props], accountId, selector!);
+    await withdrawLockedTokens([props], accountId, selector as any);
   };
 
   return (

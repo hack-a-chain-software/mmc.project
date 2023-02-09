@@ -1,27 +1,30 @@
 import { CurrencyItem } from './item';
 import { useGame } from '@/stores/game';
 import { ModalTemplate } from '../modal-template';
-import { GameCurrencyInterface } from '@/interfaces';
-import { useMemo, useState, forwardRef, useImperativeHandle } from 'react';
+import { BaseModalPropsInterface, GameCurrencyInterface } from '@/interfaces';
+import { useMemo } from 'react';
+import { useModal } from '@/stores/modal';
 
 type CurrencyCallback = (currency: GameCurrencyInterface) => void;
 
-let callback;
+export interface CurrencyModalInterface extends Partial<
+  BaseModalPropsInterface
+> {
+  buttonText: string,
+  callback: CurrencyCallback,
+}
 
-export const CurrencyModal = forwardRef(({
-  title = 'Select the currency',
-}: { title?: string, buttonText: string }, ref) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const CurrencyModal = () => {
+  const {
+    props,
+    currency,
+    onCloseModal,
+  } = useModal();
 
-  const ToggleCurrencyModalWithCallback = (value: CurrencyCallback) => {
-    setIsOpen(true);
-
-    callback = value;
-  };
-
-  useImperativeHandle(ref, () => ({
-    ToggleCurrencyModalWithCallback,
-  }));
+  const {
+    callback,
+    title = '',
+  } = useMemo(() => props.currency as CurrencyModalInterface || {}, [props]);
 
   const {
     config,
@@ -46,8 +49,8 @@ export const CurrencyModal = forwardRef(({
   return (
     <ModalTemplate
       title={title}
-      isOpen={isOpen}
-      onClose={() => setIsOpen(false)}
+      isOpen={currency}
+      onClose={() => onCloseModal('currency')}
       className="max-w-md text-black bg-white rounded-md"
     >
       <div>
@@ -59,14 +62,14 @@ export const CurrencyModal = forwardRef(({
           </span>
         </div>
 
-        {currencies.map((currency) => (
+        {currencies.map((currencyItem) => (
           <CurrencyItem
-            {...currency}
+            {...currencyItem}
             callbackCurrency={(args) => onClaim(args)}
-            key={`select-currency-modal-item: ${currency.contract as string}`}
+            key={`select-currency-modal-item: ${currencyItem.contract as string}`}
           />
         ))}
       </div>
     </ModalTemplate>
   );
-});
+};

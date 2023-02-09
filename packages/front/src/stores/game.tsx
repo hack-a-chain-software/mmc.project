@@ -192,48 +192,6 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 
 		const transactions: Transaction[] = [];
 
-		const storage = await getTokenStorage(
-      connection,
-      gameContract,
-      tokenContract,
-    );
-
-		if (!storage || storage.total < '0.10') {
-			transactions.push(
-				getTransaction(
-					accountId,
-					tokenContract as string,
-					'storage_deposit',
-					{
-						account_id: gameContract,
-						registration_only: false,
-					},
-					'0.25',
-				),
-			);
-		}
-
-		const tokenStorage = await getTokenStorage(
-      connection,
-      accountId,
-      tokenContract,
-    );
-
-		if (!tokenStorage || tokenStorage.total < '0.10') {
-			transactions.push(
-				getTransaction(
-					accountId,
-					tokenContract,
-					'storage_deposit',
-					{
-						account_id: accountId,
-						registration_only: true,
-					},
-					'0.25',
-				),
-			);
-		}
-
 		transactions.push(
 			getTransaction(accountId, detectivesContract, 'nft_transfer_call', {
 				token_id: accountDetectives[0].token_id,

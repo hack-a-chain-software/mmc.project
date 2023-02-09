@@ -154,31 +154,33 @@ export class GameController {
 
     try {
       const transactions = await Promise.all(
-        guesses.map(
-          async ({
-            id,
-            wallet_id,
-            murdered,
-            weapon,
-            motive,
-            random_number,
-          }: Guess) => {
-            await this.nearService.claimGuessRewards({
-              account_id: wallet_id,
-              murderer: murdered,
+        guesses
+          .filter(({ burned }) => !burned)
+          .map(
+            async ({
+              id,
+              wallet_id,
+              murdered,
               weapon,
               motive,
               random_number,
-            });
+            }: Guess) => {
+              await this.nearService.claimGuessRewards({
+                account_id: wallet_id,
+                murderer: murdered,
+                weapon,
+                motive,
+                random_number,
+              });
 
-            await this.guessRepository.update(
-              { id },
-              {
-                burned: true,
-              },
-            );
-          },
-        ),
+              await this.guessRepository.update(
+                { id },
+                {
+                  burned: true,
+                },
+              );
+            },
+          ),
       );
 
       return res.status(200).json(transactions);

@@ -1,7 +1,6 @@
 import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { ModalTemplate } from '../modal-template';
 import { useEffect, useState } from 'react';
-// import { useWalletSelector } from '@/context/wallet';
 import { viewFunction } from '@/helpers/near';
 import { getPages } from '@/helpers';
 import { Button } from '@/components';
@@ -10,6 +9,7 @@ import { LockedTokensCard, ContractData, Token } from './card';
 import { lockedContract, tokenContract } from '@/constants/env';
 import { useUser } from '@/stores/user';
 import { useWallet } from '@/stores/wallet';
+import { useModal } from '@/stores/modal';
 
 const ITEMS_PER_PAGE = 10;
 
@@ -24,10 +24,14 @@ export interface Vesting {
 	available_to_withdraw: string;
 }
 
-export const LockedTokensModal = ({
-  isOpen,
-  onClose,
-}: Partial<BaseModalPropsInterface>) => {
+export type LockedTokensModalInterface = Partial<BaseModalPropsInterface>;
+
+export const LockedTokensModal = () => {
+  const {
+    onCloseModal,
+    lockedTokens: isOpen,
+  } = useModal();
+
 	const [totalPages, setTotalPages] = useState(1);
 	const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -137,7 +141,7 @@ export const LockedTokensModal = ({
   return (
     <ModalTemplate
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => onCloseModal('lockedTokens')}
       isLoading={isLoading}
       title="My Locked Tokens"
       className="w-full max-w-6xl h-[650px] overflow-auto transform bg-black shadow-xl transition-all flex flex-col py-[44px] px-[50px] text-white"

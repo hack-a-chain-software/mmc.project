@@ -5,20 +5,35 @@ import { ModalTemplate } from '../modal-template';
 // import { useWalletSelector } from '@/context/wallet';
 import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { useWallet } from '@/stores/wallet';
+import { useModal } from '@/stores/modal';
+import { useMemo } from 'react';
 
-export const ConfirmStakeClueModal = ({
-  nft_id,
-  onClose,
-  isOpen = false,
-}: Partial<BaseModalPropsInterface> & Partial<ClueInterface>) => {
-  const { selector } = useWallet();
+export type ConfirmStakeClueModalInterface = Partial<BaseModalPropsInterface>
+  & Partial<ClueInterface>;
 
-  const { accountId, stakeClue } = useGame();
+export const ConfirmStakeClueModal = () => {
+  const {
+    props,
+    onCloseModal,
+    confirmStakeClue,
+  } = useModal();
+
+  const {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    nft_id = '',
+  } = useMemo(
+    () => props.confirmStakeClue as ConfirmStakeClueModalInterface || {},
+    [props],
+  );
+
+  const { stakeClue } = useGame();
+
+  const { selector, accountId } = useWallet();
 
   return (
     <ModalTemplate
-      isOpen={isOpen}
-      onClose={onClose}
+      isOpen={confirmStakeClue}
+      onClose={() => onCloseModal('confirmStakeClue')}
       title="Stake Clue"
       className="max-w-xl text-black bg-white rounded-md"
     >
@@ -38,7 +53,7 @@ export const ConfirmStakeClueModal = ({
         onClick={() => void stakeClue(
           nft_id as string,
           accountId,
-          selector!,
+          selector as any,
         )}
         className="w-[185px] min-h-[30px] h-[30px] text-sm flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto hover:border-purple-0"
       >

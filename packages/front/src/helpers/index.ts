@@ -10,14 +10,6 @@ export function getDecimals(decimals: number | undefined) {
   return Big(10).pow(decimals || 1);
 }
 
-export function formatBigNumberWithDecimals(
-  value: string | number | Big,
-  decimals: Big,
-) {
-  return new Big(value).div(decimals).toFixed(2);
-}
-
-
 export const getUTCDate = (timestamp: number = Date.now()): Date => {
   const date = new Date(timestamp);
 
@@ -51,3 +43,11 @@ export const shortenAddress = (address: string, chars = 8): string => {
   }
   return `${address.slice(0, chars)}...${address.slice(-chars)}`;
 };
+
+export const formatBigNumberWithDecimals = (
+  value: string | number | Big,
+  decimals: Big,
+) => {
+  return new Big(value).div(decimals).toFixed(2);
+};
+

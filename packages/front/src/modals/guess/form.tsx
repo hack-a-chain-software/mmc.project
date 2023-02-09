@@ -9,6 +9,7 @@ import { useWallet } from '@/stores/wallet';
 import { useUser } from '@/stores/user';
 
 import { GuessDto } from '@/interfaces/store/game';
+import { useModal } from '@/stores/modal';
 
 const defaultGuess = {
   weapon: '',
@@ -25,6 +26,11 @@ export const GuessFormModal = ({
     ...defaultGuess,
   });
 
+  const {
+    onShowModal,
+    onCloseModal,
+  } = useModal();
+
   const { selector } = useWallet();
 
   const { sendGuess } = useGame();
@@ -34,8 +40,13 @@ export const GuessFormModal = ({
   } = useUser();
 
   const send = useCallback(async () => {
+    onShowModal('overlay');
+
     await sendGuess(guess as GuessDto, accountId, selector as any);
     setGuess({ ...defaultGuess });
+
+    await onCloseModal('overlay');
+
     onClose();
   }, [guess, accountId]);
 

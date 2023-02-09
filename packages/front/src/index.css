@@ -186,3 +186,8 @@ body {
 	opacity: 0;
 	transition: 1s ease 0.3s;
 }
+
+.modal-open {
+  height: 100vh !important;
+  overflow-y: hidden !important;
+}
