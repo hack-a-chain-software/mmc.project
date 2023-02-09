@@ -96,7 +96,7 @@ export const WalletMenu = () => {
                     <div>
                       <button
                         onClick={() => {
-                          onShowModal('lockedTokens', null);
+                          onShowModal('lockedTokens');
                           close();
                         }}
                         className="pt-[19px] px-[24px] pb-[21px] w-full hover:bg-[#A500FB]/[0.10] flex items-center space-x-[8px] text-black "
@@ -116,7 +116,7 @@ export const WalletMenu = () => {
                     <div>
                       <button
                         onClick={() => {
-                          onShowModal('gameClues', null);
+                          onShowModal('gameClues');
                           close();
                         }}
                         className="pt-[19px] px-[24px] pb-[21px] w-full hover:bg-[#A500FB]/[0.10] flex items-center space-x-[8px] text-black "
@@ -136,7 +136,7 @@ export const WalletMenu = () => {
                     <div>
                       <button
                         onClick={() => {
-                          onShowModal('guesses', null);
+                          onShowModal('guesses');
                           close();
                         }}
                         className="pt-[19px] px-[24px] pb-[21px] w-full hover:bg-[#A500FB]/[0.10] flex items-center space-x-[8px] text-black "

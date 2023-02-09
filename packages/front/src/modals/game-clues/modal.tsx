@@ -37,17 +37,17 @@ export const GameCluesModal = () => {
     clues,
   } = useGame();
 
+  const isLoading = useMemo(() => {
+    return !autenticated || typeof clues === null;
+  }, [clues, autenticated]);
+
 	const myClues = useMemo(() => {
-		if (!clues || !autenticated) {
+		if (!clues || isLoading) {
 			return [];
 		}
 
 		return clues.filter((clue) => clue.isOwner);
-	}, [clues, autenticated]);
-
-  const isLoading = useMemo(() => {
-    return typeof clues === null;
-  }, [clues]);
+	}, [clues, isLoading]);
 
   return (
     <ModalTemplate
