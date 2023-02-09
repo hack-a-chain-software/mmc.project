@@ -5,9 +5,10 @@
   "private": true,
   "main": "lib/index.ts",
   "scripts": {
+    "deploy:contract": "near deploy",
     "build:contract": "node compile.js",
     "dev:deploy:contract": "near dev-deploy",
-    "deploy:contract": "near deploy"
+    "deploy:testnet": "(cd testnet_settings/src && node index.js)"
   },
   "devDependencies": {
     "env-cmd": "~10.1.0",

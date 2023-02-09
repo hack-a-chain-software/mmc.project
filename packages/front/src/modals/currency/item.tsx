@@ -16,7 +16,7 @@ export const CurrencyItem = ({
   }, [metadata]);
 
   const formattedPrice = useMemo(() => {
-    return new Big(token_price || 0).div(decimals).toFixed(5);
+    return new Big(token_price || 0).div(decimals).toFixed(2);
   }, [token_price]);
 
   return (

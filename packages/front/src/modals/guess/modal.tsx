@@ -12,12 +12,17 @@ import { StakeDetect } from './stake-detect';
 import { BuyTickets } from './buy-tickets';
 import { useWallet } from '@/stores/wallet';
 import { useUser } from '@/stores/user';
+import { useModal } from '@/stores/modal';
 
-export const GuessModal = ({
-  isOpen,
-  onClose,
-}: Partial<BaseModalPropsInterface>) => {
+export type GuessModalInterface = Partial<BaseModalPropsInterface>;
+
+export const GuessModal = () => {
   const [isLoading, setIsLoading] = useState(true);
+
+  const {
+    guess,
+    onCloseModal,
+  } = useModal();
 
 	const { selector } = useWallet();
 
@@ -45,7 +50,7 @@ export const GuessModal = ({
 	const [hasStakedGuessingNfts, sethasStakedGuessingNfts] = useState(false);
 
 	useEffect(() => {
-		if (!accountId || !isOpen || !selector) {
+		if (!accountId || !guess || !selector) {
 			return;
 		}
 
@@ -64,7 +69,7 @@ export const GuessModal = ({
 		})();
 
     return;
-	}, [accountId, isOpen]);
+	}, [accountId, guess]);
 
 	const hasTickets = useMemo(() => {
 		return ticketsAmount > 0;
@@ -89,8 +94,8 @@ export const GuessModal = ({
       />
 
       <ModalTemplate
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={guess}
+        onClose={() => onCloseModal('guess')}
         isLoading={isLoading}
         title="Ready to guess?"
         className="w-full max-w-3xl transform overflow-hidden bg-black shadow-xl transition-all py-[44px] px-[50px] text-white"

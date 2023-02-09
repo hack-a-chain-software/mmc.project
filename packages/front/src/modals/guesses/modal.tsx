@@ -7,11 +7,17 @@ import { ModalTemplate } from '../modal-template';
 import { GuessItem } from './guess-item';
 import { Button } from '@/components';
 import { useUser } from '@/stores/user';
+import { useModal } from '@/stores/modal';
 
-export const GuessesModal = ({
-  isOpen,
-  onClose,
-}: Partial<BaseModalPropsInterface>) => {
+export type GuessesModalInterface = Partial<BaseModalPropsInterface>;
+
+export const GuessesModal = () => {
+  const {
+    guesses: isOpen,
+    onShowModal,
+    onCloseModal,
+  } = useModal();
+
   const { claimAllGuessingRewards, getGuess } = useGame();
   const {
     accountId,
@@ -38,32 +44,22 @@ export const GuessesModal = ({
     return guesses.every((guess) => guess.burned);
   }, [guesses]);
 
+  const claimAll = async () => {
+    onShowModal('overlay');
+
+    await claimAllGuessingRewards();
+
+    onCloseModal('overlay');
+  };
+
   return (
     <ModalTemplate
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => onCloseModal('guesses')}
       title="My Guesses"
     >
       <div
-        className="mb-8 flex items-center"
-      >
-        <div
-          className="flex-grow flex justify-center mr-8"
-        >
-          {!isLoading && !allGuessingIsBurned && !isEmpty(guesses) && (
-            <Button
-              onClick={() => claimAllGuessingRewards()}
-              disabled={allGuessingIsBurned && isEmpty(guesses)}
-              className="disabled:opacity-75 disabled:cursor-not-allowed"
-            >
-              <span>Claim all guessing rewards</span>
-            </Button>
-          )}
-        </div>
-      </div>
-
-      <div
-        className="flex flex-col max-h-[400px] overflow-auto w-full space-y-2"
+        className="flex flex-col max-h-[420px] overflow-auto w-full space-y-2"
       >
         {!isLoading && !isEmpty(guesses) && (
           <div
@@ -149,6 +145,24 @@ export const GuessesModal = ({
             <svg className="animate-spin h-8 w-8 border border-l-black rounded-full" viewBox="0 0 24 24"/>
           </div>
         )}
+      </div>
+
+      <div
+        className="pt-8 flex items-center"
+      >
+        <div
+          className="flex-grow flex justify-center mr-8"
+        >
+          {!isLoading && !allGuessingIsBurned && !isEmpty(guesses) && (
+            <Button
+              onClick={() => claimAll()}
+              disabled={allGuessingIsBurned && isEmpty(guesses)}
+              className="disabled:opacity-75 disabled:cursor-not-allowed"
+            >
+              <span>Claim all guessing rewards</span>
+            </Button>
+          )}
+        </div>
       </div>
     </ModalTemplate>
   );

@@ -31,7 +31,9 @@ export const executeMultipleTransactions = async (
   wallet: any,
 ) => {
   try {
-    const result = await wallet.signAndSendTransactions({ transactions });
+    const result = await wallet.signAndSendTransactions({
+      transactions,
+    });
 
     refreshPage(result.map(({ transaction }) => transaction.hash).join(',') as string);
   } catch (e) {

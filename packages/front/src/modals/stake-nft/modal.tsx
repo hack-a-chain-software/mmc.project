@@ -17,9 +17,12 @@ export interface Selected extends Token {
   contract: string;
 }
 
-export interface StakeNftModalPropsInterface extends BaseModalPropsInterface {
+export interface StakeNftModalPropsInterface extends Partial<
+  BaseModalPropsInterface
+> {
   isMulti?: boolean;
   buttonText?: string;
+  currency?: GameCurrencyInterface;
   onStake: (selected: Selected[]) => Promise<void>,
   fetchTokens: () => Promise<Selected[]>
 }
@@ -33,9 +36,7 @@ export const StakeNftModal = ({
   buttonText = 'Stake',
   title = "Select NFT's",
   onStake = async () => {},
-}: Partial<StakeNftModalPropsInterface> & {
-  currency?: GameCurrencyInterface;
-}) => {
+}: StakeNftModalPropsInterface) => {
   const [price, setPrice] = useState('');
   const [tokens, setTokens] = useState<Selected[]>([]);
   const [selected, setSelected] = useState<Selected[]>([]);
