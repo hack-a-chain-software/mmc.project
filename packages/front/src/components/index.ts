@@ -13,4 +13,3 @@ export * from './select';
 export * from './progress-bar';
 export * from './if';
 export * from './spinner';
-export * from './toast';

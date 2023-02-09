@@ -308,10 +308,14 @@ async function testnetSetup() {
     console.warn(e);
   }
 
-  const testers = ['1mateus.testnet'];
+  const testers = [
+    '1mateus.testnet',
+    'jasso_test_mmc.testnet',
+    'jkrowling.testnet',
+    'mmctestnet.testnet',
+  ];
 
-  // Mint NFT's and send tokens for all account testers
-  const tokenPromises = [];
+  const storagePromises = []
 
   for (let i = 0; i < testers.length; i++) {
     let accountId = testers[i];
@@ -328,6 +332,44 @@ async function testnetSetup() {
       gas: new BN(300000000000000),
     }));
 
+   // Deposit NEKO for testers
+    tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
+      contractId: execution_data.connAccountMap.nekoTokenAccount.accountId,
+      methodName: 'storage_deposit',
+      args: {
+        account_id: accountId,
+        registration_only: true,
+      },
+      attachedDeposit: new BN("10000000000000000000000"),
+      gas: new BN(300000000000000),
+    }));
+
+   // Deposit AURORA for testers
+    tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
+      contractId: execution_data.connAccountMap.auroraTokenAccount.accountId,
+      methodName: 'storage_deposit',
+      args: {
+        account_id: accountId,
+        registration_only: true,
+      },
+      attachedDeposit: new BN("10000000000000000000000"),
+      gas: new BN(300000000000000),
+    }));
+  }
+
+  try {
+    await Promise.all(storagePromises);
+  } catch (e) {
+    console.warn(e);
+  }
+
+  // Mint NFT's and send tokens for all account testers
+  const tokenPromises = [];
+
+  for (let i = 0; i < testers.length; i++) {
+    let accountId = testers[i];
+
+    // Deposit USDT for testers
     tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
       contractId: execution_data.connAccountMap.usdtTokenAccount.accountId,
       methodName: 'ft_transfer',
@@ -341,55 +383,33 @@ async function testnetSetup() {
       gas: new BN(300000000000000),
     }));
 
-  //  // Deposit NEKO for testers
-  //   tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
-  //     contractId: execution_data.connAccountMap.nekoTokenAccount.accountId,
-  //     methodName: 'storage_deposit',
-  //     args: {
-  //       account_id: accountId,
-  //       registration_only: true,
-  //     },
-  //     attachedDeposit: new BN("10000000000000000000000"),
-  //     gas: new BN(300000000000000),
-  //   }));
+   // Deposit NEKO for testers
+    tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
+      contractId: execution_data.connAccountMap.nekoTokenAccount.accountId,
+      methodName: 'ft_transfer',
+      args: {
+        receiver_id: accountId,
+        registration_only: true,
+        amount: '500000000000',
+        memo: null,
+      },
+      attachedDeposit: new BN(1),
+      gas: new BN(300000000000000),
+    }));
 
-  //   tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
-  //     contractId: execution_data.connAccountMap.nekoTokenAccount.accountId,
-  //     methodName: 'ft_transfer',
-  //     args: {
-  //       receiver_id: accountId,
-  //       registration_only: true,
-  //       amount: '500000000000',
-  //       memo: null,
-  //     },
-  //     attachedDeposit: new BN(1),
-  //     gas: new BN(300000000000000),
-  //   }));
-
-  //  // Deposit AURORA for testers
-  //   tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
-  //     contractId: execution_data.connAccountMap.auroraTokenAccount.accountId,
-  //     methodName: 'storage_deposit',
-  //     args: {
-  //       account_id: accountId,
-  //       registration_only: true,
-  //     },
-  //     attachedDeposit: new BN("10000000000000000000000"),
-  //     gas: new BN(300000000000000),
-  //   }));
-
-  //   tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
-  //     contractId: execution_data.connAccountMap.auroraTokenAccount.accountId,
-  //     methodName: 'ft_transfer',
-  //     args: {
-  //       receiver_id: accountId,
-  //       registration_only: true,
-  //       amount: '500000000000',
-  //       memo: null,
-  //     },
-  //     attachedDeposit: new BN(1),
-  //     gas: new BN(300000000000000),
-  //   }));
+   // Deposit AURORA for testers
+    tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
+      contractId: execution_data.connAccountMap.auroraTokenAccount.accountId,
+      methodName: 'ft_transfer',
+      args: {
+        receiver_id: accountId,
+        registration_only: true,
+        amount: '500000000000',
+        memo: null,
+      },
+      attachedDeposit: new BN(1),
+      gas: new BN(300000000000000),
+    }));
 
     for (let i = 0; i < totalClues/2; i++) {
       tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
