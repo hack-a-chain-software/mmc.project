@@ -29,6 +29,7 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
   clues: null,
 	scene: null,
 	config: null,
+  myClues: null,
 	controls: null,
 
 	initGame: async (controls) => {
@@ -52,7 +53,7 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
       getScene,
     } = get();
 
-    let clues: ClueInterface[] | null = null;
+    let clues, myClues: ClueInterface[] | null = null;
 
     if (accountId) {
       console.log('');
@@ -60,10 +61,12 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
       console.log('');
 
       clues = await getClues();
+      myClues = clues.filter((clue) => clue.isOwner);
     }
 
     set({
       clues,
+      myClues,
     });
 
     await getScene();

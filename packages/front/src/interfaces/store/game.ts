@@ -9,6 +9,7 @@ import {
 } from '@/interfaces';
 import { AnimationControls } from 'framer-motion';
 import { WalletSelector } from '@near-wallet-selector/core';
+import { Vesting, Selected } from '@/modals';
 
 export interface LoginData {
 	accountId: string;
@@ -31,6 +32,7 @@ export interface GameStoreInterface {
 	config: GameConfigInterface | null;
 	controls: AnimationControls | null;
   clues: ClueInterface[] | null;
+  myClues: ClueInterface[] | null;
   guessingIsOpen: () => boolean,
 	initGame: (
 		controls: AnimationControls

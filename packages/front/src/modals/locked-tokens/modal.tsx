@@ -48,8 +48,8 @@ export const LockedTokensModal = () => {
   } = useUser();
 
   const isLoading = useMemo(() => {
-    return !autenticated || isLoadingPrograms || !isOpen;
-  }, [autenticated, setIsLoadingPrograms]);
+    return !autenticated || isLoadingPrograms || !isOpen || !accountId;
+  }, [autenticated, isLoadingPrograms, isOpen, accountId]);
 
 	const getNextPage = () => {
 		const next = page + 1;
@@ -88,7 +88,7 @@ export const LockedTokensModal = () => {
 	};
 
 	useEffect(() => {
-		if (!accountId || !autenticated || !isOpen) {
+		if (isLoading) {
 			return;
 		}
 
@@ -134,7 +134,7 @@ export const LockedTokensModal = () => {
 
 			void (await loadMore(0));
 		})();
-	}, [accountId, autenticated, isOpen]);
+	}, [accountId, isLoading]);
 
   return (
     <ModalTemplate

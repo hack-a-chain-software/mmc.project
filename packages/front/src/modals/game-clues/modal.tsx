@@ -25,25 +25,14 @@ export const GameCluesModal = () => {
     onShowModal,
   } = useModal();
 
-	const {
-    autenticated,
-  } = useUser();
-
   const {
     clues,
+    myClues,
   } = useGame();
 
   const isLoading = useMemo(() => {
-    return !autenticated || !clues || !gameClues;
-  }, [clues, autenticated]);
-
-	const myClues = useMemo(() => {
-		if (!clues || isLoading) {
-			return [];
-		}
-
-		return clues.filter((clue) => clue.isOwner);
-	}, [clues, isLoading]);
+    return !myClues || !clues;
+  }, [myClues, clues]);
 
   return (
     <ModalTemplate
