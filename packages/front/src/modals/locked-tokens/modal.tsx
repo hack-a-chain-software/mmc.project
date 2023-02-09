@@ -48,8 +48,8 @@ export const LockedTokensModal = () => {
   } = useUser();
 
   const isLoading = useMemo(() => {
-    return !autenticated || isLoadingPrograms || !isOpen || !accountId;
-  }, [autenticated, isLoadingPrograms, isOpen, accountId]);
+    return !autenticated || !isOpen || !accountId;
+  }, [autenticated, isOpen, accountId]);
 
 	const getNextPage = () => {
 		const next = page + 1;
@@ -140,7 +140,7 @@ export const LockedTokensModal = () => {
     <ModalTemplate
       isOpen={isOpen}
       onClose={() => onCloseModal('lockedTokens')}
-      isLoading={isLoading}
+      isLoading={isLoadingPrograms || isLoading}
       title="My Locked Tokens"
       className="w-full max-w-6xl h-[650px] overflow-auto transform bg-black shadow-xl transition-all flex flex-col py-[44px] px-[50px] text-white"
     >
