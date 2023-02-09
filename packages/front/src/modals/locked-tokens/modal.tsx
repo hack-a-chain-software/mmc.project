@@ -160,7 +160,7 @@ export const LockedTokensModal = () => {
         }
       </div>
 
-      {!isEmpty(programs) && !isSlastPage && (
+      {!isEmpty(programs) || !isSlastPage && (
         <div
           className="w-full flex justify-center pt-8"
         >
