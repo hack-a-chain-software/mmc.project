@@ -127,6 +127,10 @@ async function testnetSetup() {
     execution_data
   );
 
+  console.log('');
+  console.log('Created all accounts');
+  console.log('');
+
   // Deploy and initialize Fungible tokens
   await deployToken(
     'usdtTokenAccount',
@@ -172,6 +176,10 @@ async function testnetSetup() {
     execution_data,
   );
 
+  console.log('');
+  console.log('Deployed tokens');
+  console.log('');
+
   // Deploy and initialize locked token
   await deployLockedToken(
     execution_data,
@@ -181,6 +189,10 @@ async function testnetSetup() {
   await deployGame(
     execution_data,
   );
+
+  console.log('');
+  console.log('Deployed game');
+  console.log('');
 
   // register contracts in eachother
   await registerContracts(
@@ -204,6 +216,10 @@ async function testnetSetup() {
       // execution_data.connAccountMap.gameAccount,
     ],
   );
+
+  console.log('');
+  console.log('Setup minters');
+  console.log('');
 
   // setup minters in locked token contract
   const minterContracts = [
@@ -273,6 +289,10 @@ async function testnetSetup() {
     },
   });
 
+  console.log('');
+  console.log('Setup game');
+  console.log('');
+
   // Mint 20 clues on game
   const promises = [];
 
@@ -308,6 +328,10 @@ async function testnetSetup() {
     console.warn(e);
   }
 
+  console.log('');
+  console.log('All clues minted');
+  console.log('');
+
   const testers = [
     '1mateus.testnet',
     'jasso_test_mmc.testnet',
@@ -321,7 +345,7 @@ async function testnetSetup() {
     let accountId = testers[i];
 
     // Deposit USDT for testers
-    tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
+    storagePromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
       contractId: execution_data.connAccountMap.usdtTokenAccount.accountId,
       methodName: 'storage_deposit',
       args: {
@@ -333,7 +357,7 @@ async function testnetSetup() {
     }));
 
    // Deposit NEKO for testers
-    tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
+   storagePromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
       contractId: execution_data.connAccountMap.nekoTokenAccount.accountId,
       methodName: 'storage_deposit',
       args: {
@@ -345,7 +369,7 @@ async function testnetSetup() {
     }));
 
    // Deposit AURORA for testers
-    tokenPromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
+   storagePromises.push(execution_data.connAccountMap.ownerAccount.functionCall({
       contractId: execution_data.connAccountMap.auroraTokenAccount.accountId,
       methodName: 'storage_deposit',
       args: {
@@ -362,6 +386,10 @@ async function testnetSetup() {
   } catch (e) {
     console.warn(e);
   }
+
+  console.log('');
+  console.log('Deposited all storages');
+  console.log('');
 
   // Mint NFT's and send tokens for all account testers
   const tokenPromises = [];
@@ -429,6 +457,10 @@ async function testnetSetup() {
   } catch (e) {
     console.warn(e);
   }
+
+  console.log('');
+  console.log('Minted all tokens');
+  console.log('');
 
   console.log(execution_data.accountMap);
 }

@@ -90,13 +90,9 @@ export const App = () => {
         toast.success(action.message as string);
       }
 
-      if (action.message === 'Successfully staked NFTs.') {
-        setTimeout(() => {
-          onShowModal('gameClues');
-        }, 800);
-
-        return;
-      }
+      setTimeout(() => {
+        onShowModal('gameClues');
+      }, 800);
     })();
   }, [scene]);
 

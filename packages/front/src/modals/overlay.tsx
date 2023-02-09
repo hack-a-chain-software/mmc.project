@@ -8,15 +8,13 @@ export const Overlay = () => {
   } = useModal();
 
   useEffect(() => {
-    if (!overlay) {
+    if (overlay) {
+      document.body.classList.add('modal-open');
+
       return;
     }
 
-    document.body.classList.toggle('modal-open');
-
-    return () => {
-      document.body.classList.toggle('modal-open');
-    };
+    document.body.classList.remove('modal-open');
   }, [overlay]);
 
   if (!overlay) {
