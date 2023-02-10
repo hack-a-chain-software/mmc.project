@@ -148,10 +148,10 @@ jobs:
         run: yarn
 
       - name: Rust Tests
-        run: yarn contracts test:rust
+        run: yarn contracts test:integration
 
       - name: Lib Tests
-        run: yarn contracts test:lib
+        run: yarn contracts test:unit
 
   cypress-install:
     runs-on: ubuntu-latest
