@@ -28,14 +28,14 @@ services:
       - mmc
     depends_on:
       - db
-      - contracts
+      # - contracts
 
-  contracts:
-    image: ghcr.io/hack-a-chain-software/mmc.project/contracts:latest
-    build:
-      context: ./packages/contracts/
-    networks:
-      - mmc
+  # contracts:
+  #   image: ghcr.io/hack-a-chain-software/mmc.project/contracts:latest
+  #   build:
+  #     context: ./packages/contracts/
+  #   networks:
+  #     - mmc
 
   db:
     image: postgres:14.5-bullseye

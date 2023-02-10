@@ -26,9 +26,9 @@ jobs:
             package: back
 
           # contracts
-          - context: ./packages/contracts/
-            image: ghcr.io/${{ github.repository }}/contracts
-            package: contracts
+          # - context: ./packages/contracts/
+          #   image: ghcr.io/${{ github.repository }}/contracts
+          #   package: contracts
 
           # db
           - dockerfile: ./packages/db/Dockerfile
