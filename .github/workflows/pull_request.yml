@@ -122,24 +122,36 @@ jobs:
       # - name: Integration tests
       #   run: yarn test:e2e
 
-  contracts-tests:
-    needs: build-and-push-image
+  contracts_tests:
     runs-on: ubuntu-latest
-    container: ghcr.io/${{ github.repository }}/contracts:sha-${{ github.sha }}
-    permissions:
-      contents: read
-      packages: write
-    defaults:
-      run:
-        working-directory: /usr/src/app
     steps:
-      - name: Unit tests
-        run: cargo test # TODO: cache this compilation (possibly during the image build)
+      - name: Checkout
+        uses: actions/checkout@v3
 
-      - name: Integration tests
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.12.1
+          cache: 'yarn'
+
+      - name: Install Rust
         run: |
-          cd tests
-          cargo test
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          source $HOME/.cargo/env
+          rustup component add rustfmt
+          rustup target add wasm32-unknown-unknown
+
+      - name: Install Yarn Globally
+        run: npm install -g yarn
+
+      - name: Installing Dependencies
+        run: yarn
+
+      - name: Rust Tests
+        run: yarn contracts test:rust
+
+      - name: Lib Tests
+        run: yarn contracts test:lib
 
   cypress-install:
     runs-on: ubuntu-latest
