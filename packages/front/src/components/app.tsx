@@ -2,15 +2,12 @@ import routes from '~react-pages';
 import { Header } from './header';
 import { Footer } from './footer';
 import { useEffect } from 'react';
-import { useUser } from '@/stores/user';
 import { useGame } from '@/stores/game';
 import { Toaster } from 'react-hot-toast';
 import { useWallet } from '@/stores/wallet';
-import { useAnimationControls } from 'framer-motion';
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 import { ModalProvider } from '@/modals';
 import toast from 'react-hot-toast';
-import { Toast } from '@/components';
 import { getTransactionState, getTransactionsAction } from '@/helpers/transactions';
 import { useModal } from '@/stores/modal';
 
@@ -24,51 +21,23 @@ const Pages = () => {
 };
 
 export const App = () => {
-  const controls = useAnimationControls();
-
-  const { scene, initGame } = useGame();
+  const { isLoading } = useGame();
 
   const {
     accountId,
-    initWallet,
   } = useWallet();
-
-  const {
-    validateUser,
-  } = useUser();
 
   const {
     onShowModal,
   } = useModal();
 
   useEffect(() => {
-    void (async () => {
-
-      await initWallet();
-    })();
-  }, [initWallet]);
-
-  useEffect(() => {
-    if (accountId === null) {
-      return;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    console.log(`components/app.tsx: (2) login trigged for account id ${accountId as string}`);
-
-    void (async () => {
-      await validateUser();
-      await initGame(controls);
-    })();
-  }, [accountId]);
-
-  useEffect(() => {
-    if (!accountId || !transactionHashes || !scene) {
+    if (!accountId || !transactionHashes || !isLoading) {
       return;
     }
 
     void (async () => {
-      const transactions = transactionHashes.split(",");
+      const transactions = transactionHashes.split(',');
 
       const states: any[] = [];
 
@@ -90,11 +59,9 @@ export const App = () => {
         toast.success(action.message as string);
       }
 
-      setTimeout(() => {
-        onShowModal('gameClues');
-      }, 800);
+      onShowModal('gameClues');
     })();
-  }, [scene]);
+  }, [isLoading]);
 
   return (
     <Router>

@@ -28,6 +28,7 @@ export interface GuessDto {
 }
 
 export interface GameStoreInterface {
+  isLoading: boolean;
 	scene: SceneInterface | null;
 	config: GameConfigInterface | null;
 	controls: AnimationControls | null;
@@ -37,6 +38,8 @@ export interface GameStoreInterface {
 	initGame: (
 		controls: AnimationControls
   ) => Promise<GameConfigInterface>;
+  openScene: () => Promise<void>;
+  hideScene: () => Promise<void>;
 	getScene: (id?: string) => Promise<SceneInterface>;
 	getClues: () => Promise<ClueInterface[]>;
   getGuess: () => Promise<GuessInterface[]>,
@@ -68,6 +71,7 @@ export interface GameStoreInterface {
 	getTicketsById: (
 		accountId: string | null,
 		connection: WalletSelector
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	) => Promise<any>;
 	getStakedNftsById: (
 		accountId: string | null,
@@ -79,6 +83,7 @@ export interface GameStoreInterface {
     currency: GameCurrencyInterface,
 		accountId: string | null,
 		connection: WalletSelector
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	) => Promise<any>;
 	getGuessTokenPrice: (
 		accountId: string | null,

@@ -31,6 +31,35 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 	config: null,
   myClues: null,
 	controls: null,
+  isLoading: false,
+
+  openScene: async () => {
+    const {
+      controls,
+    } = get();
+
+    await controls?.start({ clipPath: 'circle(0% at 50vw 50vh)' });
+
+    document.body.classList.remove('modal-open');
+
+    set({
+      isLoading: true,
+    });
+  },
+
+  hideScene: async () => {
+    const {
+      controls,
+    } = get();
+
+    document.body.classList.add('modal-open');
+
+    await controls?.start({ clipPath: 'circle(200% at 50vw 50vh)' });
+
+    set({
+      isLoading: false,
+    });
+  },
 
 	initGame: async (controls) => {
     const {
@@ -56,10 +85,6 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
     let clues, myClues: ClueInterface[] | null = null;
 
     if (accountId) {
-      console.log('');
-      console.log('stores/game.tsx: get clues for id:', accountId);
-      console.log('');
-
       clues = await getClues();
       myClues = clues.filter((clue) => clue.isOwner);
     }
@@ -130,22 +155,20 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 		const {
       controls,
       getScene,
+      hideScene,
     } = get();
 
     if (!controls) {
       return;
     }
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-		await controls.start({ clipPath: 'circle(0% at 50vw 50vh)' });
+		await hideScene();
 
     set({
       scene: null,
     });
 
 		void await getScene(id);
-
   },
 
 	getScene: async (id = firstScene) => {

@@ -3,11 +3,11 @@ import { providers } from 'near-api-js';
 
 export interface TransactionPayload {
   status: Status;
-  transaction: Transaction;
+  transaction: TransactionInterface;
   receipts_outcome: ReceiptOutcome[];
 }
 
-interface Transaction {
+export interface TransactionInterface {
   actions: Action[];
   hash: string;
   nonce: number;
