@@ -189,5 +189,5 @@ body {
 
 .modal-open {
   height: 100vh !important;
-  overflow-y: hidden !important;
+  overflow: hidden !important;
 }

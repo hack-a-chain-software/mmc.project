@@ -9,6 +9,7 @@ export const Scene = () => {
     scene,
     controls,
     moveToScene,
+    openScene,
   } = useGame();
 
 	useEffect(() => {
@@ -16,7 +17,7 @@ export const Scene = () => {
       return;
     }
 
-    controls.start({ clipPath: 'circle(100% at 50vw 50vh)' });
+    openScene();
 	});
 
 	return (
