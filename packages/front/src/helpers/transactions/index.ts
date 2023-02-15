@@ -63,10 +63,10 @@ export const getTransactionState = async (txHash: string, accountId: string) =>
 
 export const getTransactionsStatus = (receiptsOutcome: ReceiptOutcome[]) =>
   receiptsOutcome.every(
-    ({ outcome }) => !Object.keys(outcome.status).includes("Failure")
+    ({ outcome }) => !Object.keys(outcome.status).includes('Failure')
   )
-    ? "success"
-    : "error";
+    ? 'success'
+    : 'error';
 
 export const getTransactionsAction = (
   transactions: Partial<TransactionPayload>[]
@@ -83,7 +83,12 @@ export const getTransactionsAction = (
 
       const status = getTransactionsStatus(payload?.receipts_outcome!);
 
+      const args = JSON.parse(window.atob(
+        payload?.transaction.actions[0].FunctionCall.args,
+      ));
+
       return {
+        args,
         status,
         message: action[status],
         transactionHash: payload.transaction?.hash,

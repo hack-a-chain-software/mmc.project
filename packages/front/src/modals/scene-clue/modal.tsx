@@ -7,6 +7,7 @@ import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { ClueInterface, GameCurrencyInterface } from '@/interfaces';
 import { useWallet } from '@/stores/wallet';
 import { useModal } from '@/stores/modal';
+import { getClueStatus } from '@/helpers/game';
 
 export interface SceneClueModalInterface extends
   BaseModalPropsInterface,
@@ -130,7 +131,11 @@ export const SceneClueModal = () => {
                         text-lg
                       "
                     >
-                      {isOwner ? 'Founded' : 'Available'}
+                      {getClueStatus({
+                        isMinted,
+                        isOwner,
+                        isStaked,
+                      })}
                     </span>
                   </div>
 

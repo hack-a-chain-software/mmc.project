@@ -94,7 +94,9 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
       myClues,
     });
 
-    await getScene();
+    const lastScene = localStorage.getItem('@mmc-last-scene') || undefined;
+
+    await getScene(lastScene);
 
 		return data;
 	},
@@ -177,6 +179,8 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
     } = useUser.getState();
 
     const { data } = await sendRequest(`/game/scene/${id as string}`, 'get');
+
+    localStorage.setItem('@mmc-last-scene', id as string);
 
 		set({
 			scene: data,
