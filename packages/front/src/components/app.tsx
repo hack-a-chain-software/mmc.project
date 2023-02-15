@@ -21,7 +21,7 @@ const Pages = () => {
 };
 
 export const App = () => {
-  const { isLoading } = useGame();
+  const { clues } = useGame();
 
   const {
     accountId,
@@ -32,7 +32,7 @@ export const App = () => {
   } = useModal();
 
   useEffect(() => {
-    if (!accountId || !transactionHashes || !isLoading) {
+    if (!accountId || !transactionHashes || !clues) {
       return;
     }
 
@@ -55,13 +55,17 @@ export const App = () => {
 
       window.history.pushState({}, document.title, '/987654321' );
 
-      if (action.status === 'success') {
-        toast.success(action.message as string);
-      }
+      // if (action.status === 'success') {
+      //   toast.success(action.message as string);
+      // }
 
-      onShowModal('gameClues');
+      const tokenId = JSON.parse(action.args.msg).token_id;
+
+      const updatedClue = clues?.find(({ nft_id }) => tokenId === nft_id);
+
+      onShowModal('sceneClue', updatedClue);
     })();
-  }, [isLoading]);
+  }, [clues, accountId]);
 
   return (
     <Router>
