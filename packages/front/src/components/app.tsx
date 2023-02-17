@@ -59,7 +59,9 @@ export const App = () => {
       //   toast.success(action.message as string);
       // }
 
-      const tokenId = JSON.parse(action.args.msg).token_id;
+      const msg = JSON.parse(action.args.msg);
+
+      const tokenId = msg.token_id || msg.staked_nft_id;
 
       const updatedClue = clues?.find(({ nft_id }) => tokenId === nft_id);
 
