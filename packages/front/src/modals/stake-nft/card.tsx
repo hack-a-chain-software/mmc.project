@@ -19,7 +19,7 @@ export const StakeNftCard = ({
       className="w-[173px] h-[173px] rounded-md relative cursor-pointer hover:opacity-80"
     >
       <img
-        src={`https://images.weserv.nl/?url=${image}&dpr=4`}
+        src={`https://images.weserv.nl/?url=${image.replace('png', 'jpeg')}&dpr=4`}
         className="rounded-md"
       />
 
