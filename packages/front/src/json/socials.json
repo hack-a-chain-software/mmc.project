@@ -10,5 +10,13 @@
   {
     "icon": "/svgs/medium.svg",
     "path": "https://playmmc.medium.com/building-the-next-wave-of-web3-gaming-df7e11a2f77e"
+  },
+  {
+    "icon": "/svgs/market.svg",
+    "path": "https://fewfar.com/murder-mystery-collective-detectives-near/"
+  },
+  {
+    "icon": "/svgs/fewandfar.svg",
+    "path": "https://www.mmcmarketplace.xyz/"
   }
 ]

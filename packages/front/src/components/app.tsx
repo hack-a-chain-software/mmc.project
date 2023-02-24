@@ -7,7 +7,6 @@ import { Toaster } from 'react-hot-toast';
 import { useWallet } from '@/stores/wallet';
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 import { ModalProvider } from '@/modals';
-import toast from 'react-hot-toast';
 import { getTransactionState, getTransactionsAction } from '@/helpers/transactions';
 import { useModal } from '@/stores/modal';
 
@@ -79,6 +78,7 @@ export const App = () => {
 
       <div
         className="relative z-[999999999999999999999]"
+
       >
         <Toaster />
       </div>
