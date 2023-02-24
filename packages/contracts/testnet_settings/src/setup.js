@@ -8,6 +8,13 @@ const {
   accountCreator: { UrlAccountCreator },
 } = nearAPI;
 
+const testers = [
+  '1mateus.testnet',
+  'jasso_test_mmc.testnet',
+  'jkrowling.testnet',
+  'mmctestnet.testnet',
+];
+
 const {
   tokenArray,
 
@@ -299,13 +306,6 @@ async function testnetSetup() {
   } catch (e) {
     console.warn(e);
   }
-
-  const testers = [
-    '1mateus.testnet',
-    'jasso_test_mmc.testnet',
-    'jkrowling.testnet',
-    'mmctestnet.testnet',
-  ];
 
   const storagePromises = [];
 

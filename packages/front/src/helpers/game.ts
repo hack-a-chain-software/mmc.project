@@ -12,4 +12,4 @@ export const getClueStatus = ({
   }
 
   return 'Available';
-}
+};
