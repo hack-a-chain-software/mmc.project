@@ -35,40 +35,38 @@ pub struct Contract {
   owner: AccountId,
   tokens: NonFungibleToken,
   metadata: LazyOption<NFTContractMetadata>,
-  ///List of the fungible tokens that can be used to purchase an NFT and the price on that token
+  /// List of the fungible tokens that can be used to purchase an NFT and the price on that token
   fungible_tokens: LookupMap<AccountId, U128>,
-  ///The game native token contract address
+  /// The game native token contract address
   mmc_token_account: AccountId,
   /// Contract traeasury
   treasury: LookupMap<AccountId, U128>,
   staked_tokens: UnorderedSet<TokenId>,
   staked_tokens_owners: LookupMap<AccountId, UnorderedSet<TokenId>>,
-  //This two contracts are the Accounts for the NFTs user must use to play
+  /// Detective NFTs address - these NFTs are required to guess and stake clues
   detective_token_address: AccountId,
-  //detective_checkpoints: LookupMap<AccountId, Timestamp>,
+  /// Pups NFTs address - these NFTs are required to guess
   pups_token_address: AccountId,
-  ///Used to proove that a user is the owner of an NFT - expires with time
+  /// Used to proove that a user is the owner of an NFT - expires with time
   proof_of_ownership: LookupMap<AccountId, Timestamp>,
-  ///The reward tokens for the game
+  /// The reward tokens for the game
   locked_tokens_address: AccountId,
-  ///The date that the users are allowed to start guessing
+  /// The date that the users are allowed to start guessing
   season_begin: Timestamp,
-  ///The date that the season ends - used for rewards for staking and guessing
+  /// The date that the season ends - used for rewards for staking and guessing
   season_end: Timestamp,
   /// The date that users can start guessing
   guessing_start: Timestamp,
-  ///The detective or pup NFTs that are staked for the guess - Map key is user account, has a vec of NFTs (An
+  /// The detective or pup NFTs that are staked for the guess - Map key is user account, has a vec of NFTs (An
   /// NFT is a tuple made of the contract account and the token id
   staked_guesses_owner: LookupMap<AccountId, UnorderedSet<(AccountId, TokenId)>>, //
   staked_guesses: UnorderedSet<(AccountId, TokenId)>,
-  // nft owners LUPMAP  TUPLA - ACCOUNT ID
-  //staked_guesses_owners: LookupMap<(AccountId, TokenId), AccountId>,
-  /// the initial price for a guessing ticket
+  /// The initial price for a guessing ticket
   ticket_price: U128,
   guess_ticket: LookupMap<AccountId, u32>, //view_tickets
-  ///List of guesses - Guess hash and the time of the guess
+  /// List of guesses - The key is the Guess hash and the value is the time of the guess
   guesses: LookupMap<U256, Timestamp>,
-  ///Guesses per user
+  /// Guesses per user - The key is the user account, the value is an unord. set of the guess hash
   guesses_owners: LookupMap<AccountId, UnorderedSet<U256>>,
 }
 
@@ -158,7 +156,7 @@ impl NonFungibleTokenCore for Contract {
     approval_id: Option<u64>,
     memo: Option<String>,
   ) {
-    //can only transfer NFTs that are not staked
+    //user can only transfer NFTs that are not staked
     self.assert_token_unstaked(&token_id);
 
     self

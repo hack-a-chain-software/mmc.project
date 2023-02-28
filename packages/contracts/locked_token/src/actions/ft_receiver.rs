@@ -354,7 +354,6 @@ mod tests {
         v.6,
       );
       counter += 1;
-      println!("counter: {}", counter);
     });
   }
 }

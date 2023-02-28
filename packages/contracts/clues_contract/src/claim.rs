@@ -19,6 +19,8 @@ impl Contract {
     assert!(is_owned_by_contract, "{}", UNAVAILABLE_ERR);
   }
 
+  /// This function is used to buy an NFT - there are multiple tokens that can be used
+  /// to purchase the NFT
   pub fn claim(
     &mut self,
     token_id: TokenId,
@@ -27,7 +29,7 @@ impl Contract {
     amount: U128,
   ) -> U128 {
     self.assert_token_available(&token_id);
-    self.assert_fungible_token_is_listed(currency.clone());
+    self.assert_fungible_token_is_listed(currency.clone()); //verify if the currency is accepted
     self.assert_season_is_going();
 
     //assert that the user has a detective
@@ -45,19 +47,11 @@ impl Contract {
       None,
     );
 
-    let balance = self.treasury.get(&currency);
+    let balance = self.treasury.get(&currency).unwrap_or(U128(0));
+    self.treasury.insert(&currency, &U128(balance.0 + price.0));
 
-    if let Some(mut value) = balance {
-      value = U128(value.0 + price.0);
-      self.treasury.insert(&currency, &value);
-    } else {
-      self.treasury.insert(&currency, &price);
-    }
-
-    // amout is always >= price - due to assert
-    let change = U128(amount.0 - price.0);
-
-    change
+    // amout is always >= price - due to assert - return the change to the user
+    U128(amount.0 - price.0)
   }
 
   /// Function used to prove that a certain user has a detective NFT

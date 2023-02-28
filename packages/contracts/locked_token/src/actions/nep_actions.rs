@@ -5,7 +5,6 @@ impl FungibleTokenCore for Contract {
   #[payable]
   fn ft_transfer(&mut self, receiver_id: AccountId, amount: U128, memo: Option<String>) {
     let initial_storage = env::storage_usage();
-    println!("initial storage: {}", initial_storage);
     self.only_minter(&env::predecessor_account_id());
     let mut account = self.internal_get_account(&receiver_id).expect(ERR_001);
     if !self.minters.contains(&receiver_id.clone()) {

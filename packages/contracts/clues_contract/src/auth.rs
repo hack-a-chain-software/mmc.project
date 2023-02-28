@@ -120,11 +120,8 @@ impl Contract {
   }
 
   pub fn assert_pups_or_det_transfer(&self) {
-    println!("{}{}", "predecessor: ", env::predecessor_account_id());
     let is_pup = env::predecessor_account_id() == self.pups_token_address;
-    println!("{}{}", "is_pup: ", is_pup);
     let is_det = env::predecessor_account_id() == self.detective_token_address;
-    println!("{}{}", "is_det: ", is_det);
 
     assert!(
       (is_pup || is_det),
