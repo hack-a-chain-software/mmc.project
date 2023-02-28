@@ -62,7 +62,6 @@ impl Contract {
 
 impl Contract {
   pub fn stake(&mut self, token_id: TokenId, staker_id: AccountId) -> bool {
-    // for reviewr -> should I validate if the signer id == staker id?
     self.assert_detective_transfer();
     self.assert_token_owner(&staker_id, &token_id);
     self.assert_token_unstaked(&token_id);

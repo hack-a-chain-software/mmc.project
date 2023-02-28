@@ -1,11 +1,13 @@
-use near_sdk::{near_bindgen, AccountId, json_types::U128, env, Timestamp};
+use near_sdk::{near_bindgen, AccountId, json_types::U128, env, Timestamp, assert_one_yocto};
 
 use crate::{Contract, ContractExt, errors::UNAUTHORIZED_ERR};
 
 #[near_bindgen]
 impl Contract {
+  #[payable]
   pub fn insert_token_price(&mut self, currency: AccountId, price: U128) {
     self.only_owner();
+    assert_one_yocto();
     self.fungible_tokens.insert(&currency, &price);
   }
 
@@ -173,7 +175,7 @@ mod tests {
   fn test_insert_price() {
     let context = get_context(
       vec![],
-      7090000000000000000000,
+      1,
       1_000_000_000_000_000_000_000_000,
       OWNER_ACCOUNT.parse().unwrap(),
       0,
@@ -203,7 +205,7 @@ mod tests {
   fn test_update_token_price() {
     let context = get_context(
       vec![],
-      7090000000000000000000,
+      1,
       1_000_000_000_000_000_000_000_000,
       OWNER_ACCOUNT.parse().unwrap(),
       0,
@@ -219,7 +221,9 @@ mod tests {
 
     let mut contract = init_contract();
 
-    contract.insert_token_price(TOKEN_ACCOUNT.parse().unwrap(), CLAIM_PRICE);
+    contract
+      .fungible_tokens
+      .insert(&TOKEN_ACCOUNT.parse().unwrap(), &CLAIM_PRICE); //
     assert_eq!(
       contract
         .fungible_tokens

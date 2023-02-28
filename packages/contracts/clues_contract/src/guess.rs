@@ -171,7 +171,6 @@ impl Contract {
     self.increment_ticket(account_id.clone());
 
     let tickets = self.guess_ticket.get(&account_id).expect(ERR_NO_TICKETS);
-    println!("{}{}", "tickets:", tickets);
 
     let change = U128(amount.0 - ticket_price.0);
 

@@ -37,7 +37,6 @@ impl Contract {
   }
 
   pub fn view_if_clue_is_staked(&self, token_id: TokenId) -> bool {
-    println!("{}", self.staked_tokens.contains(&token_id));
     self.staked_tokens.contains(&token_id)
   }
 

@@ -37,10 +37,7 @@ impl Contract {
     token_id: String,
     msg: String,
   ) -> bool {
-    println!("{}", "ENTROU NO ON TRANSFER");
     let nft_contract = env::predecessor_account_id();
-
-    println!("{}{}", "previous_owner_id: ", previous_owner_id);
 
     match serde_json::from_str::<TransactionType>(&msg)
       .expect("Error with the message for nft trasnfer call")

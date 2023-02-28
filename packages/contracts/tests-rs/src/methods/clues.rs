@@ -130,6 +130,7 @@ pub async fn insert_token_price(
       "currency": currency,
       "price": price,
       }))
+      .deposit(1)
       .gas(GAS_LIMIT),
   )
   .await
