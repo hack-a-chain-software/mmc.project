@@ -7,6 +7,7 @@
 use std::vec;
 use std::io::Error;
 use near_bigint::U256;
+use near_sdk::collections::Vector;
 use crate::{*, guess::Guess, Contract, ContractExt};
 
 #[near_bindgen]
@@ -37,7 +38,7 @@ impl Contract {
   }
 
   pub fn view_if_clue_is_staked(&self, token_id: TokenId) -> bool {
-    self.staked_tokens.contains(&token_id)
+    self.contains_staked_token(&token_id)
   }
 
   pub fn view_staked_det_or_pup_per_user(
@@ -57,8 +58,8 @@ impl Contract {
     self.staked_guesses.to_vec()
   }
 
-  pub fn view_staked_clues(&self) -> Vec<TokenId> {
-    self.staked_tokens.to_vec()
+  pub fn view_staked_clues(&self) -> Vec<String> {
+    self.staked_tokens.keys_as_vector().to_vec()
   }
 
   pub fn view_staked_guesses_contain(&self, tuple: (AccountId, TokenId)) -> bool {
