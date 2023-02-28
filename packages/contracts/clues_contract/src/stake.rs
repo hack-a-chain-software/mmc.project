@@ -67,7 +67,9 @@ impl Contract {
     self.assert_token_unstaked(&token_id);
     self.assert_season_is_going();
 
-    self.staked_tokens.insert(&token_id);
+    self
+      .staked_tokens
+      .insert(&token_id, &env::block_timestamp());
     let owners = self.staked_tokens_owners.get(&staker_id);
 
     if let Some(mut x) = owners {
@@ -153,7 +155,7 @@ mod tests {
 
     contract.stake(token_id.to_string(), accounts(0));
 
-    assert!(contract.staked_tokens.contains(&token_id.to_string()));
+    assert!(contract.contains_staked_token(&token_id.to_string()));
     assert!(contract.staked_tokens_owners.contains_key(&accounts(0)));
     assert!(contract
       .staked_tokens_owners
@@ -163,8 +165,8 @@ mod tests {
 
     contract.stake(token_id2.to_string(), accounts(0));
 
-    assert!(contract.staked_tokens.contains(&token_id.to_string()));
-    assert!(contract.staked_tokens.contains(&token_id2.to_string()));
+    assert!(contract.contains_staked_token(&token_id.to_string()));
+    assert!(contract.contains_staked_token(&token_id2.to_string()));
     assert!(contract.staked_tokens_owners.contains_key(&accounts(0)));
     assert!(contract
       .staked_tokens_owners
@@ -423,7 +425,9 @@ mod tests {
 
     let token_id = "1";
 
-    contract.staked_tokens.insert(&token_id.to_string().clone());
+    contract
+      .staked_tokens
+      .insert(&token_id.to_string().clone(), &(END + 1000));
 
     let mut set: UnorderedSet<TokenId> = UnorderedSet::new(StorageKey::TokenIdSet {
       account: accounts(0),

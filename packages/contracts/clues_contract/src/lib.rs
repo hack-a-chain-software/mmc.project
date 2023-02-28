@@ -3,7 +3,7 @@ use near_contract_standards::non_fungible_token::core::{
   NonFungibleTokenResolver, NonFungibleTokenCore,
 };
 use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
-use near_sdk::collections::{LazyOption, LookupMap};
+use near_sdk::collections::{LazyOption, LookupMap, UnorderedMap, UnorderedSet};
 use near_sdk::json_types::U128;
 use near_sdk::{
   env, near_bindgen, AccountId, PanicOnDefault, PromiseOrValue, BorshStorageKey, Timestamp, Gas,
@@ -13,7 +13,6 @@ use near_contract_standards::non_fungible_token::metadata::{
   NonFungibleTokenMetadataProvider, NFTContractMetadata,
 };
 use near_contract_standards::{impl_non_fungible_token_enumeration};
-use near_sdk::collections::UnorderedSet;
 
 mod auth;
 mod callback_actions;
@@ -41,7 +40,9 @@ pub struct Contract {
   mmc_token_account: AccountId,
   /// Contract traeasury
   treasury: LookupMap<AccountId, U128>,
-  staked_tokens: UnorderedSet<TokenId>,
+  /// Clue NFTs that were staked and the timestamp from when they were staked
+  staked_tokens: UnorderedMap<TokenId, Timestamp>,
+  /// List with all the owners of the staked clues
   staked_tokens_owners: LookupMap<AccountId, UnorderedSet<TokenId>>,
   /// Detective NFTs address - these NFTs are required to guess and stake clues
   detective_token_address: AccountId,
@@ -127,7 +128,7 @@ impl Contract {
       mmc_token_account,
       fungible_tokens: LookupMap::new(StorageKeys::FungibleTokens),
       treasury: LookupMap::new(StorageKeys::Treasury),
-      staked_tokens: UnorderedSet::new(StorageKeys::StakedNfts),
+      staked_tokens: UnorderedMap::new(StorageKeys::StakedNfts),
       staked_tokens_owners: LookupMap::new(StorageKeys::StakedNftsOwners),
       detective_token_address,
       pups_token_address,
@@ -340,7 +341,7 @@ mod tests {
       mmc_token_account: TOKEN_ACCOUNT.parse().unwrap(),
       fungible_tokens: LookupMap::new(StorageKeys::FungibleTokens),
       treasury: LookupMap::new(StorageKeys::Treasury),
-      staked_tokens: UnorderedSet::new(StorageKeys::StakedNfts),
+      staked_tokens: UnorderedMap::new(StorageKeys::StakedNfts),
       staked_tokens_owners: LookupMap::new(StorageKeys::StakedNftsOwners),
       detective_token_address: DET_ACCOUNT.parse().unwrap(),
       pups_token_address: PUP_ACCOUNT.parse().unwrap(),

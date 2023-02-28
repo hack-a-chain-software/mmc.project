@@ -1,5 +1,5 @@
 use near_contract_standards::non_fungible_token::TokenId;
-use near_sdk::{AccountId, env};
+use near_sdk::{AccountId, env, collections::UnorderedMap};
 
 use crate::{
   Contract,
@@ -69,7 +69,14 @@ impl Contract {
   }
 
   pub fn is_token_staked(&self, token_id: &TokenId) -> bool {
-    self.staked_tokens.contains(&token_id)
+    self.contains_staked_token(token_id)
+  }
+
+  pub fn contains_staked_token(&self, token_id: &TokenId) -> bool {
+    match self.staked_tokens.get(token_id) {
+      Some(_) => true,
+      None => false,
+    }
   }
 
   pub fn assert_token_unstaked(&self, token_id: &TokenId) {
