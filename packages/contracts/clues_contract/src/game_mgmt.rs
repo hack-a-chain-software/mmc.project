@@ -1,3 +1,4 @@
+use near_contract_standards::non_fungible_token::TokenId;
 use near_sdk::{near_bindgen, AccountId, json_types::U128, env, Timestamp, assert_one_yocto};
 
 use crate::{Contract, ContractExt, errors::UNAUTHORIZED_ERR};
@@ -9,6 +10,16 @@ impl Contract {
     self.only_owner();
     assert_one_yocto();
     self.fungible_tokens.insert(&currency, &price);
+  }
+
+  /// Fn to insert the maximum amout of rewards a certain clue is elegible
+  /// when it is staked - restricted to the owner - necessary to claim rewards
+  #[payable]
+  pub fn insert_clue_raniking(&mut self, token_id: TokenId, rewards: U128) {
+    self.only_owner();
+    assert_one_yocto();
+
+    self.clues_rewards.insert(&token_id, &rewards);
   }
 
   pub fn change_guessing_date(&mut self, new_guesssing_date: Timestamp) {

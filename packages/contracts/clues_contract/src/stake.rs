@@ -17,7 +17,7 @@ use crate::{
     ERR_NFT_NOT_STAKED, UNAUTHORIZED_ERR, ERR_CLUE_NOT_STAKED,
   },
   ext_interface::{self},
-  BASE_GAS, StorageKey,
+  BASE_GAS, StorageKey, FRACTION_BASE,
 };
 
 #[near_bindgen]
@@ -42,7 +42,7 @@ impl Contract {
       UNAUTHORIZED_ERR
     );
 
-    let rewards: U128 = calculate_reward(token_id.clone());
+    let rewards: U128 = self.calculate_reward(token_id.clone());
 
     ext_interface::token_contract::ext(self.locked_tokens_address.clone())
       .with_static_gas(BASE_GAS)
@@ -85,10 +85,25 @@ impl Contract {
 
     true // signals to return token back to owner
   }
-}
-//TO-DO: implement the reward formula here -> Client still hasn't passed the reward formula for Clues
-pub fn calculate_reward(token_id: TokenId) -> U128 {
-  U128(100)
+
+  /// Fn used to calculate the rewards elegible for a staked CLUE nft
+  /// The rewards are proportional to the period the clue was staked
+  /// The maximum amount of elegible rewards per clue is inputed by the owner
+  pub fn calculate_reward(&self, token_id: TokenId) -> U128 {
+    self.is_token_staked(&token_id);
+
+    //get the interval between staking and end of the season
+    let delta_time = (self.season_end - self.staked_tokens.get(&token_id).unwrap()) as u128;
+
+    let season_duration = (self.season_end - self.season_begin) as u128;
+
+    //calculate what is the % of time the clue was staked - use FRACTION_BASE to handle decimals
+    // only multiply by FRACTION_BASE at the end result, otherwise you'll get 0 as result
+    let percentage = (delta_time * FRACTION_BASE) / season_duration;
+
+    //return the maximum amount of rewards times the percentage the user is elegible due to time on stake
+    U128(self.clues_rewards.get(&token_id).unwrap().0 * percentage / FRACTION_BASE)
+  }
 }
 
 #[cfg(test)]
@@ -96,7 +111,7 @@ mod tests {
 
   use std::collections::HashMap;
 
-  use near_sdk::{VMConfig, RuntimeFeesConfig, test_utils::accounts};
+  use near_sdk::{VMConfig, RuntimeFeesConfig, test_utils::accounts, Timestamp};
 
   use super::*;
   use crate::tests::*;
@@ -115,7 +130,7 @@ mod tests {
   //8. claim reawards not being the owner
   //9. claim rewards not being staked
 
-  //SEASON BEGIN/END  BEGIN: Timestamp = 0; END: Timestamp = 100_000_000;
+  //SEASON BEGIN/END  BEGIN: Timestamp = 10; END: Timestamp = 100_000_000;
 
   #[test]
   fn test_stake_normal_flow() {
@@ -422,12 +437,14 @@ mod tests {
     );
 
     let mut contract = init_contract();
+    let stake_date: Timestamp = 100_000;
+    let elegible_rewards = U128(420_000);
 
     let token_id = "1";
 
     contract
       .staked_tokens
-      .insert(&token_id.to_string().clone(), &(END + 1000));
+      .insert(&token_id.to_string().clone(), &stake_date);
 
     let mut set: UnorderedSet<TokenId> = UnorderedSet::new(StorageKey::TokenIdSet {
       account: accounts(0),
@@ -435,6 +452,101 @@ mod tests {
     set.insert(&token_id.to_string().clone());
     contract.staked_tokens_owners.insert(&accounts(0), &set);
 
-    //     contract.claim_rewards(token_id.to_string());
+    contract
+      .clues_rewards
+      .insert(&token_id.to_string(), &elegible_rewards);
+
+    // Reward manually calculated
+    // Season duration = 100_000_000 - 10 = 99_999_990
+    // Delta_time = 100_000_000 - 100_000 = 99_900_000
+    // percentage = 0,9990001
+    // rewards = 419_580,042 -> 419_580
+
+    let final_rewards = contract.view_available_clue_rewards(token_id.to_string()).0;
+
+    assert_eq!(final_rewards, 419_580 as u128);
+  }
+
+  #[test]
+  #[should_panic(expected = "Unauthorized user")]
+  fn test_claim_rewards_using_owner_fn_to_set_price_not_being_the_owner() {
+    let context = get_context_predecessor(
+      vec![],
+      1,
+      1_000_000_000_000_000_000_000_000,
+      accounts(0),
+      accounts(0),
+      (END + 1000),
+      Gas(300u64 * 10u64.pow(12)),
+    );
+    testing_env!(
+      context,
+      VMConfig::test(),
+      RuntimeFeesConfig::test(),
+      HashMap::default(),
+      Vec::default()
+    );
+
+    let mut contract = init_contract();
+    let stake_date: Timestamp = 100_000;
+    let elegible_rewards = U128(420_000);
+
+    let token_id = "1";
+
+    contract
+      .staked_tokens
+      .insert(&token_id.to_string().clone(), &stake_date);
+
+    let mut set: UnorderedSet<TokenId> = UnorderedSet::new(StorageKey::TokenIdSet {
+      account: accounts(0),
+    });
+    set.insert(&token_id.to_string().clone());
+    contract.staked_tokens_owners.insert(&accounts(0), &set);
+
+    contract.insert_clue_raniking(token_id.to_string(), elegible_rewards);
+    let final_rewards = contract.view_available_clue_rewards(token_id.to_string()).0;
+
+    assert_eq!(final_rewards, 419_580 as u128);
+  }
+
+  #[test]
+  fn test_claim_rewards_using_owner_fn_to_set_price() {
+    let context = get_context_predecessor(
+      vec![],
+      1,
+      1_000_000_000_000_000_000_000_000,
+      OWNER_ACCOUNT.parse().unwrap(),
+      OWNER_ACCOUNT.parse().unwrap(),
+      (END + 1000),
+      Gas(300u64 * 10u64.pow(12)),
+    );
+    testing_env!(
+      context,
+      VMConfig::test(),
+      RuntimeFeesConfig::test(),
+      HashMap::default(),
+      Vec::default()
+    );
+
+    let mut contract = init_contract();
+    let stake_date: Timestamp = 100_000;
+    let elegible_rewards = U128(420_000);
+
+    let token_id = "1";
+
+    contract
+      .staked_tokens
+      .insert(&token_id.to_string().clone(), &stake_date);
+
+    let mut set: UnorderedSet<TokenId> = UnorderedSet::new(StorageKey::TokenIdSet {
+      account: accounts(0),
+    });
+    set.insert(&token_id.to_string().clone());
+    contract.staked_tokens_owners.insert(&accounts(0), &set);
+
+    contract.insert_clue_raniking(token_id.to_string(), elegible_rewards);
+    let final_rewards = contract.view_available_clue_rewards(token_id.to_string()).0;
+
+    assert_eq!(final_rewards, 419_580 as u128);
   }
 }

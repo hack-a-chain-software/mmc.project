@@ -103,7 +103,10 @@ pub async fn view_guess_was_inserted(contract: &Contract, hash: String) -> anyho
   )
 }
 
-pub async fn view_staked_guesses_contain(contract: &Contract, tuple: (String, String)) -> anyhow::Result<bool> {
+pub async fn view_staked_guesses_contain(
+  contract: &Contract,
+  tuple: (String, String),
+) -> anyhow::Result<bool> {
   anyhow::Ok(
     contract
       .view(
@@ -115,7 +118,20 @@ pub async fn view_staked_guesses_contain(contract: &Contract, tuple: (String, St
   )
 }
 
-
+pub async fn view_available_clue_rewards(
+  contract: &Contract,
+  token_id: String,
+) -> anyhow::Result<u128> {
+  anyhow::Ok(
+    contract
+      .view(
+        "view_available_clue_rewards",
+        json!({ "token_id": token_id }).to_string().into_bytes(),
+      )
+      .await?
+      .json()?,
+  )
+}
 
 pub async fn insert_token_price(
   contract: &Contract,
@@ -129,6 +145,25 @@ pub async fn insert_token_price(
       .args_json(json!({
       "currency": currency,
       "price": price,
+      }))
+      .deposit(1)
+      .gas(GAS_LIMIT),
+  )
+  .await
+}
+
+pub async fn insert_clue_raniking(
+  contract: &Contract,
+  caller: &Account,
+  token_id: String,
+  rewards: String,
+) -> ExecutionResult<String> {
+  transact_call(
+    caller
+      .call(&contract.as_account().id(), "insert_clue_raniking")
+      .args_json(json!({
+      "token_id": token_id,
+      "rewards": rewards,
       }))
       .deposit(1)
       .gas(GAS_LIMIT),
@@ -168,7 +203,6 @@ pub async fn claim_guess_rewards(
   )
   .await
 }
-
 
 pub async fn unstake_guess(
   contract: &Contract,

@@ -28,6 +28,8 @@ mod view;
 
 pub const BASE_GAS: Gas = Gas(50_000_000_000_000);
 
+pub const FRACTION_BASE: u128 = 10_000;
+
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
 pub struct Contract {
@@ -69,6 +71,8 @@ pub struct Contract {
   guesses: LookupMap<U256, Timestamp>,
   /// Guesses per user - The key is the user account, the value is an unord. set of the guess hash
   guesses_owners: LookupMap<AccountId, UnorderedSet<U256>>,
+  /// The amount of rewards that are elegible for each clue
+  clues_rewards: LookupMap<TokenId, U128>,
 }
 
 #[derive(BorshDeserialize, BorshSerialize, BorshStorageKey)]
@@ -88,6 +92,7 @@ enum StorageKeys {
   ProofOwnership,
   Guesses,
   GuessesOwner,
+  ClueRewards,
 }
 
 #[derive(BorshStorageKey, BorshDeserialize, BorshSerialize)]
@@ -143,6 +148,7 @@ impl Contract {
       guess_ticket: LookupMap::new(StorageKeys::GuessTicket),
       guesses: LookupMap::new(StorageKeys::Guesses),
       guesses_owners: LookupMap::new(StorageKeys::GuessesOwner),
+      clues_rewards: LookupMap::new(StorageKeys::ClueRewards),
     }
   }
 }
@@ -356,6 +362,7 @@ mod tests {
       guess_ticket: LookupMap::new(StorageKeys::GuessTicket),
       guesses: LookupMap::new(StorageKeys::Guesses),
       guesses_owners: LookupMap::new(StorageKeys::GuessesOwner),
+      clues_rewards: LookupMap::new(StorageKeys::ClueRewards),
     }
   }
 

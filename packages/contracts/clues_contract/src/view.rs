@@ -62,6 +62,13 @@ impl Contract {
     self.staked_tokens.keys_as_vector().to_vec()
   }
 
+  pub fn view_staking_timestamp_clue(&self, token_id: TokenId) -> Timestamp {
+    self
+      .staked_tokens
+      .get(&token_id)
+      .expect("That token is not staked")
+  }
+
   pub fn view_staked_guesses_contain(&self, tuple: (AccountId, TokenId)) -> bool {
     self.staked_guesses.contains(&tuple)
   }
@@ -80,6 +87,10 @@ impl Contract {
 
   pub fn view_ticket_price(&self, token_id: TokenId, account_id: AccountId) {
     //self.calculate_ticket_cost(, det_or_pup)
+  }
+
+  pub fn view_available_clue_rewards(&self, token_id: TokenId) -> U128 {
+    self.calculate_reward(token_id)
   }
 
   //pub view_available_nfts_for_mint{}
