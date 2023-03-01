@@ -6,6 +6,7 @@ use crate::{
   errors::{
     INEXISTENT_ERR, UNAUTHORIZED_ERR, UNACC_TOKEN_ERR, NO_PROOF_ERR, EXPIRED_TIME_ERR,
     SEASON_END_ERR, ERR_SEASON_NOT_OPEN, STAKED_TOKEN_ERR, GUESSING_NOT_OPEN, NOT_A_DET_ERROR,
+    ERR_CLUE_NOT_STAKED,
   },
 };
 
@@ -68,8 +69,12 @@ impl Contract {
     assert!(env::block_timestamp() < proof_time, "{}", EXPIRED_TIME_ERR);
   }
 
-  pub fn is_token_staked(&self, token_id: &TokenId) -> bool {
-    self.contains_staked_token(token_id)
+  pub fn is_token_staked(&self, token_id: &TokenId) {
+    assert!(
+      self.contains_staked_token(token_id),
+      "{}",
+      ERR_CLUE_NOT_STAKED
+    )
   }
 
   pub fn contains_staked_token(&self, token_id: &TokenId) -> bool {
@@ -80,7 +85,11 @@ impl Contract {
   }
 
   pub fn assert_token_unstaked(&self, token_id: &TokenId) {
-    assert!(!self.is_token_staked(&token_id), "{}", STAKED_TOKEN_ERR);
+    assert!(
+      !self.contains_staked_token(&token_id),
+      "{}",
+      STAKED_TOKEN_ERR
+    );
   }
 
   pub fn assert_token_owner(&self, account_id: &AccountId, token_id: &TokenId) {
