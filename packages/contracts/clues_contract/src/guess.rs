@@ -1,3 +1,4 @@
+use borsh::{BorshSerialize, BorshDeserialize};
 use near_contract_standards::non_fungible_token::TokenId;
 use near_sdk::{
   AccountId, env, json_types::U128, near_bindgen, assert_one_yocto, Timestamp,
@@ -15,7 +16,7 @@ use crate::{
   ext_interface, BASE_GAS, StorageKey,
 };
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, BorshSerialize, BorshDeserialize)]
 pub struct Guess {
   account_id: AccountId,
   murderer: String,

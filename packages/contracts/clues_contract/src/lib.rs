@@ -1,3 +1,4 @@
+use guess::Guess;
 use near_bigint::U256;
 use near_contract_standards::non_fungible_token::core::{
   NonFungibleTokenResolver, NonFungibleTokenCore,
@@ -71,8 +72,13 @@ pub struct Contract {
   guesses: LookupMap<U256, Timestamp>,
   /// Guesses per user - The key is the user account, the value is an unord. set of the guess hash
   guesses_owners: LookupMap<AccountId, UnorderedSet<U256>>,
-  /// The amount of rewards that are elegible for each clue
+  /// The max amount of rewards that are elegible for each clue
   clues_rewards: LookupMap<TokenId, U128>,
+  ///The answer to the mistery - it's an enum bc the owner should only input it at the end of the game
+  answer: Option<Guess>,
+  /// 1/3 of the maximum amount of rewards elegible for answering the mistery
+  /// - it's an enum bc the owner should only input it at the end of the game
+  rewards_guessing: Option<U128>,
 }
 
 #[derive(BorshDeserialize, BorshSerialize, BorshStorageKey)]
@@ -149,6 +155,8 @@ impl Contract {
       guesses: LookupMap::new(StorageKeys::Guesses),
       guesses_owners: LookupMap::new(StorageKeys::GuessesOwner),
       clues_rewards: LookupMap::new(StorageKeys::ClueRewards),
+      answer: None,
+      rewards_guessing: None,
     }
   }
 }
@@ -363,6 +371,8 @@ mod tests {
       guesses: LookupMap::new(StorageKeys::Guesses),
       guesses_owners: LookupMap::new(StorageKeys::GuessesOwner),
       clues_rewards: LookupMap::new(StorageKeys::ClueRewards),
+      answer: None,
+      rewards_guessing: None,
     }
   }
 
