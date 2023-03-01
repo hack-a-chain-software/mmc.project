@@ -1,7 +1,7 @@
 use near_contract_standards::non_fungible_token::TokenId;
 use near_sdk::{near_bindgen, AccountId, json_types::U128, env, Timestamp, assert_one_yocto};
 
-use crate::{Contract, ContractExt, errors::UNAUTHORIZED_ERR};
+use crate::{Contract, ContractExt, errors::UNAUTHORIZED_ERR, guess::Guess};
 
 #[near_bindgen]
 impl Contract {
@@ -20,6 +20,25 @@ impl Contract {
     assert_one_yocto();
 
     self.clues_rewards.insert(&token_id, &rewards);
+  }
+
+  /// Fn to insert the maximum amout of rewards the guesses are elegible to
+  /// The input should be 1/3 of the max rewards - this makes it easier to avoid calculation problems
+  /// restricted to the owner - necessary to claim rewards
+  #[payable]
+  pub fn insert_guess_reward_amount(&mut self, rewards: U128) {
+    self.only_owner();
+    assert_one_yocto();
+    self.rewards_guessing = Some(rewards);
+  }
+
+  /// Fn to insert the answer to the mistery  the account_id and random_number
+  /// should be the owner account and 0 respectively
+  #[payable]
+  pub fn insert_mistery_answer(&mut self, guess: Guess) {
+    self.only_owner();
+    assert_one_yocto();
+    self.answer = Some(guess);
   }
 
   pub fn change_guessing_date(&mut self, new_guesssing_date: Timestamp) {
