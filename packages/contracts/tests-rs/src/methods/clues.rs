@@ -121,7 +121,7 @@ pub async fn view_staked_guesses_contain(
 pub async fn view_available_clue_rewards(
   contract: &Contract,
   token_id: String,
-) -> anyhow::Result<u128> {
+) -> anyhow::Result<String> {
   anyhow::Ok(
     contract
       .view(

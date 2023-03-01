@@ -371,10 +371,11 @@ mod tests {
 
     //14. Claim clues reward
 
-    let max_reward_clue = "20_000";
+    let max_reward_clue = "20000";
 
     let initial_balance3: u128 = ft_balance_of(&locked_token, &user).await?.parse().unwrap();
 
+    println!("-------------------------------------- INSERT CLUE RANKING -------------------------------------");
     //insert the amount of rewards elegible for this clue
     insert_clue_raniking(
       &clues,
@@ -384,17 +385,22 @@ mod tests {
     )
     .await;
 
-    let clue_reward: u128 = view_available_clue_rewards(&clues, clue_id.to_string()).await?;
+    println!("-------------------------------------- VIEW CLUE REWARD -------------------------------------");
+    let clue_reward = view_available_clue_rewards(&clues, clue_id.to_string()).await?;
 
     println!("{}{}", "clue_rewards: ", clue_reward);
 
+    println!("-------------------------------------- CLAIM CLUE REWARD -------------------------------------");
     //claim clues reward
     claim_rewards(&clues, &user, clue_id.to_string()).await;
+
+    let clue_reward_as_u128: u128 = clue_reward.parse().unwrap();
+
 
     let final_balance3: u128 = ft_balance_of(&locked_token, &user).await?.parse().unwrap();
 
     assert_eq!(
-      initial_balance3 + clue_reward,
+      initial_balance3 + clue_reward_as_u128,
       final_balance3,
       "{}",
       "Fail on 3rd balance"
@@ -402,7 +408,7 @@ mod tests {
 
     let vesting_1_3 = &view_vesting_paginated(&locked_token, &user).await?[2];
 
-    assert_eq!(vesting_1_3["locked_value"], clue_reward.to_string());
+    assert_eq!(vesting_1_3["locked_value"], clue_reward);
     assert!(!vesting_1_3["fast_pass"].as_bool().unwrap());
     assert_eq!(vesting_1_3["withdrawn_tokens"], 0.to_string());
 
