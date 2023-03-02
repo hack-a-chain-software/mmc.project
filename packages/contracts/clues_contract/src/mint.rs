@@ -1,4 +1,4 @@
-use near_sdk::{near_bindgen, env, assert_one_yocto};
+use near_sdk::{near_bindgen, env};
 use near_contract_standards::non_fungible_token::{Token, TokenId};
 use near_contract_standards::non_fungible_token::metadata::TokenMetadata;
 

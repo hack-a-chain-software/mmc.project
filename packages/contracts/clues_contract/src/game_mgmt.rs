@@ -1,7 +1,7 @@
 use near_contract_standards::non_fungible_token::TokenId;
 use near_sdk::{near_bindgen, AccountId, json_types::U128, env, Timestamp, assert_one_yocto};
 
-use crate::{Contract, ContractExt, errors::UNAUTHORIZED_ERR, guess::Guess};
+use crate::{Contract, ContractExt, guess::Guess};
 
 #[near_bindgen]
 impl Contract {
@@ -83,7 +83,7 @@ mod tests {
 
   use std::collections::HashMap;
 
-  use near_sdk::{VMConfig, RuntimeFeesConfig, test_utils::accounts};
+  use near_sdk::{VMConfig, RuntimeFeesConfig};
 
   use super::*;
   use crate::tests::*;
