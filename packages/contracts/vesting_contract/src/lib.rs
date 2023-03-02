@@ -233,7 +233,7 @@ mod tests {
 
   pub fn get_context(
     input: Vec<u8>,
-    is_view: bool,
+    _is_view: bool,
     attached_deposit: u128,
     account_balance: u128,
     signer_id: AccountId,

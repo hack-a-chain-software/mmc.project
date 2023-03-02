@@ -277,7 +277,7 @@ mod tests {
 
     let guess2 = Guess {
       account_id: user.id().to_string(),
-      murderer: "Jane".to_string(),
+      murderer: "John".to_string(),
       weapon: "Knife".to_string(),
       motive: "Hunger".to_string(),
       random_number: 1.to_string(),
@@ -336,17 +336,29 @@ mod tests {
 
     time_travel(&worker, half_hour * 3).await?;
 
+    //add rewards for guessing
+    insert_guess_reward_amount(&clues, &owner, "1000".to_string()).await;
+
+    //add mistery answer
+    insert_mistery_answer(&clues, &owner, guess.clone()).await;
+
     let initial_balance: u128 = ft_balance_of(&locked_token, &user).await?.parse().unwrap();
+
+    let guess_reward = view_guess_reward(&clues, guess.clone()).await?;
+    let guess_reward2 = view_guess_reward(&clues, guess2.clone()).await?;
+
+    let guess_reward_as_u128: u128 = guess_reward.parse().unwrap();
+    let guess2_reward_as_u128: u128 = guess_reward2.parse().unwrap();
 
     //claim first guess reward
     claim_guess_rewards(&clues, &user, guess).await;
 
     let final_balance: u128 = ft_balance_of(&locked_token, &user).await?.parse().unwrap();
 
-    assert_eq!(initial_balance + 100, final_balance);
+    assert_eq!(initial_balance + guess_reward_as_u128, final_balance);
 
     let vesting_1_1 = &view_vesting_paginated(&locked_token, &user).await?[0];
-    assert_eq!(vesting_1_1["locked_value"], 100.to_string());
+    assert_eq!(vesting_1_1["locked_value"], guess_reward);
     assert!(!vesting_1_1["fast_pass"].as_bool().unwrap());
     assert_eq!(vesting_1_1["withdrawn_tokens"], 0.to_string());
 
@@ -358,14 +370,14 @@ mod tests {
     let final_balance2: u128 = ft_balance_of(&locked_token, &user).await?.parse().unwrap();
 
     assert_eq!(
-      initial_balance2 + 100,
+      initial_balance2 + guess2_reward_as_u128,
       final_balance2,
       "{}",
       "Fail on 2 balance"
     );
 
     let vesting_1_2 = &view_vesting_paginated(&locked_token, &user).await?[1];
-    assert_eq!(vesting_1_2["locked_value"], 100.to_string());
+    assert_eq!(vesting_1_2["locked_value"], guess_reward2);
     assert!(!vesting_1_2["fast_pass"].as_bool().unwrap());
     assert_eq!(vesting_1_2["withdrawn_tokens"], 0.to_string());
 
@@ -375,7 +387,6 @@ mod tests {
 
     let initial_balance3: u128 = ft_balance_of(&locked_token, &user).await?.parse().unwrap();
 
-    println!("-------------------------------------- INSERT CLUE RANKING -------------------------------------");
     //insert the amount of rewards elegible for this clue
     insert_clue_raniking(
       &clues,
@@ -385,17 +396,12 @@ mod tests {
     )
     .await;
 
-    println!("-------------------------------------- VIEW CLUE REWARD -------------------------------------");
     let clue_reward = view_available_clue_rewards(&clues, clue_id.to_string()).await?;
 
-    println!("{}{}", "clue_rewards: ", clue_reward);
-
-    println!("-------------------------------------- CLAIM CLUE REWARD -------------------------------------");
     //claim clues reward
     claim_rewards(&clues, &user, clue_id.to_string()).await;
 
     let clue_reward_as_u128: u128 = clue_reward.parse().unwrap();
-
 
     let final_balance3: u128 = ft_balance_of(&locked_token, &user).await?.parse().unwrap();
 

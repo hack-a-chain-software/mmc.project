@@ -1,10 +1,8 @@
-use borsh::{BorshDeserialize, BorshSerialize};
 use near_sdk::{
   AccountId,
   json_types::U128,
   env, near_bindgen, assert_one_yocto, Promise,
-  collections::{Vector, UnorderedSet},
-  BorshStorageKey,
+  collections::{UnorderedSet},
 };
 use near_contract_standards::non_fungible_token::TokenId;
 
@@ -12,10 +10,7 @@ use near_contract_standards::non_fungible_token::TokenId;
 
 use crate::{
   Contract, ContractExt,
-  errors::{
-    STAKED_TOKEN_ERR, NFT_OWNER_ERR, REWARD_CLAIMED_ERR, SEASON_END_ERR, SEASON_NOT_END_ANS_ERR,
-    ERR_NFT_NOT_STAKED, UNAUTHORIZED_ERR, ERR_CLUE_NOT_STAKED,
-  },
+  errors::{UNAUTHORIZED_ERR, ERR_CLUE_NOT_STAKED},
   ext_interface::{self},
   BASE_GAS, StorageKey, FRACTION_BASE,
 };
@@ -115,8 +110,6 @@ mod tests {
 
   use super::*;
   use crate::tests::*;
-
-  pub const REWARD: U128 = U128(100);
 
   //TESTS:
   //1. stake - test_stake_normal_flow
@@ -335,7 +328,7 @@ mod tests {
       1_000_000_000_000_000_000_000_000,
       accounts(0),
       DET_ACCOUNT.parse().unwrap(),
-      (END + 1000000),
+      END + 1000000,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -367,7 +360,7 @@ mod tests {
       1_000_000_000_000_000_000_000_000,
       accounts(0),
       accounts(0),
-      (END + 1000),
+      END + 1000,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -392,7 +385,7 @@ mod tests {
       1_000_000_000_000_000_000_000_000,
       accounts(0),
       accounts(0),
-      (1_000),
+      1_000,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -406,14 +399,6 @@ mod tests {
     let mut contract = init_contract();
 
     let token_id = "1";
-
-    //contract.staked_tokens.insert(&token_id.to_string().clone());
-
-    //let mut set: UnorderedSet<TokenId> = UnorderedSet::new(StorageKey::TokenIdSet {
-    //  account: accounts(0),
-    //});
-    //set.insert(&token_id.to_string().clone());
-    // contract.staked_tokens_owners.insert(&accounts(0), &set);
     contract.claim_rewards(token_id.to_string());
   }
 
@@ -425,7 +410,7 @@ mod tests {
       1_000_000_000_000_000_000_000_000,
       accounts(0),
       accounts(0),
-      (END + 1000),
+      END + 1000,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -476,7 +461,7 @@ mod tests {
       1_000_000_000_000_000_000_000_000,
       accounts(0),
       accounts(0),
-      (END + 1000),
+      END + 1000,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
@@ -517,7 +502,7 @@ mod tests {
       1_000_000_000_000_000_000_000_000,
       OWNER_ACCOUNT.parse().unwrap(),
       OWNER_ACCOUNT.parse().unwrap(),
-      (END + 1000),
+      END + 1000,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(

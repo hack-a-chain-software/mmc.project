@@ -133,6 +133,52 @@ pub async fn view_available_clue_rewards(
   )
 }
 
+pub async fn view_guess_reward(contract: &Contract, guess: Guess) -> anyhow::Result<String> {
+  anyhow::Ok(
+    contract
+      .view(
+        "view_guess_reward",
+        json!({ "guess": guess }).to_string().into_bytes(),
+      )
+      .await?
+      .json()?,
+  )
+}
+
+pub async fn insert_mistery_answer(
+  contract: &Contract,
+  caller: &Account,
+  guess: Guess,
+) -> ExecutionResult<String> {
+  transact_call(
+    caller
+      .call(&contract.as_account().id(), "insert_mistery_answer")
+      .args_json(json!({
+        "guess": guess,
+      }))
+      .deposit(1)
+      .gas(GAS_LIMIT),
+  )
+  .await
+}
+
+pub async fn insert_guess_reward_amount(
+  contract: &Contract,
+  caller: &Account,
+  rewards: String,
+) -> ExecutionResult<String> {
+  transact_call(
+    caller
+      .call(&contract.as_account().id(), "insert_guess_reward_amount")
+      .args_json(json!({
+        "rewards": rewards,
+      }))
+      .deposit(1)
+      .gas(GAS_LIMIT),
+  )
+  .await
+}
+
 pub async fn insert_token_price(
   contract: &Contract,
   caller: &Account,
