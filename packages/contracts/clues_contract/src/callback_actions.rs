@@ -1,6 +1,6 @@
 use crate::{
   *,
-  errors::{ERR_NFT_NOT_STAKED, ERR_NFT_NOT_USED},
+  errors::{ERR_NFT_NOT_USED},
 };
 
 use near_sdk::{env, near_bindgen, PromiseResult};

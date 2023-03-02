@@ -1,5 +1,5 @@
 use near_contract_standards::non_fungible_token::TokenId;
-use near_sdk::{AccountId, env, collections::UnorderedMap};
+use near_sdk::{AccountId, env};
 
 use crate::{
   Contract,

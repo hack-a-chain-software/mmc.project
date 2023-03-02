@@ -10,13 +10,13 @@ use serde::{Deserialize, Serialize};
 use crate::{
   Contract, ContractExt,
   errors::{
-    ERR_NFT_USED, ERR_NFT_NOT_STAKED, ERR_UNSUFICIENT_FUNDS_GUESS, ERR_NO_TICKETS,
-    ERR_SEASON_NOT_END_UNSTAKE, INEXISTENT_ERR, ERR_NFT_NOT_USED, ERR_WRONG_TOKEN, ERR_NO_GUESS,
+    ERR_NFT_NOT_STAKED, ERR_UNSUFICIENT_FUNDS_GUESS, ERR_NO_TICKETS, INEXISTENT_ERR,
+    ERR_NFT_NOT_USED, ERR_WRONG_TOKEN, ERR_NO_GUESS,
   },
-  ext_interface, BASE_GAS, StorageKey,
+  ext_interface, BASE_GAS, StorageKey, FRACTION_BASE,
 };
 
-#[derive(Serialize, Deserialize, BorshSerialize, BorshDeserialize)]
+#[derive(Serialize, Deserialize, BorshSerialize, BorshDeserialize, Clone)]
 pub struct Guess {
   account_id: AccountId,
   murderer: String,
@@ -171,8 +171,6 @@ impl Contract {
     assert!((ticket_price <= amount), "{}", ERR_UNSUFICIENT_FUNDS_GUESS);
     self.increment_ticket(account_id.clone());
 
-    let tickets = self.guess_ticket.get(&account_id).expect(ERR_NO_TICKETS);
-
     let change = U128(amount.0 - ticket_price.0);
 
     change
@@ -187,7 +185,40 @@ impl Contract {
   }
 
   pub fn calculate_guess_reward(&self, guess: Guess, timestamp: Timestamp) -> U128 {
-    U128(100)
+    let answer = self
+      .answer
+      .as_ref()
+      .expect("No answer was added yet by the owner of the game");
+
+    let mut count = 0;
+
+    if answer.murderer == guess.murderer {
+      count += 1;
+    }
+    if answer.weapon == guess.weapon {
+      count += 1;
+    }
+    if answer.motive == guess.motive {
+      count += 1;
+    }
+
+    //get the interval between guessing and end of the season
+    let delta_time = self.season_end as u128 - (timestamp as u128); //
+
+    let guessing_duration = (self.season_end - self.guessing_start) as u128;
+
+    //calculate what is the % of time the clue was staked - use FRACTION_BASE to handle decimals
+    // only multiply by FRACTION_BASE at the end result, otherwise you'll get 0 as result
+    let mut percentage = count * (delta_time * FRACTION_BASE) / guessing_duration;
+
+    percentage = percentage
+      * self
+        .rewards_guessing
+        .expect("No rewards were added by the owner")
+        .0;
+
+    //return the maximum amount of rewards times the percentage the user is elegible due to time on stake
+    U128(percentage / FRACTION_BASE)
   }
 
   pub fn insert_nft_on_stake_list(
@@ -217,7 +248,7 @@ impl Contract {
 
   pub fn increment_ticket(&mut self, account_id: AccountId) {
     //after staking, user get's a ticket
-    if (self.guess_ticket.contains_key(&account_id)) {
+    if self.guess_ticket.contains_key(&account_id) {
       //increment ticket value
       let user_ticket = self.guess_ticket.get(&account_id).unwrap();
       self.guess_ticket.insert(&account_id, &(user_ticket + 1));
@@ -225,5 +256,82 @@ impl Contract {
       //give the first ticket
       self.guess_ticket.insert(&account_id, &(1));
     }
+  }
+}
+
+#[cfg(test)]
+mod tests {
+
+  use std::collections::HashMap;
+
+  use near_sdk::{VMConfig, RuntimeFeesConfig, test_utils::accounts, Timestamp};
+
+  use super::*;
+  use crate::tests::*;
+
+  #[test]
+  fn test_claim_guess_rewards() {
+    let context = get_context_predecessor(
+      vec![],
+      1,
+      1_000_000_000_000_000_000_000_000,
+      accounts(0),
+      accounts(0),
+      END + 1000,
+      Gas(300u64 * 10u64.pow(12)),
+    );
+    testing_env!(
+      context,
+      VMConfig::test(),
+      RuntimeFeesConfig::test(),
+      HashMap::default(),
+      Vec::default()
+    );
+
+    let mut contract = init_contract();
+    //guessing starts at
+    let guessing_date: Timestamp = 15_000_000;
+    let elegible_rewards = U128(100_000);
+
+    // --------- insert 2 guesses manually
+    let guess = Guess {
+      account_id: accounts(0),
+      murderer: "John".to_string(),
+      weapon: "Glock".to_string(),
+      motive: "Jealous".to_string(),
+      random_number: U128(1),
+    };
+
+    let guess2 = Guess {
+      account_id: accounts(0),
+      murderer: "John".to_string(),
+      weapon: "Knife".to_string(),
+      motive: "Hunger".to_string(),
+      random_number: U128(1),
+    };
+
+    //get the hash for both guesses
+    let guess_hash = contract.view_hash(guess.clone());
+    let guess_hash2 = contract.view_hash(guess2.clone());
+
+    contract.guesses.insert(&guess_hash, &guessing_date);
+    contract.guesses.insert(&guess_hash2, &guessing_date);
+
+    let mut set = UnorderedSet::new(StorageKey::GuessSet {
+      account: accounts(0),
+    });
+    set.insert(&guess_hash);
+    set.insert(&guess_hash2);
+    contract.guesses_owners.insert(&accounts(0), &set);
+
+    // --------- insert the answer and the rewards
+
+    contract.answer = Some(guess.clone());
+    contract.rewards_guessing = Some(elegible_rewards);
+
+    let rewards_1 = contract.view_guess_reward(guess);
+    let rewards_2 = contract.view_guess_reward(guess2);
+    assert_eq!(rewards_1, U128(283_330));
+    assert_eq!(rewards_2, U128(94_440));
   }
 }

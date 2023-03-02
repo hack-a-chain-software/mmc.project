@@ -5,10 +5,8 @@
 // View staked nfts user
 
 use std::vec;
-use std::io::Error;
 use near_bigint::U256;
-use near_sdk::collections::Vector;
-use crate::{*, guess::Guess, Contract, ContractExt};
+use crate::{*, guess::Guess, Contract, ContractExt, errors::ERR_NO_GUESS};
 
 #[near_bindgen]
 impl Contract {
@@ -58,6 +56,12 @@ impl Contract {
     self.staked_guesses.to_vec()
   }
 
+  pub fn view_guess_reward(&self, guess: Guess) -> U128 {
+    let hash = guess.to_hash();
+    let timestamp = self.guesses.get(&hash).expect(ERR_NO_GUESS);
+    self.calculate_guess_reward(guess, timestamp)
+  }
+
   pub fn view_staked_clues(&self) -> Vec<String> {
     self.staked_tokens.keys_as_vector().to_vec()
   }
@@ -85,7 +89,7 @@ impl Contract {
     self.season_end
   }
 
-  pub fn view_ticket_price(&self, token_id: TokenId, account_id: AccountId) {
+  pub fn view_ticket_price(&self, _token_id: TokenId, _account_id: AccountId) {
     //self.calculate_ticket_cost(, det_or_pup)
   }
 

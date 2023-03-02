@@ -84,7 +84,7 @@ mod tests {
       7090000000000000000000,
       1_000_000_000_000_000_000_000_000,
       OWNER_ACCOUNT.parse().unwrap(),
-      (BEGIN + 1),
+      BEGIN + 1,
       Gas(300u64 * 10u64.pow(12)),
     );
     testing_env!(
