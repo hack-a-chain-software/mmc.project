@@ -18,3 +18,8 @@ export const undercoverPupsContract =
 
 //api
 export const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
+// currencies
+export const mmcToken = import.meta.env.VITE_MMC_TOKEN;
+export const usdcToken = import.meta.env.VITE_USDC_TOKEN;
+export const usdtToken = import.meta.env.VITE_USDT_TOKEN;

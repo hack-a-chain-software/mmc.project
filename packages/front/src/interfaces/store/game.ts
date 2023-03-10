@@ -34,6 +34,7 @@ export interface GameStoreInterface {
 	controls: AnimationControls | null;
   clues: ClueInterface[] | null;
   myClues: ClueInterface[] | null;
+  loadCurrencies: () => Promise<any>,
   guessingIsOpen: () => boolean,
 	initGame: (
 		controls: AnimationControls

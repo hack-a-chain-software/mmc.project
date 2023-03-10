@@ -1,9 +1,13 @@
 import Big from 'big.js';
 import { create } from 'zustand';
+import { useWallet } from './wallet';
 import {
 	firstScene,
+	mmcToken,
 	tokenContract,
 	undercoverPupsContract,
+  usdcToken,
+  usdtToken,
 } from '@/constants/env';
 import { Token, ClueInterface } from '@/interfaces';
 import {
@@ -61,19 +65,51 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
     });
   },
 
+  loadCurrencies: async () => {
+    const {
+      selector,
+    } = useWallet.getState();
+
+    const baseCurrencies = [
+      mmcToken,
+      usdcToken,
+      usdtToken,
+    ];
+
+    return Promise.all(baseCurrencies.map(async (contract: string) => {
+      const metadata = viewFunction(
+        selector,
+        contract,
+        'ft_metadata',
+      );
+
+      return {
+        contract,
+        ...metadata,
+      };
+    }));
+  },
+
 	initGame: async (controls) => {
     const {
       accountId,
       sendRequest,
     } = useUser.getState();
 
+    const {
+      loadCurrencies,
+    } = get();
+
 		const { data } = await sendRequest('/game/config', 'get');
+
+    const currencies = await loadCurrencies();
 
 		set({
 			controls,
 			config: {
         ...data,
         ...data.config,
+        currencies,
       },
 		});
 

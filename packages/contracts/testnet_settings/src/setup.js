@@ -1,3 +1,4 @@
+const fs = require("fs");
 const crypto = require("crypto");
 const nearAPI = require("near-api-js");
 const { BN } = require("near-workspaces");
@@ -251,6 +252,7 @@ async function testnetSetup() {
       currency: execution_data.connAccountMap.usdtTokenAccount.accountId,
       price: '1000000',
     },
+    attachedDeposit: new BN(1),
   });
 
   await execution_data.connAccountMap.ownerAccount.functionCall({
@@ -260,6 +262,7 @@ async function testnetSetup() {
       currency: execution_data.connAccountMap.nekoTokenAccount.accountId,
       price: '1000000',
     },
+    attachedDeposit: new BN(1),
   });
 
   await execution_data.connAccountMap.ownerAccount.functionCall({
@@ -269,6 +272,7 @@ async function testnetSetup() {
       currency: execution_data.connAccountMap.auroraTokenAccount.accountId,
       price: '1000000',
     },
+    attachedDeposit: new BN(1),
   });
 
   console.log('setup.js: Mint all game clues');
@@ -419,7 +423,12 @@ async function testnetSetup() {
     console.warn(e);
   }
 
+  const ownerCredentials = JSON.parse(
+    fs.readFileSync(`../.near-credentials/testnet/${random_prefix}owner.testnet.json`),
+  );
+
   console.log(execution_data.accountMap);
+  console.log('Owner Credentials', ownerCredentials)
 }
 
 module.exports = { testnetSetup };
