@@ -65,7 +65,7 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
     });
   },
 
-  loadCurrencies: async () => {
+  loadCurrencies: async (currentCurrencies) => {
     const {
       selector,
     } = useWallet.getState();
@@ -77,7 +77,7 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
     ];
 
     return Promise.all(baseCurrencies.map(async (contract: string) => {
-      const metadata = viewFunction(
+      const metadata = await viewFunction(
         selector,
         contract,
         'ft_metadata',
@@ -85,7 +85,8 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
 
       return {
         contract,
-        ...metadata,
+        metadata,
+        token_price: '1000000',
       };
     }));
   },
@@ -96,20 +97,20 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
       sendRequest,
     } = useUser.getState();
 
-    const {
-      loadCurrencies,
-    } = get();
+    // const {
+    //   loadCurrencies,
+    // } = get();
 
 		const { data } = await sendRequest('/game/config', 'get');
 
-    const currencies = await loadCurrencies();
+    // const currencies = await loadCurrencies(data.config.currencies);
 
 		set({
 			controls,
 			config: {
         ...data,
         ...data.config,
-        currencies,
+        // currencies,
       },
 		});
 
