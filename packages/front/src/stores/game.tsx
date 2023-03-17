@@ -65,7 +65,7 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
     });
   },
 
-  loadCurrencies: async (currentCurrencies) => {
+  loadCurrencies: async () => {
     const {
       selector,
     } = useWallet.getState();
@@ -97,22 +97,23 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
       sendRequest,
     } = useUser.getState();
 
-    // const {
-    //   loadCurrencies,
-    // } = get();
+    const {
+      loadCurrencies,
+    } = get();
 
 		const { data } = await sendRequest('/game/config', 'get');
 
-    // const currencies = await loadCurrencies(data.config.currencies);
+    const currencies = await loadCurrencies(data.config.currencies);
 
-		set({
-			controls,
-			config: {
+    data.config.currencies = currencies;
+
+    set({
+      controls,
+      config: {
         ...data,
         ...data.config,
-        // currencies,
       },
-		});
+    });
 
     const {
       getClues,
