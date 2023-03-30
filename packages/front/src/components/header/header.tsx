@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { HashLink } from 'react-router-hash-link';
 import NavbarModal from './navbar-modal';
 import routes from '@/json/routes.json';
@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import {
-  If,
 	Button,
 	Socials,
 	WalletMenu,
@@ -36,7 +35,7 @@ export function Header() {
   } = useUser();
 
 	const inGame = useMemo(() => {
-		return pathname === '/987654321';
+		return pathname === '/7172737475';
 	}, [pathname]);
 
   const onBack = () => {

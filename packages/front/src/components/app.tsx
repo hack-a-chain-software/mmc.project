@@ -38,6 +38,7 @@ export const App = () => {
     void (async () => {
       const transactions = transactionHashes.split(',');
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const states: any[] = [];
 
       for (let i = 0; i < transactions.length; i++) {
@@ -52,12 +53,13 @@ export const App = () => {
         return;
       }
 
-      window.history.pushState({}, document.title, '/987654321' );
+      window.history.pushState({}, document.title, '/7172737475' );
 
       // if (action.status === 'success') {
       //   toast.success(action.message as string);
       // }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       const msg = JSON.parse(action.args.msg);
 
       const tokenId = msg.token_id || msg.staked_nft_id;
