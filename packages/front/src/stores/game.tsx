@@ -183,7 +183,7 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
     } = useUser.getState();
 
     try {
-      const { data } = await sendRequest('/game/rewards/', 'post', {});
+      const { data } = await sendRequest('/game/rewards', 'post', {});
 
       return data;
     } catch (e) {

@@ -138,6 +138,95 @@ export class GameController {
     return res.status(viewResult ? 200 : 403).json(viewResult);
   }
 
+  // @UseGuards(JwtAuthGuard)
+  @Post('create-scene')
+  async createScene(
+    @Body() body: any,
+    @Request() req: JwtValidatedRequest,
+    @Response() res: express.Response,
+  ) {
+    const { seasonId, ...baseScene } = body;
+
+    const season = await this.gameService.findSeasonById(seasonId);
+
+    const newScene = await this.gameService.createScene(baseScene, season);
+
+    return res.status(200).json(newScene);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('create-clues')
+  async createClues(
+    @Body() body: any,
+    @Request() req: JwtValidatedRequest,
+    @Response() res: express.Response,
+  ) {
+    const { clues, sceneId } = body;
+
+    const scene = await this.gameService.findSceneById(sceneId);
+
+    const newClues = await Promise.all(
+      clues.map(async (clue) => {
+        return await this.gameService.createClue(clue, scene);
+      }),
+    );
+
+    return res.status(200).json(newClues);
+  }
+
+  // @UseGuards(JwtAuthGuard)
+  @Post('create-warps')
+  async createWarps(
+    @Body() body: any,
+    @Request() req: JwtValidatedRequest,
+    @Response() res: express.Response,
+  ) {
+    const { warps, sceneId } = body;
+
+    const scene = await this.gameService.findSceneById(sceneId);
+
+    const newClues = await Promise.all(
+      warps.map(async (clue) => {
+        return await this.gameService.createWarp(clue, scene);
+      }),
+    );
+
+    return res.status(200).json(newClues);
+  }
+
+  // @UseGuards(JwtAuthGuard)
+  @Post('create-scene-image')
+  async createSceneImage(
+    @Body() body: any,
+    @Request() req: JwtValidatedRequest,
+    @Response() res: express.Response,
+  ) {
+    const { image, sceneId } = body;
+
+    const scene = await this.gameService.findSceneById(sceneId);
+
+    const newImage = await this.gameService.createImage(image, scene);
+
+    return res.status(200).json(newImage);
+  }
+
+  // @UseGuards(JwtAuthGuard)
+  @Put('update-scene-availability')
+  async updateSceneAvailability(
+    @Body() body: any,
+    @Request() req: JwtValidatedRequest,
+    @Response() res: express.Response,
+  ) {
+    const { sceneId, availability } = body;
+
+    const updatedScene = await this.gameService.updateSceneAvailability(
+      sceneId,
+      availability,
+    );
+
+    return res.status(200).json(updatedScene);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('rewards')
   async rewards(

@@ -156,9 +156,9 @@ async function deployGame (execution_data) {
       detective_token_address: execution_data.connAccountMap.detectives.accountId,
       pups_token_address: execution_data.connAccountMap.pups.accountId,
       locked_tokens_address: execution_data.connAccountMap.lockedTokenAccount.accountId,
-      season_begin: 1675384820863000000,
-      season_end: 1738542416348000000,
-      guessing_start: 1675384820863000000,
+      season_begin: 1680520854353000000,
+      season_end: 4038542416348000000,
+      guessing_start: 1680520854353000000,
       ticket_price: "1000000",
       metadata: {
         spec: "nft-1.0.0",
