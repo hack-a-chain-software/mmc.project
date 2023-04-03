@@ -8,7 +8,7 @@ import {
 	FadeInTransition,
 } from '@/components';
 
-export const Index = (props) => {
+export const Index = () => {
 	return (
 		<div className="mx-auto bodypage">
 			<div
