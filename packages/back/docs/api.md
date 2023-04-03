@@ -25,17 +25,22 @@ The API accept requests to create new scenes, clues, warps and images.
     {
       method: "POST",
       body: JSON.stringify({
-        width: 10,
-        height: 10,
-        name: "New Clue Exemplo",
-        position_top: 64.00,
-        position_left: 64.50,
-        media: "./images/clues/ramen.png",
-        placeholder: "./images/clues/ramen-silhouette.png",
-        media_small: "./images/mini-clues/ramen.png",
-        placeholder_small: "./images/mini-clues/ramen-silhouette.png",
-        description: "The package of FSM Ramen noodles appears unopened and there is a sticky note attached to it that says “CHECK”.",
-        nft_id: "19",
+        "sceneId": "dc9a9254-392a-4d77-84db-60fc52eb6360",
+        "clues": [
+            {
+                width: 10,
+                height: 10,
+                name: "New Clue Exemplo",
+                position_top: 64.00,
+                position_left: 64.50,
+                media: "./images/clues/ramen.png",
+                placeholder: "./images/clues/ramen-silhouette.png",
+                media_small: "./images/mini-clues/ramen.png",
+                placeholder_small: "./images/mini-clues/ramen-silhouette.png",
+                description: "The package of FSM Ramen noodles appears unopened and there is a sticky note attached to it that says “CHECK”.",
+                nft_id: "19",
+            },
+        ],
       })
     },
   );
@@ -48,12 +53,17 @@ The API accept requests to create new scenes, clues, warps and images.
     {
       method: "POST",
       body: JSON.stringify({
-        width: 10,
-        height: 10,
-        position_top: 42.00,
-        position_left: 12.00,
-        scene_id: "88bf421c-70fd-46b6-825f-024bd04952cb",
-        warps_to: "473af5a1-6b3b-4d18-af28-2fc42e657ba2",
+        sceneId: "dc9a9254-392a-4d77-84db-60fc52eb6360",
+        warps: [
+            {
+                width: 10,
+                height: 10,
+                position_top: 42.00,
+                position_left: 12.00,
+                scene_id: "88bf421c-70fd-46b6-825f-024bd04952cb",
+                warps_to: "473af5a1-6b3b-4d18-af28-2fc42e657ba2",
+            },
+        ],
       })
     },
   );
