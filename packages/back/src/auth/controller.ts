@@ -43,6 +43,20 @@ export class AuthController {
     return res.status(authResult.success ? 200 : 401).json(authResult);
   }
 
+  @Post('admin')
+  async loginAdmin(
+    @Body() body: { password: string },
+    @Response() res: express.Response,
+  ) {
+    if (body.password !== this.authService.adminPassword) {
+      return res.status(400).json({ success: false, error: 'Wrong Password' });
+    }
+
+    const jwt = await this.authService.adminPrivileges();
+
+    return res.status(400).json(jwt);
+  }
+
   getUint8Array(value?: string) {
     if (!value) {
       return;

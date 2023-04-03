@@ -138,13 +138,17 @@ export class GameController {
     return res.status(viewResult ? 200 : 403).json(viewResult);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('create-scene')
   async createScene(
     @Body() body: any,
     @Request() req: JwtValidatedRequest,
     @Response() res: express.Response,
   ) {
+    if (!req.user.isAdmin) {
+      return res.status(400).json({ success: false, error: 'Only for Admin' });
+    }
+
     const { seasonId, ...baseScene } = body;
 
     const season = await this.gameService.findSeasonById(seasonId);
@@ -161,6 +165,10 @@ export class GameController {
     @Request() req: JwtValidatedRequest,
     @Response() res: express.Response,
   ) {
+    if (!req.user.isAdmin) {
+      return res.status(400).json({ success: false, error: 'Only for Admin' });
+    }
+
     const { clues, sceneId } = body;
 
     const scene = await this.gameService.findSceneById(sceneId);
@@ -174,13 +182,17 @@ export class GameController {
     return res.status(200).json(newClues);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('create-warps')
   async createWarps(
     @Body() body: any,
     @Request() req: JwtValidatedRequest,
     @Response() res: express.Response,
   ) {
+    if (!req.user.isAdmin) {
+      return res.status(400).json({ success: false, error: 'Only for Admin' });
+    }
+
     const { warps, sceneId } = body;
 
     const scene = await this.gameService.findSceneById(sceneId);
@@ -194,13 +206,17 @@ export class GameController {
     return res.status(200).json(newClues);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post('create-scene-image')
   async createSceneImage(
     @Body() body: any,
     @Request() req: JwtValidatedRequest,
     @Response() res: express.Response,
   ) {
+    if (!req.user.isAdmin) {
+      return res.status(400).json({ success: false, error: 'Only for Admin' });
+    }
+
     const { image, sceneId } = body;
 
     const scene = await this.gameService.findSceneById(sceneId);
@@ -210,13 +226,17 @@ export class GameController {
     return res.status(200).json(newImage);
   }
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Put('update-scene-availability')
   async updateSceneAvailability(
     @Body() body: any,
     @Request() req: JwtValidatedRequest,
     @Response() res: express.Response,
   ) {
+    if (!req.user.isAdmin) {
+      return res.status(400).json({ success: false, error: 'Only for Admin' });
+    }
+
     const { sceneId, availability } = body;
 
     const updatedScene = await this.gameService.updateSceneAvailability(
