@@ -10,6 +10,7 @@ export function configuration(): Configuration {
   return {
     auth: {
       messageValidForMs: parseInt(process.env.AUTH_MESSAGE_VALID_FOR_MS, 10),
+      adminPassword: process.env.ADMIN_PASSWORD,
 
       jwt: {
         secret: process.env.JWT_SECRET,
