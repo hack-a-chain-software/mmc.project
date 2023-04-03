@@ -53,33 +53,24 @@ export function Select<V>({
             >
               <Listbox.Options className="cursor-pointer shadow-lg">
                 <div
-                  className="absolute z-10 mt-1 w-full max-h-60 focus:outline-none cursor-pointer shadow-lg p-[2px] overflow-hidden bg-white"
+                  className="absolute z-10 mt-1 w-full focus:outline-none cursor-pointer shadow-lg p-[2px] overflow-auto bg-white"
                 >
                   <div
-                    className="flex-col w-full overflow-hidden"
+                    className="flex-col w-full overflow-auto max-h-[250px]"
                   >
                     {items.map(({ label, value: itemValue }) => (
                       <Listbox.Option
                         key={`select-option-${itemValue as string}`}
                         value={itemValue}
-                        className="cursor-pointer overflow-hidden"
+                        className="cursor-pointer"
                       >
-                        {({ selected: selectedValue }) => (
+                        {() => (
                           <div
                             className="select-none relative py-2 pl-3 pr-9 cursor-pointer text-[#A500FB] hover:opacity-[0.7]"
                           >
-                            <div className="block truncate first-letter:uppercase cursor-pointer">
+                            <div className="block first-letter:uppercase cursor-pointer break-words">
                               {label}
                             </div>
-
-                            {selectedValue ? (
-                              <span className="absolute inset-y-0 right-0 flex items-center pr-4">
-                                <CheckIcon
-                                  className="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            ) : null}
                           </div>
                         )}
                       </Listbox.Option>

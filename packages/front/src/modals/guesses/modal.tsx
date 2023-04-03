@@ -111,7 +111,7 @@ export const GuessesModal = () => {
               <span
                 className="text-xs font-bold"
               >
-                Burned
+                Claimed
               </span>
             </div>
           </div>
