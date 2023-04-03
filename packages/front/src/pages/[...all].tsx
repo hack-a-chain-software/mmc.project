@@ -10,12 +10,12 @@ export const All = () => (
       >
         404
       </span>
+
       <span
         className="text-xl"
       >
         Oops, page not found
       </span>
-
     </div>
   </div>
 );
