@@ -81,7 +81,7 @@ The API accept requests to create new scenes, clues, warps and images.
   await fetch(
     "/game/create-scene-image",
     {
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify({
         availability: "2019-03-26 15:10:10+00",
         sceneId: "dc9a9254-392a-4d77-84db-60fc52eb6360",
