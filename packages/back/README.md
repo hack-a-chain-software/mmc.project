@@ -1,6 +1,6 @@
 # MMC Backend
 
-This repository contains the source-code for the MMC Project backend. Its written in TypeScript, with the [NestJS](https://docs.nestjs.com framework. 
+This repository contains the source-code for the MMC Project backend. Its written in TypeScript, with the [NestJS](https://docs.nestjs.com framework.
 
 ## Installation
 
@@ -95,3 +95,7 @@ In order to run the app either locally or in production, the following environme
 - `JWT_SECRET`: a securely generated random password that's not used anywhere else
 - `JWT_VALID_FOR_S`: how long you want users to be authenticated, in seconds. It's a fine trade-off between UX and security, but something like 180 (3 minutes) should be ok
 - `AUTH_MESSAGE_VALID_FOR_MS`: read the [authentication docs](./docs/authentication.md) for more information. Something around 60000 (1 minute) should work.
+
+
+## Api
+[Check api available requests](./docs/api.md)

@@ -5,6 +5,8 @@ import { Scenes } from './entities/scenes.entity';
 import { Guess } from './entities/guess.entity';
 import { Clues } from './entities/clues.entity';
 import { Seasons } from './entities/seasons.entity';
+import { Warps } from './entities/warps.entity';
+import { Images } from './entities/images.entity';
 
 @Injectable()
 export class GameService {
@@ -17,6 +19,10 @@ export class GameService {
     private seasonsRepository: Repository<Seasons>,
     @InjectRepository(Clues)
     private cluesRepository: Repository<Clues>,
+    @InjectRepository(Warps)
+    private warpsRepository: Repository<Warps>,
+    @InjectRepository(Images)
+    private imagesRepository: Repository<Images>,
   ) {}
 
   findSceneById(sceneId: string): Promise<Scenes> {
@@ -64,5 +70,47 @@ export class GameService {
 
   saveGuess(guess: any) {
     return this.guessRepository.save(guess);
+  }
+
+  async createScene(scene: any, season: Seasons) {
+    const newScene = this.scenesRepository.create(scene) as any;
+
+    newScene.seasons = season;
+
+    return this.scenesRepository.save(newScene);
+  }
+
+  createClue(clue: any, scene: Scenes) {
+    const newClue = this.cluesRepository.create(clue) as any;
+
+    newClue.scenes = scene;
+
+    return this.cluesRepository.save(newClue);
+  }
+
+  createWarp(warp: any, scene: Scenes) {
+    const newWarp = this.warpsRepository.create(warp) as any;
+
+    newWarp.scenes = scene;
+
+    return this.warpsRepository.save(newWarp);
+  }
+
+  createImage(image: any, scene: Scenes) {
+    const newImage = this.imagesRepository.create(image) as any;
+
+    newImage.scenes = scene;
+
+    return this.imagesRepository.save(newImage);
+  }
+
+  async updateSceneAvailability(sceneId: any, availability: any) {
+    const scene = await this.findSceneById(sceneId);
+
+    console.log('scene', scene);
+
+    scene.available_at = availability;
+
+    return this.scenesRepository.save(scene);
   }
 }
