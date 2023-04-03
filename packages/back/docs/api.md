@@ -2,18 +2,34 @@
 
 The API accept requests to create new scenes, clues, warps and images.
 
+## Admin Auth
+```bash
+  await fetch(
+    "/auth/admin",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        password: "foo",
+      }),
+    },
+  );
+```
+
 ## Create Scene
 ```bash
   await fetch(
     "/game/create-scene",
     {
       method: "POST",
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsiaXNBZG1pbiI6dHJ1ZX0sImlhdCI6MTY4MDU0NDc3NiwiZXhwIjoxNjgwNTQ1MDc2fQ.mVttHJh8mPBijnJ_9PgcepiaIiNUT93EgKfD2cNs_P8`
+      },
       body: JSON.stringify({
         description: "description",
-        name: "This is a fucking mock bro",
+        name: "Name Example",
         available_at: "2016-03-26 15:10:10+00",
         seasonId: "838d9703-02ca-40d6-93ec-ec723052c0d1",
-      })
+      }),
     },
   );
 ```
@@ -24,6 +40,9 @@ The API accept requests to create new scenes, clues, warps and images.
     "/game/create-clues",
     {
       method: "POST",
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsiaXNBZG1pbiI6dHJ1ZX0sImlhdCI6MTY4MDU0NDc3NiwiZXhwIjoxNjgwNTQ1MDc2fQ.mVttHJh8mPBijnJ_9PgcepiaIiNUT93EgKfD2cNs_P8`
+      },
       body: JSON.stringify({
         "sceneId": "dc9a9254-392a-4d77-84db-60fc52eb6360",
         "clues": [
@@ -52,6 +71,9 @@ The API accept requests to create new scenes, clues, warps and images.
     "/game/create-warps",
     {
       method: "POST",
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsiaXNBZG1pbiI6dHJ1ZX0sImlhdCI6MTY4MDU0NDc3NiwiZXhwIjoxNjgwNTQ1MDc2fQ.mVttHJh8mPBijnJ_9PgcepiaIiNUT93EgKfD2cNs_P8`
+      },
       body: JSON.stringify({
         sceneId: "dc9a9254-392a-4d77-84db-60fc52eb6360",
         warps: [
@@ -75,6 +97,9 @@ The API accept requests to create new scenes, clues, warps and images.
     "/game/create-scene-image",
     {
       method: "POST",
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsiaXNBZG1pbiI6dHJ1ZX0sImlhdCI6MTY4MDU0NDc3NiwiZXhwIjoxNjgwNTQ1MDc2fQ.mVttHJh8mPBijnJ_9PgcepiaIiNUT93EgKfD2cNs_P8`
+      },
       body: JSON.stringify({
         sceneId: "dc9a9254-392a-4d77-84db-60fc52eb6360",
         image: {
@@ -92,6 +117,9 @@ The API accept requests to create new scenes, clues, warps and images.
     "/game/create-scene-image",
     {
       method: "PUT",
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsiaXNBZG1pbiI6dHJ1ZX0sImlhdCI6MTY4MDU0NDc3NiwiZXhwIjoxNjgwNTQ1MDc2fQ.mVttHJh8mPBijnJ_9PgcepiaIiNUT93EgKfD2cNs_P8`
+      },
       body: JSON.stringify({
         availability: "2019-03-26 15:10:10+00",
         sceneId: "dc9a9254-392a-4d77-84db-60fc52eb6360",

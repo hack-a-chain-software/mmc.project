@@ -20,6 +20,8 @@ export interface AuthMessage {
 
 @Injectable()
 export class AuthService {
+  adminPassword: string;
+
   private messageValidForMs: number;
 
   constructor(
@@ -31,6 +33,7 @@ export class AuthService {
     const authConfig = configService.get('auth', { infer: true });
 
     this.messageValidForMs = authConfig.messageValidForMs;
+    this.adminPassword = authConfig.adminPassword;
   }
 
   async authenticate(
@@ -98,9 +101,20 @@ export class AuthService {
     return {
       success: true,
       jwt: await this.jwtService.signAsync({
-        sub: { accountId: success ? accountId : '', seasonId, clues },
+        sub: {
+          clues,
+          seasonId,
+          isAdmin: false,
+          accountId: success ? accountId : '',
+        },
       }),
     };
+  }
+
+  async adminPrivileges() {
+    return await this.jwtService.signAsync({
+      sub: { isAdmin: true },
+    });
   }
 
   validateMessage(message: string): boolean {
