@@ -18,6 +18,7 @@ import { GAME_URI } from './constants';
 import { GameService } from './service';
 import { Guess } from './entities/guess.entity';
 import { Clues } from './entities/clues.entity';
+import { Warps } from './entities/warps.entity';
 import { NearService } from 'src/near/service';
 
 interface GuessDto {
@@ -35,6 +36,10 @@ export class GameController {
     private nearService: NearService,
     @InjectRepository(Guess)
     private guessRepository: Repository<Guess>,
+    @InjectRepository(Clues)
+    private cluesRepository: Repository<Clues>,
+    @InjectRepository(Warps)
+    private warpsRepository: Repository<Warps>,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -183,6 +188,29 @@ export class GameController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Put('update-clue')
+  async updateClue(
+    @Body() body: any,
+    @Request() req: JwtValidatedRequest,
+    @Response() res: express.Response,
+  ) {
+    if (!req.user.isAdmin) {
+      return res.status(400).json({ success: false, error: 'Only for Admin' });
+    }
+
+    const { clue } = body;
+
+    const currentClue = await this.gameService.findClueById(clue.id);
+
+    const updatedClue = await this.cluesRepository.save({
+      ...currentClue,
+      clue,
+    });
+
+    return res.status(200).json(updatedClue);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('create-warps')
   async createWarps(
     @Body() body: any,
@@ -207,6 +235,29 @@ export class GameController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Put('update-warp')
+  async updateWarp(
+    @Body() body: any,
+    @Request() req: JwtValidatedRequest,
+    @Response() res: express.Response,
+  ) {
+    if (!req.user.isAdmin) {
+      return res.status(400).json({ success: false, error: 'Only for Admin' });
+    }
+
+    const { warp } = body;
+
+    const currentClue = await this.gameService.findClueById(warp.id);
+
+    const updatedClue = await this.warpsRepository.save({
+      ...currentClue,
+      warp,
+    });
+
+    return res.status(200).json(updatedClue);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Post('create-scene-image')
   async createSceneImage(
     @Body() body: any,
@@ -227,7 +278,25 @@ export class GameController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put('update-scene-availability')
+  @Put('update-scene-image')
+  async updateSceneImage(
+    @Body() body: any,
+    @Request() req: JwtValidatedRequest,
+    @Response() res: express.Response,
+  ) {
+    if (!req.user.isAdmin) {
+      return res.status(400).json({ success: false, error: 'Only for Admin' });
+    }
+
+    const { image } = body;
+
+    const updatedImage = await this.gameService.updateImage(image);
+
+    return res.status(200).json(updatedImage);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('update-scene')
   async updateSceneAvailability(
     @Body() body: any,
     @Request() req: JwtValidatedRequest,
@@ -237,12 +306,9 @@ export class GameController {
       return res.status(400).json({ success: false, error: 'Only for Admin' });
     }
 
-    const { sceneId, availability } = body;
+    const { scene } = body;
 
-    const updatedScene = await this.gameService.updateSceneAvailability(
-      sceneId,
-      availability,
-    );
+    const updatedScene = await this.gameService.updateScene(scene);
 
     return res.status(200).json(updatedScene);
   }

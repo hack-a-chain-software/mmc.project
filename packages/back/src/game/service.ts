@@ -38,6 +38,22 @@ export class GameService {
     });
   }
 
+  findClueById(clueId: string ): Promise<Clues> {
+    return this.cluesRepository.findOne({
+      where: {
+        id: clueId,
+      },
+    });
+  }
+
+  findImageById(imageId: string) {
+    return this.imagesRepository.findOne({
+      where: {
+        id: imageId,
+      },
+    });
+  }
+
   findAllScenes(): Promise<Scenes[]> {
     return this.scenesRepository.find({
       relations: {
@@ -104,13 +120,21 @@ export class GameService {
     return this.imagesRepository.save(newImage);
   }
 
-  async updateSceneAvailability(sceneId: any, availability: any) {
-    const scene = await this.findSceneById(sceneId);
+  async updateScene(scene: Scenes) {
+    const currentScene = await this.findSceneById(scene.id);
 
-    console.log('scene', scene);
+    return this.scenesRepository.save({
+      ...currentScene,
+      ...scene,
+    });
+  }
 
-    scene.available_at = availability;
+  async updateImage(image: Partial<Images>): Promise<Images> {
+    const currentImage = await this.findImageById(image.id);
 
-    return this.scenesRepository.save(scene);
+    return await this.imagesRepository.save({
+      ...currentImage,
+      ...image,
+    });
   }
 }
