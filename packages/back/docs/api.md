@@ -1,6 +1,6 @@
 # Game API
 
-The API accept requests to create new scenes, clues, warps and images.
+The MMC API accepts requests to login, create new scenes, clues, warps and images.
 
 ## Admin Auth
 ```bash
@@ -65,6 +65,26 @@ The API accept requests to create new scenes, clues, warps and images.
   );
 ```
 
+## Update Clues
+```bash
+  await fetch(
+    "/game/update-clue",
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsiaXNBZG1pbiI6dHJ1ZX0sImlhdCI6MTY4MDU0NDc3NiwiZXhwIjoxNjgwNTQ1MDc2fQ.mVttHJh8mPBijnJ_9PgcepiaIiNUT93EgKfD2cNs_P8`
+      },
+      body: JSON.stringify({
+        clue:{
+            id: "foo",
+            media: "./images/clues/ramen.png",
+            placeholder: "./images/clues/ramen-silhouette.png",
+        },
+      }),
+    },
+  );
+```
+
 ## Create Warps
 ```bash
   await fetch(
@@ -91,6 +111,26 @@ The API accept requests to create new scenes, clues, warps and images.
   );
 ```
 
+## Update Warp
+```bash
+  await fetch(
+    "/game/update-warp",
+    {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsiaXNBZG1pbiI6dHJ1ZX0sImlhdCI6MTY4MDU0NDc3NiwiZXhwIjoxNjgwNTQ1MDc2fQ.mVttHJh8mPBijnJ_9PgcepiaIiNUT93EgKfD2cNs_P8`
+      },
+      body: JSON.stringify({
+        warp:{
+            id: "foo",
+            width: 15,
+            height: 15,
+        },
+      }),
+    },
+  );
+```
+
 ## Create Scene Image
 ```bash
   await fetch(
@@ -111,18 +151,20 @@ The API accept requests to create new scenes, clues, warps and images.
   );
 ```
 
-## Update Scene Availability
+## Update Scene
 ```bash
   await fetch(
-    "/game/create-scene-image",
+    "/game/update-scene",
     {
       method: "PUT",
       headers: {
         Authorization: `Bearer eyJhbGciOiJI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsiaXNBZG1pbiI6dHJ1ZX0sImlhdCI6MTY4MDU0NDc3NiwiZXhwIjoxNjgwNTQ1MDc2fQ.mVttHJh8mPBijnJ_9PgcepiaIiNUT93EgKfD2cNs_P8`
       },
       body: JSON.stringify({
-        availability: "2019-03-26 15:10:10+00",
-        sceneId: "dc9a9254-392a-4d77-84db-60fc52eb6360",
+        scene: {
+            available_at: "2019-03-26 15:10:10+00",
+            sceneId: "dc9a9254-392a-4d77-84db-60fc52eb6360",
+        }
       }),
     },
   );
