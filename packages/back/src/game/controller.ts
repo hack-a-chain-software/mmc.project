@@ -247,14 +247,14 @@ export class GameController {
 
     const { warp } = body;
 
-    const currentClue = await this.gameService.findClueById(warp.id);
+    const currentWarp = await this.gameService.findWarpById(warp.id);
 
-    const updatedClue = await this.warpsRepository.save({
-      ...currentClue,
-      warp,
+    const updatedWarp = await this.warpsRepository.save({
+      ...currentWarp,
+      ...warp,
     });
 
-    return res.status(200).json(updatedClue);
+    return res.status(200).json(updatedWarp);
   }
 
   @UseGuards(JwtAuthGuard)

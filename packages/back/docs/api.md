@@ -122,9 +122,9 @@ The MMC API accepts requests to login, create new scenes, clues, warps and image
       },
       body: JSON.stringify({
         warp:{
-            id: "foo",
-            width: 15,
-            height: 15,
+            id: "7dced706-5ff6-40a8-a595-35048e834d83",
+            position_top: 71,
+            position_left: 17
         },
       }),
     },
@@ -163,7 +163,7 @@ The MMC API accepts requests to login, create new scenes, clues, warps and image
       body: JSON.stringify({
         scene: {
             available_at: "2019-03-26 15:10:10+00",
-            sceneId: "dc9a9254-392a-4d77-84db-60fc52eb6360",
+            id: "dc9a9254-392a-4d77-84db-60fc52eb6360",
         }
       }),
     },

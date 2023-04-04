@@ -54,6 +54,14 @@ export class GameService {
     });
   }
 
+  findWarpById(warpId: string) {
+    return this.warpsRepository.findOne({
+      where: {
+        id: warpId,
+      },
+    });
+  }
+
   findAllScenes(): Promise<Scenes[]> {
     return this.scenesRepository.find({
       relations: {
