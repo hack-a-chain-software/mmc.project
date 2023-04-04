@@ -54,7 +54,12 @@ describe('AuthService', () => {
       const jwtServiceMock: DeepMocked<JwtService> = module.get(JwtService);
       expect(jwtServiceMock.signAsync).toHaveBeenCalledWith(
         expect.objectContaining({
-          sub: { accountId: 'signer.near', clues: [], seasonId: 'abcdef' },
+          sub: {
+            accountId: 'signer.near',
+            clues: [],
+            seasonId: 'abcdef',
+            isAdmin: false,
+          },
         }),
       );
     });
