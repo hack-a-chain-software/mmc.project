@@ -442,12 +442,12 @@ async function testnetSetup() {
   //insert_mistery_answer(&mut self, guess: Guess) {
   console.log("setup.js: Inserting the answer to the mistery");
 
-  //create the guess object - random number can be ignored 
+  //create the guess object - random number can be ignored
   let guess = {
     account_id: execution_data.connAccountMap.ownerAccount.accountId,
-    murderer: "John",
-    weapon: "Glock",
-    motive: "Jealous",
+    murderer: "Ima Resting",
+    weapon: "Meat Cleaver",
+    motive: "Discovered Petey's true identity",
     random_number: "1"
   };
 
@@ -461,8 +461,8 @@ async function testnetSetup() {
     attachedDeposit: new BN(1),
   });
 
-  //Insert clue ranking - loop trough the clues and add the amount of rewards each is elegible to 
-  //pub fn insert_clue_raniking(&mut self, token_id: TokenId, rewards: U128) 
+  //Insert clue ranking - loop trough the clues and add the amount of rewards each is elegible to
+  //pub fn insert_clue_raniking(&mut self, token_id: TokenId, rewards: U128)
   console.log("setup.js: Ranking the clues");
 
   for (let i = 0; i < totalClues; i++) {
