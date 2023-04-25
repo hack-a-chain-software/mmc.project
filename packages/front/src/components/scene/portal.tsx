@@ -10,7 +10,10 @@ interface PortalInterface {
 	position: Position;
 }
 
-export const Portal = ({ position, onClick = () => {} }: PortalInterface) => {
+export const Portal = ({
+    position,
+    onClick = () => {}
+  }: PortalInterface) => {
 	return (
 		<div
 			style={position}

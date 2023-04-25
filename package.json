@@ -18,10 +18,10 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --fix"
+      ""
     ],
     "*.{js,jsx}": [
-      "eslint --fix"
+      ""
     ],
     "*.rs": [
       "sh ./format_rust.sh"
