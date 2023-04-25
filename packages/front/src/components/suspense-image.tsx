@@ -12,6 +12,8 @@ export function SuspenseImage(props) {
 		const resource = TSResource(src, () => {
 			return new Promise((resolve) => {
 				const img = new Image();
+        img.decoding="async";
+
 				img.onload = () => {
 					resolve(src);
 				};

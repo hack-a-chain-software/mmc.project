@@ -196,7 +196,7 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
       controls,
       getScene,
       hideScene,
-    } = get();
+    } = await get();
 
     if (!controls) {
       return;

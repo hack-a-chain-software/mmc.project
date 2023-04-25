@@ -3,7 +3,6 @@ import { Portal } from './portal';
 import { useEffect, useState } from 'react';
 import { SuspenseImage } from '@/components';
 import { useGame } from '@/stores/game';
-import { twMerge } from 'tailwind-merge';
 import { firstScene } from '@/constants/env';
 
 export const Scene = () => {
@@ -12,6 +11,7 @@ export const Scene = () => {
   const {
     scene,
     controls,
+    isLoading,
     moveToScene,
     openScene,
   } = useGame();
@@ -67,6 +67,10 @@ export const Scene = () => {
 					<Portal
 						position={{ left: `${position_left as string}%`, top: `${position_top as string}%` }}
 						onClick={() => {
+              if (!isLoading) {
+                return;
+              }
+
               setShowVideo(false);
               void moveToScene(warps_to as string);
             }}
