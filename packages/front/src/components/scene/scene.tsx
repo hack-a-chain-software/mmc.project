@@ -33,7 +33,7 @@ export const Scene = () => {
 	return (
 		<div className="relative bg-blue-100 min-h-screen">
       <div
-        className="absolute -top-[80px] z-[9999999999] scale-[0.6] opacity-1 pointer-events-none"
+        className="absolute -top-[80px] z-[9] scale-[0.6] opacity-1 pointer-events-none"
       >
         {
           showVideo && scene &&
