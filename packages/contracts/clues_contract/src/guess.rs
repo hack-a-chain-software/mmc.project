@@ -112,19 +112,23 @@ impl Contract {
 
     let reward = self.calculate_guess_reward(guess, timestamp);
 
-    ext_interface::token_contract::ext(self.locked_tokens_address.clone())
-      .with_static_gas(BASE_GAS)
-      .with_attached_deposit(1)
-      .ft_transfer(
-        account_id.clone().to_string(),
-        reward,
-        "Guess reward".to_string(),
-      )
-      .then(
-        ext_interface::ext_self::ext(env::current_account_id())
-          .with_static_gas(BASE_GAS)
-          .undo_guess(hash, account_id),
-      );
+    if reward <= U128(0) {
+      ext_interface::token_contract::ext(self.locked_tokens_address.clone())
+        .with_static_gas(BASE_GAS)
+        .with_attached_deposit(1)
+        .ft_transfer(
+          account_id.clone().to_string(),
+          reward,
+          "Guess reward".to_string(),
+        )
+        .then(
+          ext_interface::ext_self::ext(env::current_account_id())
+            .with_static_gas(BASE_GAS)
+            .undo_guess(hash, account_id),
+        );
+    } else {
+      self.undo_guess(hash, account_id);
+    }
   }
 }
 
