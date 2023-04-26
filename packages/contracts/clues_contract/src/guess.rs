@@ -112,7 +112,7 @@ impl Contract {
 
     let reward = self.calculate_guess_reward(guess, timestamp);
 
-    if reward <= U128(0) {
+    if reward > U128(0) {
       ext_interface::token_contract::ext(self.locked_tokens_address.clone())
         .with_static_gas(BASE_GAS)
         .with_attached_deposit(1)
@@ -309,16 +309,16 @@ mod tests {
     // --------- insert 2 guesses manually
     let guess = Guess {
       account_id: accounts(0),
-      murderer: "John".to_string(),
-      weapon: "Glock".to_string(),
-      motive: "Jealous".to_string(),
+      murderer: "Ima Resting".to_string(),
+      weapon: "Meat Cleaver".to_string(),
+      motive: "Discovered Petey's true identity".to_string(),
       random_number: U128(1),
     };
 
     let guess2 = Guess {
       account_id: accounts(0),
-      murderer: "John".to_string(),
-      weapon: "Knife".to_string(),
+      murderer: "John Galt".to_string(),
+      weapon: "Meat Cleaver".to_string(),
       motive: "Hunger".to_string(),
       random_number: U128(1),
     };
