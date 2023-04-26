@@ -127,7 +127,16 @@ impl Contract {
             .undo_guess(hash, account_id),
         );
     } else {
-      self.undo_guess(hash, account_id);
+      self.guesses.remove(&hash);
+
+      let mut set = self
+        .guesses_owners
+        .get(&account_id)
+        .expect("Guess already removed from owner");
+
+      set.remove(&hash);
+
+      self.guesses_owners.insert(&account_id, &set);
     }
   }
 }
@@ -314,18 +323,29 @@ mod tests {
       random_number: U128(1),
     };
 
+    let guess3 = Guess {
+      account_id: accounts(0),
+      murderer: "potato".to_string(),
+      weapon: "tomato".to_string(),
+      motive: "apple".to_string(),
+      random_number: U128(1),
+    };
+
     //get the hash for both guesses
     let guess_hash = contract.view_hash(guess.clone());
     let guess_hash2 = contract.view_hash(guess2.clone());
+    let guess_hash3 = contract.view_hash(guess3.clone());
 
     contract.guesses.insert(&guess_hash, &guessing_date);
     contract.guesses.insert(&guess_hash2, &guessing_date);
+    contract.guesses.insert(&guess_hash3, &guessing_date);
 
     let mut set = UnorderedSet::new(StorageKey::GuessSet {
       account: accounts(0),
     });
     set.insert(&guess_hash);
     set.insert(&guess_hash2);
+    set.insert(&guess_hash3);
     contract.guesses_owners.insert(&accounts(0), &set);
 
     // --------- insert the answer and the rewards
@@ -333,9 +353,13 @@ mod tests {
     contract.answer = Some(guess.clone());
     contract.rewards_guessing = Some(elegible_rewards);
 
+    contract.claim_guess_rewards(guess3.clone());
+
     let rewards_1 = contract.view_guess_reward(guess);
     let rewards_2 = contract.view_guess_reward(guess2);
+    let rewards_3 = contract.view_guess_reward(guess3);
     assert_eq!(rewards_1, U128(283_330));
     assert_eq!(rewards_2, U128(94_440));
+    assert_eq!(rewards_3, U128(0));
   }
 }
