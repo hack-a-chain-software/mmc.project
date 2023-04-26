@@ -27,6 +27,7 @@ export const GuessFormModal = ({
   });
 
   const {
+    overlay,
     onShowModal,
     onCloseModal,
   } = useModal();
@@ -43,6 +44,7 @@ export const GuessFormModal = ({
     onShowModal('overlay');
 
     await sendGuess(guess as GuessDto, accountId, selector as any);
+
     setGuess({ ...defaultGuess });
 
     await onCloseModal('overlay');
@@ -53,7 +55,13 @@ export const GuessFormModal = ({
   return (
     <ModalTemplate
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={() => {
+        if (overlay) {
+          return;
+        }
+
+        onClose();
+      }}
       title="Ready to guess?"
       className="w-full max-w-3xl transform overflow-hidden bg-black shadow-xl transition-all text-white"
     >

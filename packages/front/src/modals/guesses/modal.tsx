@@ -1,11 +1,10 @@
 import { GuessInterface } from '@/interfaces';
 import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { useGame } from '@/stores/game';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import { ModalTemplate } from '../modal-template';
 import { GuessItem } from './guess-item';
-import { Button } from '@/components';
 import { useUser } from '@/stores/user';
 import { useModal } from '@/stores/modal';
 
@@ -13,21 +12,26 @@ export type GuessesModalInterface = Partial<BaseModalPropsInterface>;
 
 export const GuessesModal = () => {
   const {
+    overlay,
     guesses: isOpen,
     onShowModal,
     onCloseModal,
   } = useModal();
 
-  const { claimAllGuessingRewards, getGuess } = useGame();
+  const { claimGuessRewards, getGuess } = useGame();
+
   const {
     accountId,
     autenticated,
   } = useUser();
 
   const [guesses, setGuesses] = useState<GuessInterface[]>([]);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(isOpen);
+
     if (!accountId || !autenticated || !isOpen) {
       return;
     }
@@ -40,93 +44,49 @@ export const GuessesModal = () => {
     })();
   }, [accountId, isOpen]);
 
-  const allGuessingIsBurned = useMemo(() => {
-    return guesses.every((guess) => guess.burned);
-  }, [guesses]);
+  const claimRewards = async (guess) => {
+    await onShowModal('overlay');
 
-  const claimAll = async () => {
-    onShowModal('overlay');
+    try {
+      await claimGuessRewards(guess);
+    } catch (e) {
+      console.warn('error', e);
+    }
 
-    await claimAllGuessingRewards();
+    await onCloseModal('overlay');
 
-    onCloseModal('overlay');
+    setIsLoading(true);
+    const userGuesses = await getGuess();
+    setGuesses((userGuesses || []) as GuessInterface[]);
+    setIsLoading(false);
   };
 
   return (
     <ModalTemplate
       isOpen={isOpen}
-      onClose={() => onCloseModal('guesses')}
+      onClose={() => {
+        if (overlay) {
+          return;
+        }
+
+        onCloseModal('guesses');
+      }}
       title="My Guesses"
     >
       <div
-        className="flex flex-col max-h-[420px] overflow-auto w-full space-y-2"
+        className="grid grid-cols-[repeat(auto-fill,minmax(263px,262px))] gap-4 justify-center flex-grow max-h-[400px] h-[400px] overflow-auto w-full pb-12"
       >
-        {!isLoading && !isEmpty(guesses) && (
-          <div
-            className="grid grid-cols-12 max-w-full gap-2"
-          >
-            <div
-              className="col-span-2 overflow-hidden text-left"
-            >
-              <span
-                className="text-xs font-bold"
-              >
-                Murdered
-              </span>
-            </div>
-
-            <div
-              className="col-span-3 overflow-hidden text-left"
-            >
-              <span
-                className="text-xs font-bold"
-              >
-                Weapon
-              </span>
-            </div>
-
-            <div
-              className="col-span-4 overflow-hidden text-left"
-            >
-              <span
-                className="text-xs font-bold"
-              >
-                Motive
-              </span>
-            </div>
-
-            <div
-              className="col-span-2 overflow-hidden text-left"
-            >
-              <span
-                className="text-xs font-bold"
-              >
-                Created At
-              </span>
-            </div>
-
-            <div
-              className="col-span-1 overflow-hidden text-left"
-            >
-              <span
-                className="text-xs font-bold"
-              >
-                Claimed
-              </span>
-            </div>
-          </div>
-        )}
-
         {!isLoading && !isEmpty(guesses) && guesses.map((guess, index) => (
           <GuessItem
             {...guess}
             order={index + 1}
             key={guess.id}
+            burned={guess.burned}
+            claimRewards={() => claimRewards(guess)}
           />
         ))}
 
         {!isLoading && isEmpty(guesses) && (
-
           <div
             className="flex items-center justify-center bg-blue h-[300px]"
           >
@@ -140,29 +100,11 @@ export const GuessesModal = () => {
 
         {isLoading && (
           <div
-            className="flex items-center justify-center h-[300px] w-full"
+            className="flex items-center justify-center h-[300px] w-full col-span-12"
           >
             <svg className="animate-spin h-8 w-8 border border-l-black rounded-full" viewBox="0 0 24 24"/>
           </div>
         )}
-      </div>
-
-      <div
-        className="pt-8 flex items-center"
-      >
-        <div
-          className="flex-grow flex justify-center mr-8"
-        >
-          {!isLoading && !allGuessingIsBurned && !isEmpty(guesses) && (
-            <Button
-              onClick={() => claimAll()}
-              disabled={allGuessingIsBurned && isEmpty(guesses)}
-              className="disabled:opacity-75 disabled:cursor-not-allowed"
-            >
-              <span>Claim all guessing rewards</span>
-            </Button>
-          )}
-        </div>
       </div>
     </ModalTemplate>
   );

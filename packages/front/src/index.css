@@ -190,6 +190,7 @@ body {
 .modal-open {
   height: 100vh !important;
   overflow: hidden !important;
+  pointer-events: none;
 }
 
 .clip-shadow {

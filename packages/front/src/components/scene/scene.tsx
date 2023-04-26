@@ -17,7 +17,7 @@ export const Scene = () => {
   } = useGame();
 
 	useEffect(() => {
-    if (!!!scene || !!!controls) {
+    if (!!!scene || !!!controls || isLoading) {
       return;
     }
 

@@ -191,6 +191,20 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
     }
   },
 
+  claimGuessRewards: async (guess) => {
+    const {
+      sendRequest,
+    } = useUser.getState();
+
+    try {
+      const { data } = await sendRequest('/game/rewards', 'post', { ...guess });
+
+      return data;
+    } catch (e) {
+      console.warn(e);
+    }
+  },
+
   moveToScene: async (id) => {
 		const {
       controls,

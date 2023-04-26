@@ -41,6 +41,8 @@ export const useModal = create<ModalStoreInterface>((set, get) => ({
     return new Promise((resolve) => {
       if (!reset) {
         setTimeout(resolve, 200);
+
+        return;
       }
 
       void (() => {

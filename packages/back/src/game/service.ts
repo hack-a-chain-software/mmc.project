@@ -84,6 +84,14 @@ export class GameService {
     });
   }
 
+  findGuessByHash(hash: string): Promise<Guess> {
+    return this.guessRepository.findOneOrFail({
+      where: {
+        hash,
+      },
+    });
+  }
+
   findGuessByWalletId(walletId: string): Promise<Guess[]> {
     return this.guessRepository.find({
       where: {

@@ -45,6 +45,7 @@ export interface GameStoreInterface {
 	getClues: () => Promise<ClueInterface[]>;
   getGuess: () => Promise<GuessInterface[]>,
   claimAllGuessingRewards: () => Promise<void>,
+  claimGuessRewards: (GuessDto) => Promise<void>,
 	claimClue: (
 		tokenid: string,
     currency: GameCurrencyInterface,

@@ -316,6 +316,7 @@ export class GameController {
   @UseGuards(JwtAuthGuard)
   @Post('rewards')
   async rewards(
+    @Body() body: GuessDto,
     @Request() req: JwtValidatedRequest,
     @Response() res: express.Response,
   ) {
@@ -323,42 +324,35 @@ export class GameController {
       return res.status(400).json({ success: false, error: 'not validated' });
     }
 
-    const guesses = (await this.gameService.findGuessByWalletId(
-      req.user.accountId,
-    )) as Guess[];
+    const guess = await this.gameService.findGuessByHash(body.hash);
+
+    if (guess.burned) {
+      return res.status(200).json({
+        success: false,
+        error: 'You already collected this ticket',
+      });
+    }
 
     try {
-      const transactions = await Promise.all(
-        guesses
-          .filter(({ burned }) => !burned)
-          .map(
-            async ({
-              id,
-              wallet_id,
-              murdered,
-              weapon,
-              motive,
-              random_number,
-            }: Guess) => {
-              await this.nearService.claimGuessRewards({
-                account_id: wallet_id,
-                murderer: murdered,
-                weapon,
-                motive,
-                random_number,
-              });
+      const txHash = await this.nearService.claimGuessRewards({
+        account_id: guess.wallet_id,
+        murderer: guess.murdered,
+        weapon: guess.weapon,
+        motive: guess.motive,
+        random_number: guess.random_number,
+      });
 
-              await this.guessRepository.update(
-                { id },
-                {
-                  burned: true,
-                },
-              );
-            },
-          ),
+      await this.guessRepository.update(
+        { id: guess.id },
+        {
+          burned: true,
+        },
       );
 
-      return res.status(200).json(transactions);
+      return res.status(200).json({
+        ...body,
+        burned: true,
+      });
     } catch (e) {
       return res.status(400).json({
         success: false,

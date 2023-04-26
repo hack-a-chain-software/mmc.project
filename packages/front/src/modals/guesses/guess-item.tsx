@@ -1,8 +1,5 @@
+import { Button } from '@/components';
 import { GuessInterface } from '@/interfaces';
-// import { shortenAddress } from '@/helpers';
-import { format } from 'date-fns';
-import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { twMerge } from 'tailwind-merge';
 
 export const GuessItem = ({
   order,
@@ -11,69 +8,77 @@ export const GuessItem = ({
   weapon,
   murdered,
   created_at,
-}: GuessInterface & { order: number }) => (
- <div
-  className={
-    twMerge(
-      'grid grid-cols-12 max-w-full',
-      order % 2 === 1 && 'bg-white/10',
-    )
-  }
- >
+  claimRewards,
+}: GuessInterface & { order: number, claimRewards: () => Promise<void> }) => (
   <div
-    className="col-span-2 overflow-hidden"
+    className="
+      px-6
+      py-6
+      space-y-4
+      bg-white
+      rounded-md
+      bg-[rgba(255,255,255,0.1);]
+      flex flex-col items-stretch justify-center
+    "
   >
-    <span
-      title={murdered}
-      children={murdered}
-      className="text-xs"
-    />
-  </div>
+    <div
+      className="flex flex-col overflow-hidden"
+    >
+      <span
+        className="text-xs font-bold"
+      >
+        Murdered
+      </span>
 
-  <div
-    className="col-span-3 overflow-hidden max-w-full truncate"
-  >
-    <span
-      title={weapon}
-      children={weapon}
-      className="text-xs"
-    />
-  </div>
-
-  <div
-    className="col-span-4 overflow-hidden max-w-full truncate"
-  >
-    <span
-      title={motive}
-      children={motive}
-      className="text-xs"
-    />
-  </div>
-
-  <div
-    className="col-span-2 overflow-hidden"
-  >
-    <span
-      className="text-xs"
-      title={format(new Date(created_at as string), 'y MM dd')}
-      children={format(new Date(created_at as string), 'y MM dd')}
-    />
-  </div>
-
-  <div
-    className="col-span-1 flex justify-center"
-  >
-    {burned && (
-      <CheckIcon
-        className="text-white w-6 h-6"
+      <span
+        title={murdered}
+        children={murdered}
+        className="text-xs"
       />
-    )}
+    </div>
 
-    {!burned && (
-      <XMarkIcon
-        className="text-white w-6 h-6"
+    <div
+      className="flex flex-col overflow-hidden"
+    >
+      <span
+        className="text-xs font-bold"
+      >
+        Weapon
+      </span>
+
+      <span
+        title={weapon}
+        children={weapon}
+        className="text-xs"
       />
-      )}
-  </div>
+    </div>
+
+    <div
+      className="flex flex-col overflow-hidden"
+    >
+      <span
+        className="text-xs font-bold"
+      >
+        Motive
+      </span>
+
+      <span
+        title={motive}
+        children={motive}
+        className="text-xs"
+      />
+    </div>
+
+    <div
+      className="flex flex-col overflow-hidden"
+    >
+      <Button
+        onClick={() => void claimRewards()}
+        disabled={burned}
+        className="w-full text-xs flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto disabled:hover:bg-purple-0 disabled:hover:text-white"
+      >
+        Claim Rewards
+      </Button>
+    </div>
  </div>
 );
