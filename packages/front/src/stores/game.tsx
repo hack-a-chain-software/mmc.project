@@ -387,7 +387,7 @@ export const useGame = create<GameStoreInterface>((set, get) => ({
       sendRequest,
     } = useUser.getState();
 
-		const randomNumber = (Math.random() * 7).toFixed(0);
+		const randomNumber = Date.now() + (Math.random() * 7).toFixed(0);
 
 		const guessHash = await viewFunction(connection, gameContract, 'view_hash', {
       guess: {
