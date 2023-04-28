@@ -83,10 +83,12 @@ export const LockedTokensModal = () => {
 
   useEffect(() => {
     return () => {
-      setPrograms([]);
-      setTotalPages(1);
-      setCurrentPage(0);
-      setIsLoadingPrograms(true);
+      setTimeout(() => {
+        setPrograms([]);
+        setTotalPages(1);
+        setCurrentPage(0);
+        setIsLoadingPrograms(true);
+      }, 210);
     }
   }, [isOpen]);
 
