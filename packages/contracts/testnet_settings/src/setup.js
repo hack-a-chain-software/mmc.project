@@ -136,21 +136,33 @@ async function testnetSetup() {
   await deployToken(
     'usdtTokenAccount',
     TOKEN_SUPPLY,
-    tokenArray[0],
+    {
+      ...tokenArray[0],
+      name: "USDT",
+      symbol: "USDT",
+    },
     execution_data,
   );
 
   await deployToken(
     'nekoTokenAccount',
     TOKEN_SUPPLY,
-    tokenArray[1],
+    {
+      ...tokenArray[1],
+      name: "USDC",
+      symbol: "USDC",
+    },
     execution_data,
   );
 
   await deployToken(
     'auroraTokenAccount',
     TOKEN_SUPPLY,
-    tokenArray[2],
+    {
+      ...tokenArray[2],
+      name: "MMCToken",
+      symbol: "MMCT",
+    },
     execution_data,
   );
 
