@@ -88,7 +88,7 @@ export const GuessesModal = () => {
 
         {!isLoading && isEmpty(guesses) && (
           <div
-            className="flex items-center justify-center bg-blue h-[300px]"
+            className="flex items-center justify-center bg-blue h-[300px] col-span-12"
           >
             <span
               className="text-white"

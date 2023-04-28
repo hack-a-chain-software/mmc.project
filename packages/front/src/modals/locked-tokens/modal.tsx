@@ -49,7 +49,7 @@ export const LockedTokensModal = () => {
   } = useUser();
 
   const isLoading = useMemo(() => {
-    return !autenticated || !isOpen || !accountId;
+    return !autenticated || !accountId || !isOpen;
   }, [autenticated, isOpen, accountId]);
 
 	const loadMore = async (nextPage: number) => {
@@ -81,7 +81,18 @@ export const LockedTokensModal = () => {
     }
 	};
 
+  useEffect(() => {
+    return () => {
+      setPrograms([]);
+      setTotalPages(1);
+      setCurrentPage(0);
+      setIsLoadingPrograms(true);
+    }
+  }, [isOpen]);
+
 	useEffect(() => {
+    console.log(autenticated, accountId);
+
 		if (isLoading) {
 			return;
 		}
