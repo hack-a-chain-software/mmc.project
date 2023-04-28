@@ -5,14 +5,13 @@ import {
   CurrencyModalInterface,
   SceneClueModalInterface,
   LockedTokensModalInterface,
-  FastPassModalPropsInterface,
   StakeNftModalPropsInterface,
   ConfirmStakeClueModalInterface,
 } from '@/modals';
 
 export type Key = 'currency' | 'lockedTokens' | 'fastPass' | 'gameClues' | 'guess' | 'guesses' | 'sceneClue' | 'stakeNft' | 'confirmStakeClue' | 'overlay';
 
-export type ModalProps = GuessModalInterface | GuessesModalInterface | GameClueModalInterface | CurrencyModalInterface | SceneClueModalInterface | FastPassModalPropsInterface | StakeNftModalPropsInterface | LockedTokensModalInterface | ConfirmStakeClueModalInterface;
+export type ModalProps = GuessModalInterface | GuessesModalInterface | GameClueModalInterface | CurrencyModalInterface | SceneClueModalInterface | StakeNftModalPropsInterface | LockedTokensModalInterface | ConfirmStakeClueModalInterface;
 
 export interface Props {
   guess?: GuessModalInterface,
@@ -20,7 +19,6 @@ export interface Props {
   currency?: CurrencyModalInterface,
   gameClues?: GameClueModalInterface,
   sceneClue?: SceneClueModalInterface,
-  fastPass?: FastPassModalPropsInterface,
   stakeNft?: StakeNftModalPropsInterface,
   lockedTokens?: LockedTokensModalInterface,
   confirmStakeClue?: ConfirmStakeClueModalInterface,

@@ -4,6 +4,7 @@ export const network = import.meta.env.VITE_NEAR_NETWORK || 'testnet';
 // Game
 export const gameSeason = import.meta.env.VITE_SEASON_ID;
 export const firstScene = import.meta.env.VITE_FIRST_SCENE_ID;
+export const showClues = import.meta.env.VITE_SHOW_CLUES || false;
 
 // Contracts
 export const tokenContract = import.meta.env.VITE_TOKEN_CONTRACT;

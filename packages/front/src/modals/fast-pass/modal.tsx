@@ -1,4 +1,4 @@
-import Big from 'big.js';
+// import Big from 'big.js';
 import { useMemo } from 'react';
 import { Button } from '@/components';
 import { useGame } from '@/stores/game';
@@ -6,11 +6,11 @@ import { ModalTemplate } from '../modal-template';
 import { FungibleTokenMetadata } from '@/interfaces';
 import { BaseModalPropsInterface } from '@/interfaces/modal';
 import { useWallet } from '@/stores/wallet';
-import { useModal } from '@/stores/modal';
 
 export interface FastPassModalPropsInterface extends Partial<
   BaseModalPropsInterface
 > {
+  onClose: () => void
   token: FungibleTokenMetadata;
   isOpen: boolean;
   acceleration: number;
@@ -19,32 +19,30 @@ export interface FastPassModalPropsInterface extends Partial<
   passCost: string;
 }
 
-export const FastPassModal = () => {
-  const {
-    props,
-    fastPass,
-    onCloseModal,
-  } = useModal();
-
-  const {
-    token,
-    passCost,
-    vestingId,
-    totalAmount,
-    acceleration,
-  } = useMemo(
-    () => props.fastPass as FastPassModalPropsInterface || {}, [props]);
-
+export const FastPassModal = ({
+  token,
+  isOpen,
+  passCost,
+  vestingId,
+  totalAmount,
+  acceleration,
+  onClose,
+}: FastPassModalPropsInterface) => {
   const { accountId, selector } = useWallet();
 
   const { buyFastPass } = useGame();
 
-  const decimals = useMemo(() => {
-    return new Big(10).pow(token?.decimals ?? 0);
-  }, [token]);
+  // const decimals = useMemo(() => {
+  //   return new Big(10).pow(token?.decimals ?? 0);
+  // }, [token]);
 
   const formattedTotal = useMemo(() => {
-    return new Big(totalAmount ?? 0).mul(0.05).div(decimals).toFixed(2);
+    return new Intl.NumberFormat('en-IN', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2,
+    }).format(+totalAmount);
+
+    // return new Big(totalAmount ?? 0).mul(0.05).div(decimals).toFixed(2);
   }, [totalAmount, token]);
 
   const buy = async () => {
@@ -63,8 +61,8 @@ export const FastPassModal = () => {
 
   return (
     <ModalTemplate
-      isOpen={fastPass}
-      onClose={() => onCloseModal('fastPass')}
+      isOpen={isOpen}
+      onClose={() => onClose()}
       title="Buy Fast Pass!"
       className="max-w-md text-black bg-white rounded-md"
     >
@@ -76,7 +74,7 @@ export const FastPassModal = () => {
       </div>
 
       <div className="text-sm">
-        <span>Time decrease:{
+        <span>Time decrease: {
           (-100 / acceleration + 100).toFixed(0)
         }%</span>
       </div>

@@ -79,15 +79,30 @@ export const LockedTokensCard = (
   }, [props]);
 
   const totalAmount = useMemo((): string => {
-    return formatBigNumberWithDecimals(props.locked_value, decimals);
+    return new Intl.NumberFormat('en-IN', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2,
+    }).format(+props.locked_value);
+
+    // return formatBigNumberWithDecimals(props.locked_value, decimals);
   }, [props, decimals]);
 
   const avaialbleToClaim = useMemo((): string => {
-    return formatBigNumberWithDecimals(props.available_to_withdraw, decimals);
+    return new Intl.NumberFormat('en-IN', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2,
+    }).format(+props.available_to_withdraw);
+
+    // return formatBigNumberWithDecimals(props.available_to_withdraw, decimals);
   }, [props, decimals]);
 
   const withdrawnAmount = useMemo(() => {
-    return formatBigNumberWithDecimals(props.withdrawn_tokens, decimals);
+    return new Intl.NumberFormat('en-IN', {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 2,
+    }).format(+props.withdrawn_tokens);
+
+    // return formatBigNumberWithDecimals(props.withdrawn_tokens, decimals);
   }, [props, decimals]);
 
   const isEnded = useMemo(() => {
@@ -215,6 +230,21 @@ export const LockedTokensCard = (
               children={`${avaialbleToClaim} ${props.token?.symbol}`}
             />
           </div>
+
+          <div
+            className="flex justify-between items-center space-x-1"
+          >
+            <span
+              className="text-xs"
+            >
+              Withdrawn Tokens
+            </span>
+
+            <span
+              className="text-xs font-semibold"
+              children={`${withdrawnAmount} ${props.token?.symbol}`}
+            />
+          </div>
         </div>
 
         <div
@@ -223,7 +253,7 @@ export const LockedTokensCard = (
           <Button
             onClick={() => void getAvailableTokens()}
             disabled={props.available_to_withdraw === '0' || !accountId}
-            className="w-full text-xs flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto bg-transparent"
+            className="w-full text-xs flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto bg-transparent disabled:bg-transparent disabled:text-white"
           >
             Withdraw unlocked
           </Button>
@@ -234,7 +264,7 @@ export const LockedTokensCard = (
               props.fast_pass || props.baseTokenBalance === '0' || !accountId
             }
             onClick={() => setShowFastPass(true)}
-            className="w-full text-xs flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto"
+            className="w-full text-xs flex justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-purple-0 disabled:text-white uppercase mx-auto"
           >
             {props.fast_pass ? 'Bought Fast Pass' : 'Buy Fast Pass'}
           </Button>

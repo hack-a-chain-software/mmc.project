@@ -17,8 +17,9 @@ export const GuessItem = ({
       space-y-4
       bg-white
       rounded-md
+      h-max
       bg-[rgba(255,255,255,0.1);]
-      flex flex-col items-stretch justify-center
+      flex flex-col
     "
   >
     <div
@@ -75,9 +76,12 @@ export const GuessItem = ({
       <Button
         onClick={() => void claimRewards()}
         disabled={burned}
-        className="w-full text-xs flex justify-center disabled:opacity-75 disabled:cursor-not-allowed uppercase mx-auto disabled:hover:bg-purple-0 disabled:hover:text-white"
+        className="w-full text-xs flex justify-center disabled:opacity-50 disabled:cursor-not-allowed uppercase mx-auto disabled:hover:bg-purple-0 disabled:hover:text-white"
       >
-        Claim Rewards
+        {burned
+          ? 'redeemed'
+          : 'Claim Rewards'
+        }
       </Button>
     </div>
  </div>

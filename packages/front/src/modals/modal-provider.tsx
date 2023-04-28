@@ -4,7 +4,6 @@ import * as moduleModals from '.';
 const modalKeys = [
   'ConfirmStakeClueModal',
   'CurrencyModal',
-  'FastPassModal',
   'GameCluesModal',
   'GuessModal',
   'GuessesModal',
