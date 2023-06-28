@@ -15,10 +15,10 @@ const items = [
               <span className="font-[500]">SUPPLY:</span> TBD
             </div>
             <div className="whitespace-nowrap">
-              <span className="font-[500]">CLUE STAKING:</span> YES
+              <span className="font-[500]">CLUE REVEALING:</span> YES
             </div>
             <div className="whitespace-nowrap">
-              <span className="font-[500]">REWARD ELIGABLE:</span> YES
+              <span className="font-[500]">REWARD ELIGIBLE:</span> YES
             </div>
           </div>
         ),
@@ -28,8 +28,8 @@ const items = [
         text: (
           <span>
             <span className="font-[500]">SUPPLY:</span> TBD <br />{" "}
-            <span className="font-[500]">CLUE STAKING:</span> NO <br />{" "}
-            <span className="font-[500]">REWARD ELIGABLE:</span> YES
+            <span className="font-[500]">CLUE REVEALING:</span> NO <br />{" "}
+            <span className="font-[500]">REWARD ELIGIBLE:</span> YES
           </span>
         ),
       },
@@ -40,9 +40,9 @@ const items = [
     title: "Investigate Clues",
     items: [
       {
-        title: "Staking",
+        title: "Clue Revealing",
         text: (
-          <span>MINT {"&"} STAKE CLUES TO REVEAL PUBLICLY ON THE GAME MAP</span>
+          <span>MINT {"&"} & REVEAL PUBLICLY ON THE GAME MAP</span>
         ),
       },
       {
@@ -69,7 +69,7 @@ const items = [
       },
       {
         title: "Earn",
-        text: "SOLVE THE CASE SUCCESSFULLY AND EARN REWARDS",
+        text: "SOLVE THE CASE SUCCESSFULLY AND EARN XP REWARDS",
       },
     ],
   },

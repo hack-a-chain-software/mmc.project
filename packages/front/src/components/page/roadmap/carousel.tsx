@@ -21,13 +21,10 @@ const roadmap = [
     items: [
       <>
         <span className="block pb-[24px]">
-          $ Solve token <br /> presale {'&'} public sale
-        </span>
-        <span className="block pb-[24px]">
           Season one <br /> game launch
         </span>
         <span>
-          Clue minting {'&'} <br /> staking
+          Clue minting {'&'} <br /> revealing
         </span>
       </>,
     ],
@@ -37,7 +34,7 @@ const roadmap = [
     items: [
       <>
         <span className="block pb-[24px]">Season one concludes</span>
-        <span className="block pb-[24px]">Staking {'&'} Solving rewards</span>
+        <span className="block pb-[24px]">Clue reveal {'&'} Solving XP rewards</span>
         <span>Season 2 announcements</span>
       </>,
     ],
