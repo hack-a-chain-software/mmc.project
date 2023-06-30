@@ -248,7 +248,7 @@ mod tests {
     )
     .await;
 
-    //verify if clue was staked - in progress - no fucking clue how to catch the answer -
+    //verify if clue was staked
     let staked_clue = view_if_clue_is_staked(&clues, clue_id.to_string()).await?;
 
     assert!(staked_clue);

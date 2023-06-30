@@ -112,19 +112,32 @@ impl Contract {
 
     let reward = self.calculate_guess_reward(guess, timestamp);
 
-    ext_interface::token_contract::ext(self.locked_tokens_address.clone())
-      .with_static_gas(BASE_GAS)
-      .with_attached_deposit(1)
-      .ft_transfer(
-        account_id.clone().to_string(),
-        reward,
-        "Guess reward".to_string(),
-      )
-      .then(
-        ext_interface::ext_self::ext(env::current_account_id())
-          .with_static_gas(BASE_GAS)
-          .undo_guess(hash, account_id),
-      );
+    if reward > U128(0) {
+      ext_interface::token_contract::ext(self.locked_tokens_address.clone())
+        .with_static_gas(BASE_GAS)
+        .with_attached_deposit(1)
+        .ft_transfer(
+          account_id.clone().to_string(),
+          reward,
+          "Guess reward".to_string(),
+        )
+        .then(
+          ext_interface::ext_self::ext(env::current_account_id())
+            .with_static_gas(BASE_GAS)
+            .undo_guess(hash, account_id),
+        );
+    } else {
+      self.guesses.remove(&hash);
+
+      let mut set = self
+        .guesses_owners
+        .get(&account_id)
+        .expect("Guess already removed from owner");
+
+      set.remove(&hash);
+
+      self.guesses_owners.insert(&account_id, &set);
+    }
   }
 }
 
@@ -296,32 +309,43 @@ mod tests {
     // --------- insert 2 guesses manually
     let guess = Guess {
       account_id: accounts(0),
-      murderer: "John".to_string(),
-      weapon: "Glock".to_string(),
-      motive: "Jealous".to_string(),
+      murderer: "Ima Resting".to_string(),
+      weapon: "Meat Cleaver".to_string(),
+      motive: "Discovered Petey's true identity".to_string(),
       random_number: U128(1),
     };
 
     let guess2 = Guess {
       account_id: accounts(0),
-      murderer: "John".to_string(),
-      weapon: "Knife".to_string(),
+      murderer: "John Galt".to_string(),
+      weapon: "Meat Cleaver".to_string(),
       motive: "Hunger".to_string(),
+      random_number: U128(1),
+    };
+
+    let guess3 = Guess {
+      account_id: accounts(0),
+      murderer: "potato".to_string(),
+      weapon: "tomato".to_string(),
+      motive: "apple".to_string(),
       random_number: U128(1),
     };
 
     //get the hash for both guesses
     let guess_hash = contract.view_hash(guess.clone());
     let guess_hash2 = contract.view_hash(guess2.clone());
+    let guess_hash3 = contract.view_hash(guess3.clone());
 
     contract.guesses.insert(&guess_hash, &guessing_date);
     contract.guesses.insert(&guess_hash2, &guessing_date);
+    contract.guesses.insert(&guess_hash3, &guessing_date);
 
     let mut set = UnorderedSet::new(StorageKey::GuessSet {
       account: accounts(0),
     });
     set.insert(&guess_hash);
     set.insert(&guess_hash2);
+    set.insert(&guess_hash3);
     contract.guesses_owners.insert(&accounts(0), &set);
 
     // --------- insert the answer and the rewards
@@ -329,9 +353,13 @@ mod tests {
     contract.answer = Some(guess.clone());
     contract.rewards_guessing = Some(elegible_rewards);
 
+    contract.claim_guess_rewards(guess3.clone());
+
     let rewards_1 = contract.view_guess_reward(guess);
     let rewards_2 = contract.view_guess_reward(guess2);
+    let rewards_3 = contract.view_guess_reward(guess3);
     assert_eq!(rewards_1, U128(283_330));
     assert_eq!(rewards_2, U128(94_440));
+    assert_eq!(rewards_3, U128(0));
   }
 }
